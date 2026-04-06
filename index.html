@@ -57,7 +57,7 @@
                         <input type="password" id="password" placeholder="••••••••" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none transition" required>
                     </div>
                     <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-lg shadow-lg transition-all duration-200">
-                        Masuk 
+                        Masuk Ke Aplikasi
                     </button>
                 </form>
             </div>
@@ -72,7 +72,7 @@
                 </div>
                 <i data-lucide="quote" class="w-12 h-12 mb-6 mx-auto opacity-50"></i>
                 <h1 class="text-3xl font-extrabold mb-4 leading-tight">"Pendidikan adalah senjata paling ampuh untuk mengubah dunia."</h1>
-                <p class="text-xl text-blue-100 italic">— Yelmi Putri, S.Pd</p>
+                <p class="text-xl text-blue-100 italic">— Nelson Mandela</p>
             </div>
         </div>
     </div>
@@ -81,8 +81,8 @@
     <div id="appInterface" class="hidden min-h-screen flex">
         <aside class="w-64 bg-blue-900 text-white flex flex-col fixed h-full transition-all duration-300 overflow-y-auto hide-scrollbar z-50">
             <div class="p-6 text-center border-b border-blue-800">
-                <h1 class="text-xl font-bold tracking-tight">ADMINISTRASI GURU</h1>
-                <p class="text-xs text-blue-300">Professional</p>
+                <h1 class="text-xl font-bold tracking-tight">ADMIN GURU</h1>
+                <p class="text-xs text-blue-300">v1.0 Professional</p>
             </div>
             
             <nav class="flex-1 py-4">
@@ -105,7 +105,7 @@
                     <i data-lucide="calendar" class="w-5 h-5"></i><span>Tahun Pelajaran</span>
                 </a>
                 <a href="#" onclick="switchMenu('kategori_soal', event)" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
-                    <i data-lucide="tag" class="w-5 h-5"></i><span>Kategori</span>
+                    <i data-lucide="tag" class="w-5 h-5"></i><span>Kategori Soal</span>
                 </a>
                 <a href="#" onclick="switchMenu('data_siswa', event)" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
                     <i data-lucide="users" class="w-5 h-5"></i><span>Data Siswa</span>
@@ -158,8 +158,8 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="text-right">
-                        <p class="font-bold text-slate-800">Yelmi Putri,S.Pd</p>
-                        <p class="text-xs text-blue-600">Guru Kelas</p>
+                        <p class="font-bold text-slate-800">Yelmi Putri</p>
+                        <p class="text-xs text-blue-600">Administrator</p>
                     </div>
                     <div class="w-12 h-12 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center font-bold text-xl border-2 border-blue-200">
                         YP
@@ -175,7 +175,7 @@
         // --- GLOBAL STATE ---
         const credentials = { user: "Yelmi Putri", pass: "12345" };
         let currentMenu = 'beranda';
-        let editingIndex = null; // Ditambahkan untuk melacak baris yang sedang diedit
+        let editingIndex = null; 
         
         let db = JSON.parse(localStorage.getItem('admin_guru_db')) || {
             sekolah: {},
@@ -236,7 +236,7 @@
 
         function switchMenu(menu, event) {
             currentMenu = menu;
-            editingIndex = null; // Reset status edit saat pindah menu
+            editingIndex = null; 
             const items = document.querySelectorAll('.sidebar-item');
             items.forEach(item => item.classList.remove('active'));
             
@@ -362,35 +362,26 @@
                     sub.innerText = "Amankan database Anda atau pulihkan dari file cadangan.";
                     body.innerHTML = `
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:border-green-400 transition-colors">
+                            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
                                 <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6">
                                     <i data-lucide="download" class="w-8 h-8"></i>
                                 </div>
                                 <h3 class="text-xl font-bold text-slate-800 mb-2">Cadangkan Data (Backup)</h3>
-                                <p class="text-slate-500 mb-6 text-sm leading-relaxed">Simpan seluruh data sekolah, siswa, nilai, dan absensi ke dalam file komputer Anda. Disarankan dilakukan secara rutin.</p>
-                                <button onclick="exportData()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-green-200 transition-all flex items-center justify-center space-x-2">
+                                <button onclick="exportData()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center space-x-2">
                                     <i data-lucide="file-json" class="w-5 h-5"></i>
                                     <span>Download Data JSON</span>
                                 </button>
                             </div>
-                            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 hover:border-blue-400 transition-colors">
+                            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
                                 <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-6">
                                     <i data-lucide="upload" class="w-8 h-8"></i>
                                 </div>
                                 <h3 class="text-xl font-bold text-slate-800 mb-2">Pulihkan Data (Restore)</h3>
-                                <p class="text-slate-500 mb-6 text-sm leading-relaxed">Unggah file backup sebelumnya untuk mengembalikan seluruh data ke aplikasi ini. Perhatian: Data saat ini akan terhapus.</p>
                                 <input type="file" id="importFile" class="hidden" accept=".json" onchange="importData(event)">
-                                <button onclick="triggerImport()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-200 transition-all flex items-center justify-center space-x-2">
+                                <button onclick="triggerImport()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center space-x-2">
                                     <i data-lucide="refresh-cw" class="w-5 h-5"></i>
                                     <span>Pilih File Backup</span>
                                 </button>
-                            </div>
-                        </div>
-                        <div class="mt-8 bg-amber-50 border border-amber-200 p-6 rounded-2xl flex items-start space-x-4">
-                            <i data-lucide="alert-triangle" class="w-6 h-6 text-amber-600 shrink-0"></i>
-                            <div class="text-sm text-amber-800">
-                                <p class="font-bold mb-1">Penting!</p>
-                                <p>File backup berformat <b>.json</b> berisi informasi sensitif. Jangan bagikan file ini kepada orang lain dan simpan di tempat yang aman (Google Drive atau Flashdisk).</p>
                             </div>
                         </div>
                     `;
@@ -532,9 +523,9 @@
                     db[dbKey] = obj;
                 } else {
                     if (editingIndex !== null) {
-                        db[dbKey][editingIndex] = obj; // Memperbarui pada indeks yang sama
+                        db[dbKey][editingIndex] = obj;
                     } else {
-                        db[dbKey].push(obj); // Menambah ke posisi terakhir jika data baru
+                        db[dbKey].push(obj);
                     }
                 }
                 editingIndex = null;
@@ -707,7 +698,7 @@
 
                     <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                         <div class="p-4 border-b bg-slate-50 flex justify-between items-center">
-                            <h5 class="text-sm font-bold text-slate-700">Daftar Log Kehadiran</h5>
+                            <h5 class="text-sm font-bold text-slate-700">Daftar Data Terdaftar</h5>
                         </div>
                         <table id="academicTable" class="w-full text-left">
                             <thead>
@@ -740,8 +731,7 @@
                     ${dbKey === 'absensi' ? `
                     <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                         <div class="p-4 border-b bg-blue-50 flex justify-between items-center">
-                            <h5 class="text-sm font-bold text-blue-900">Rekapitulasi Kehadiran per Siswa (Otomatis - Hanya di Aplikasi)</h5>
-                            <span class="text-[10px] bg-blue-200 text-blue-800 px-2 py-1 rounded font-bold uppercase">Ringkasan</span>
+                            <h5 class="text-sm font-bold text-blue-900">Rekapitulasi Kehadiran per Siswa</h5>
                         </div>
                         <table class="w-full text-left">
                             <thead>
@@ -793,9 +783,9 @@
                 }
                 
                 if (editingIndex !== null) {
-                    db[dbKey][editingIndex] = obj; // Memperbarui data pada baris yang sama
+                    db[dbKey][editingIndex] = obj;
                 } else {
-                    db[dbKey].push(obj); // Menambah baru jika tidak dalam mode edit
+                    db[dbKey].push(obj);
                 }
                 editingIndex = null;
                 saveData();
@@ -924,6 +914,7 @@
             const querySiswa = document.getElementById('filterSiswa')?.value.toLowerCase() || "";
             const rows = document.querySelectorAll('.academic-row');
             const queryMapel = document.getElementById('filterMapel')?.value || "";
+            const queryKategori = document.getElementById('filterKategori')?.value || ""; // Mengambil nilai filter kategori
             const queryTahun = document.getElementById('filterTahun')?.value || "";
             const querySemester = document.getElementById('filterSemester')?.value || "";
             rows.forEach((row, idx) => {
@@ -931,8 +922,10 @@
                 if(!data) return;
                 const matchSiswa = (data.nama_siswa || data.mapel || "").toLowerCase().includes(querySiswa);
                 const matchMapel = queryMapel === "" || (data.mapel === queryMapel);
+                const matchKategori = queryKategori === "" || (data.kategori === queryKategori); // Logika filter kategori
                 const matchTahun = queryTahun === "" || (data.tahun === queryTahun);
                 const matchSemester = querySemester === "" || (data.semester === querySemester);
+                
                 if (key === 'absensi' || key === 'jurnal') {
                     const dateStart = document.getElementById('filterDateStart')?.value;
                     const dateEnd = document.getElementById('filterDateEnd')?.value;
@@ -941,7 +934,8 @@
                     if (dateEnd && data.tanggal > dateEnd) matchDate = false;
                     row.style.display = (matchSiswa && matchMapel && matchDate) ? "" : "none";
                 } else {
-                    row.style.display = (matchSiswa && matchMapel && matchTahun && matchSemester) ? "" : "none";
+                    // Menyertakan matchKategori untuk menu Input Nilai dan Kisi-kisi
+                    row.style.display = (matchSiswa && matchMapel && matchKategori && matchTahun && matchSemester) ? "" : "none";
                 }
             });
         }
@@ -954,20 +948,16 @@
             const item = db[key][index];
             if (!item) return;
             
-            editingIndex = index; // Mencatat index yang sedang diedit agar posisi tetap sama
-            
-            // Render ulang menu untuk memperbarui tombol dan status visual
+            editingIndex = index; 
             renderMenu();
             
             const form = document.getElementById('academicForm') || document.getElementById('mainForm');
             const containerId = (key === 'sekolah' || key === 'kop' || key === 'ttd') ? 'formMaster' : (currentMenu === 'penilaian' || currentMenu === 'absensi' || currentMenu === 'jurnal' || currentMenu === 'kisi_kisi' ? 'formAkademik' : 'formMaster');
             
-            // Isi form dengan data yang ada
             Object.keys(item).forEach(k => { 
                 if (form[k]) form[k].value = item[k]; 
             });
             
-            // Buka container form
             const el = document.getElementById(containerId);
             if (el) el.classList.remove('hidden');
             
@@ -979,30 +969,38 @@
             const kop = db.kop; const ttd = db.ttd; const sekolah = db.sekolah;
             const filterSiswa = document.getElementById('filterSiswa')?.value || "";
             const filterMapel = document.getElementById('filterMapel')?.value || "";
+            const filterKategori = document.getElementById('filterKategori')?.value || ""; // Filter Kategori untuk cetak
             const filterTahun = document.getElementById('filterTahun')?.value || "";
             const filterSemester = document.getElementById('filterSemester')?.value || "";
             const filterDateStart = document.getElementById('filterDateStart')?.value || "";
             const filterDateEnd = document.getElementById('filterDateEnd')?.value || "";
+            
             let filterDesc = [];
             if (filterSiswa) filterDesc.push(`<b>Siswa:</b> ${filterSiswa}`);
             if (filterMapel) filterDesc.push(`<b>Mapel:</b> ${filterMapel}`);
+            if (filterKategori) filterDesc.push(`<b>Kategori:</b> ${filterKategori}`);
             if (filterTahun) filterDesc.push(`<b>Tahun Ajaran:</b> ${filterTahun}`);
             if (filterSemester) filterDesc.push(`<b>Semester:</b> ${filterSemester}`);
+            
             const filterHeaderHtml = filterDesc.length > 0 ? `<div style="margin-bottom: 15px; font-size: 10px; border: 1px solid #ccc; padding: 10px; border-radius: 5px; background: #fafafa; display: flex; flex-wrap: wrap; gap: 15px;">${filterDesc.map(f => `<span>${f}</span>`).join('')}</div>` : '';
+            
             const printContent = db[key].filter(item => {
                 const querySiswa = filterSiswa.toLowerCase();
                 const matchSiswa = (item.nama_siswa || item.mapel || "").toLowerCase().includes(querySiswa);
                 const matchMapel = filterMapel === "" || (item.mapel === filterMapel);
+                const matchKategori = filterKategori === "" || (item.kategori === filterKategori);
                 const matchTahun = filterTahun === "" || (item.tahun === filterTahun);
                 const matchSemester = filterSemester === "" || (item.semester === filterSemester);
+                
                 if (key === 'absensi' || key === 'jurnal') {
                     let matchDate = true;
                     if (filterDateStart && item.tanggal < filterDateStart) matchDate = false;
                     if (filterDateEnd && item.tanggal > filterDateEnd) matchDate = false;
                     return matchSiswa && matchMapel && matchDate;
                 }
-                return matchSiswa && matchMapel && matchTahun && matchSemester;
+                return matchSiswa && matchMapel && matchKategori && matchTahun && matchSemester;
             });
+            
             if (printContent.length === 0) { alert("Tidak ada data yang sesuai dengan filter."); return; }
             const tglCetakIndo = formatTanggalIndo(new Date());
             const newWindow = window.open('', '_blank');
@@ -1013,4 +1011,3 @@
     </script>
 </body>
 </html>
-
