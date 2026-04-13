@@ -13,7 +13,7 @@
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
         .sidebar-item.active { background-color: #1e40af; border-left: 4px solid #f8fafc; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center; color: white; flex-direction: column; }
+        .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center; color: white; flex-direction: column; backdrop-filter: blur(4px); }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
         .multi-select-container { max-height: 120px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 0.5rem; padding: 0.5rem; background: white; }
     </style>
@@ -23,11 +23,12 @@
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay">
         <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white mb-4"></div>
-        <p>Sedang Memproses...</p>
+        <p class="font-bold tracking-widest uppercase text-sm">Sedang Menyiapkan PDF...</p>
+        <p class="text-xs opacity-75 mt-2">Mohon tunggu sebentar</p>
     </div>
 
     <!-- Area Tersembunyi untuk Render PDF -->
-    <div id="pdfRenderArea" style="position: absolute; left: -9999px; top: -9999px; width: 1024px; background: white; color: black;"></div>
+    <div id="pdfRenderArea" style="position: absolute; left: -9999px; top: 0; width: 1024px; background: white; color: black; padding: 20px;"></div>
 
     <!-- Custom Logout Modal -->
     <div id="logoutModal" class="modal-overlay">
@@ -1037,19 +1038,20 @@
             const tglCetakIndo = formatTanggalIndo(new Date());
 
             const renderImage = (src, style) => {
-                if (!src || src.trim() === '') return '<div style="display:inline-block; width:0; height:0;"></div>';
-                return `<img src="${src}" style="${style}" onerror="this.style.display='none'">`;
+                if (!src || src.trim() === '') return '<div style="display:inline-block; width:1px; height:1px;"></div>';
+                return `<img src="${src}" style="${style}" crossorigin="anonymous" onerror="this.style.display='none'">`;
             };
 
             return `
-                <div style="padding: 20px; background: white; color: black; font-family: sans-serif;">
+                <div style="padding: 20px; background: white; color: black; font-family: sans-serif; width: 100%; box-sizing: border-box;">
                     <style>
                         @page { size: ${cssPageSize} ${paperOrient}; margin: 1cm; }
-                        table { border-collapse: collapse; width: 100%; }
+                        table { border-collapse: collapse; width: 100%; border: 1px solid black; }
                         th, td { border: 1px solid black; padding: 6px; font-size: 9px; text-align: center; }
                         .no-border td { border: none; }
+                        .kop-container { display: flex; align-items: center; border-bottom: 4px double black; padding-bottom: 10px; margin-bottom: 20px; text-align: center; }
                     </style>
-                    <div style="display: flex; align-items: center; border-bottom: 4px double black; padding-bottom: 10px; margin-bottom: 20px; text-align: center;">
+                    <div class="kop-container">
                         ${renderImage(kop.logo_kiri, "width: 80px; height: auto;")}
                         <div style="flex: 1;">
                             <h2 style="margin: 0; font-size: 18px;">${kop.pemda || 'PEMERINTAH DAERAH'}</h2>
@@ -1070,15 +1072,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            ${printContent.map((item, idx) => `
+                            ${printContent.length === 0 ? '<tr><td colspan="20">Tidak ada data untuk dicetak</td></tr>' : 
+                                printContent.map((item, idx) => `
                                 <tr>
                                     <td>${idx+1}</td>
-                                    ${getAcademicTableRow(key, item).replace(/<img/g, '<img style="width:40px; height:40px; object-fit:cover;"')}
+                                    ${getAcademicTableRow(key, item).replace(/<img/g, '<img style="width:40px; height:40px; object-fit:cover;" crossorigin="anonymous"')}
                                 </tr>
                             `).join('')}
                         </tbody>
                     </table>
-                    <div style="margin-top: 40px; display: flex; justify-content: space-between; padding: 0 40px;">
+                    <div style="margin-top: 40px; display: flex; justify-content: space-between; padding: 0 40px; page-break-inside: avoid;">
                         <div style="width: 250px; text-align: center; font-size: 11px;">
                             <p style="margin: 1px 0;">Mengetahui,</p>
                             <p style="margin: 1px 0;">Kepala Sekolah,</p>
@@ -1106,34 +1109,59 @@
                 newWindow.document.close();
                 setTimeout(() => {
                     newWindow.print();
-                }, 500);
+                }, 800);
             }
         }
 
-        function downloadPDF(key) {
-            const htmlContent = generatePrintHTML(key);
-            const element = document.getElementById('pdfRenderArea');
-            element.innerHTML = htmlContent;
+        async function downloadPDF(key) {
+            // Tampilkan loading overlay agar pengguna tahu proses sedang berjalan
+            const loader = document.getElementById('loadingOverlay');
+            loader.style.display = 'flex';
             
-            // Pengaturan Kertas
-            const paperSize = document.getElementById('paperSize')?.value || 'a4';
-            const paperOrient = document.getElementById('paperOrientation')?.value || 'portrait';
-            
-            let jsPdfFormat = paperSize;
-            if (paperSize === 'f4') jsPdfFormat = [8.46, 12.99]; // Custom inches for F4
-            if (paperSize === 'legal') jsPdfFormat = 'legal';
+            try {
+                const htmlContent = generatePrintHTML(key);
+                const element = document.getElementById('pdfRenderArea');
+                
+                // Masukkan konten ke area tersembunyi
+                element.innerHTML = htmlContent;
+                
+                // Tunggu sebentar agar browser selesai memproses rendering DOM internal
+                // Ini krusial agar html2pdf tidak mengambil elemen kosong/setengah jadi
+                await new Promise(resolve => setTimeout(resolve, 800));
+                
+                // Pengaturan Kertas dari UI
+                const paperSize = document.getElementById('paperSize')?.value || 'a4';
+                const paperOrient = document.getElementById('paperOrientation')?.value || 'portrait';
+                
+                let jsPdfFormat = paperSize;
+                if (paperSize === 'f4') jsPdfFormat = [8.46, 12.99]; 
+                if (paperSize === 'legal') jsPdfFormat = 'legal';
 
-            const opt = {
-                margin:       0.3,
-                filename:     `Laporan_${key}_${new Date().getTime()}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
-                jsPDF:        { unit: 'in', format: jsPdfFormat, orientation: paperOrient }
-            };
+                const opt = {
+                    margin:       [0.2, 0.2, 0.2, 0.2],
+                    filename:     `Laporan_${key}_${new Date().getTime()}.pdf`,
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { 
+                        scale: 2, 
+                        useCORS: true, 
+                        letterRendering: true,
+                        logging: false
+                    },
+                    jsPDF:        { unit: 'in', format: jsPdfFormat, orientation: paperOrient }
+                };
 
-            html2pdf().set(opt).from(element).save().then(() => {
+                // Jalankan proses download
+                await html2pdf().set(opt).from(element).save();
+                
+                // Bersihkan area setelah selesai
                 element.innerHTML = ''; 
-            });
+            } catch (error) {
+                console.error("Gagal membuat PDF:", error);
+                alert("Terjadi kesalahan saat membuat PDF. Pastikan koneksi internet stabil untuk memuat aset.");
+            } finally {
+                // Sembunyikan loading overlay
+                loader.style.display = 'none';
+            }
         }
 
         window.addEventListener('DOMContentLoaded', () => { setTimeout(() => { refreshIcons(); if(document.getElementById('loginScreen').classList.contains('hidden')) { renderMenu(); } }, 100); });
