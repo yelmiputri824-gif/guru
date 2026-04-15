@@ -1039,7 +1039,7 @@
             const tglCetakIndo = formatTanggalIndo(new Date());
 
             const renderImage = (src, style) => {
-                if (!src || src.trim() === '') return '<div style="display:inline-block; width:0; height:0;"></div>';
+                if (!src || src.trim() === '') return '<div style="display:inline-block; width:1px; height:1px;"></div>';
                 return `<img src="${src}" style="${style}" crossorigin="anonymous" onerror="this.style.display='none'">`;
             };
 
@@ -1051,6 +1051,7 @@
                         th, td { border: 1px solid black; padding: 6px; font-size: 9px; text-align: center; }
                         .no-border td { border: none; }
                         .kop-container { display: flex; align-items: center; border-bottom: 4px double black; padding-bottom: 10px; margin-bottom: 20px; text-align: center; }
+                        .signature-space { height: 80px; display: flex; align-items: center; justify-content: center; }
                     </style>
                     <div class="kop-container">
                         ${renderImage(kop.logo_kiri, "width: 80px; height: auto;")}
@@ -1085,14 +1086,18 @@
                         <div style="width: 250px; text-align: center; font-size: 11px;">
                             <p style="margin: 1px 0;">Mengetahui,</p>
                             <p style="margin: 1px 0;">Kepala Sekolah,</p>
-                            ${renderImage(ttd.ks, "width: 80px; height: 50px; object-fit: contain; margin: 10px auto; display: block;")}
+                            <div class="signature-space">
+                                ${renderImage(ttd.ks, "width: 80px; height: 70px; object-fit: contain;")}
+                            </div>
                             <p style="margin: 1px 0;"><b>${sekolah.kepala || '................'}</b></p>
                             <p style="margin: 1px 0;">NIP. ${sekolah.nip || '-'}</p>
                         </div>
                         <div style="width: 250px; text-align: center; font-size: 11px;">
                             <p style="margin: 1px 0;">${sekolah.tempat || 'Kota'}, ${tglCetakIndo}</p>
                             <p style="margin: 1px 0;">Wali Kelas,</p>
-                            ${renderImage(ttd.wk, "width: 80px; height: 50px; object-fit: contain; margin: 10px auto; display: block;")}
+                            <div class="signature-space">
+                                ${renderImage(ttd.wk, "width: 80px; height: 70px; object-fit: contain;")}
+                            </div>
                             <p style="margin: 1px 0;"><b>${db.wali_kelas[0]?.nama || '................'}</b></p>
                             <p style="margin: 1px 0;">NIP. ${db.wali_kelas[0]?.nip || '-'}</p>
                         </div>
