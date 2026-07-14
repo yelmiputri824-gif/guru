@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>YELMI PUTRI, S.Pd</title>
+    <title>Yelmi Putri, S.Pd</title>
     
     <!-- PWA & Mobile Capabilities -->
     <meta name="mobile-web-app-capable" content="yes">
@@ -24,6 +24,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.0/umd/lucide.min.js"></script>
     <!-- Library untuk PDF Download -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Library untuk QR Code Scanning -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; -webkit-tap-highlight-color: transparent; }
@@ -65,15 +68,30 @@
         </div>
         <p id="progressPercentageText" class="text-2xl font-black font-mono text-blue-400">0%</p>
         
-        <p class="text-xs opacity-60 mt-4 italic text-center">Tunggu Sebentar<br>Mohon jangan tutup browser anda</p>
+        <p class="text-xs opacity-60 mt-4 italic text-center">Sinkronisasi Basis Data Awan<br>Mohon jangan tutup browser anda</p>
     </div>
 
     <!-- Area Tersembunyi untuk Render PDF -->
     <div id="pdfRenderArea" style="position: absolute; left: -9999px; top: 0; width: 1024px; background: white; color: black; padding: 20px;"></div>
 
+    <!-- Custom Confirm Modal -->
+    <div id="confirmModal" class="modal-overlay">
+        <div class="bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl text-center m-4">
+            <div class="w-20 h-20 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="help-circle" class="w-10 h-10"></i>
+            </div>
+            <h3 id="confirmTitle" class="text-xl font-bold text-slate-800 mb-2">Konfirmasi</h3>
+            <p id="confirmMessage" class="text-slate-500 mb-8">Apakah Anda yakin ingin memproses aksi ini?</p>
+            <div class="flex space-x-4">
+                <button onclick="closeConfirmModal(false)" class="flex-1 px-4 py-3 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition">Batal</button>
+                <button onclick="closeConfirmModal(true)" class="flex-1 px-4 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition">Ya, Proses</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Custom Logout Modal -->
     <div id="logoutModal" class="modal-overlay">
-        <div class="bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl text-center">
+        <div class="bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl text-center m-4">
             <div class="w-20 h-20 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
                 <i data-lucide="log-out" class="w-10 h-10"></i>
             </div>
@@ -83,6 +101,39 @@
                 <button onclick="closeLogoutModal()" class="flex-1 px-4 py-3 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition">Batal</button>
                 <button onclick="confirmLogout()" class="flex-1 px-4 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition">Ya, Keluar</button>
             </div>
+        </div>
+    </div>
+
+    <!-- QR Scanner Modal -->
+    <div id="qrScannerModal" class="modal-overlay">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl relative m-4">
+            <button onclick="closeQRScanner()" class="absolute top-4 right-4 text-slate-500 hover:text-slate-800 transition">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Scan QR Code Siswa</h3>
+            <div class="bg-slate-100 rounded-xl overflow-hidden aspect-square flex items-center justify-center relative mb-4 border-2 border-dashed border-blue-300">
+                <div id="qr-reader" class="w-full h-full"></div>
+            </div>
+            <p class="text-xs text-slate-500 text-center">Arahkan kamera ke QR Code NISN siswa</p>
+            <button onclick="closeQRScanner()" class="mt-4 w-full px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-bold hover:bg-slate-200 transition">Batal</button>
+        </div>
+    </div>
+
+    <!-- QR Code Viewer Modal -->
+    <div id="qrViewerModal" class="modal-overlay">
+        <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl text-center relative m-4">
+            <button onclick="closeQRViewer()" class="absolute top-4 right-4 text-slate-500 hover:text-slate-800 transition">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 id="qrViewerName" class="text-xl font-bold text-slate-800 mb-1">Nama Siswa</h3>
+            <p id="qrViewerNisn" class="text-sm text-slate-500 mb-6 font-mono">NISN: -</p>
+            <div class="bg-slate-50 p-4 rounded-2xl border flex justify-center items-center mb-6">
+                <img id="qrViewerImage" src="" alt="QR Code" class="w-48 h-48">
+            </div>
+            <button onclick="printQR()" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 rounded-xl shadow transition mb-2 flex items-center justify-center space-x-2">
+                <i data-lucide="printer" class="w-4 h-4"></i><span>Cetak QR Code</span>
+            </button>
+            <button onclick="closeQRViewer()" class="w-full px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-bold hover:bg-slate-200 transition">Tutup</button>
         </div>
     </div>
 
@@ -104,7 +155,7 @@
                         <input type="password" id="password" placeholder="••••••••" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none transition" required>
                     </div>
                     <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-lg shadow-lg transition-all duration-200">
-                        Masuk 
+                        Masuk Ke Aplikasi
                     </button>
                 </form>
             </div>
@@ -126,10 +177,11 @@
 
     <!-- MAIN APP WRAPPER -->
     <div id="appInterface" class="hidden min-h-screen flex">
-        <aside class="w-64 bg-blue-900 text-white flex flex-col fixed h-full overflow-y-auto hide-scrollbar z-50">
+        <!-- Sidebar disembunyikan di HP menggunakan utility Tailwind 'hidden md:flex' -->
+        <aside class="hidden md:flex w-64 bg-blue-900 text-white flex-col fixed h-full overflow-y-auto hide-scrollbar z-50">
             <div class="p-6 text-center border-b border-blue-800">
-                <h1 class="text-xl font-bold tracking-tight">ADMINISTRASI GURU</h1>
-                <p class="text-xs text-blue-300">Professional</p>
+                <h1 class="text-xl font-bold tracking-tight">ADMIN GURU</h1>
+                <p class="text-xs text-blue-300">v1.0 Professional</p>
             </div>
             
             <nav class="flex-1 py-4">
@@ -200,24 +252,29 @@
             </nav>
         </aside>
 
-        <main class="flex-1 ml-64 p-8">
+        <!-- Main Content area (ml-0 di HP, ml-64 di layar besar) -->
+        <main class="flex-1 ml-0 md:ml-64 p-4 md:p-8">
             <header class="flex justify-between items-center mb-8 bg-white p-6 rounded-xl shadow-sm border border-slate-200 sticky top-0 z-40">
                 <div class="flex items-center space-x-4">
                     <div>
-                        <h2 id="menuTitle" class="text-2xl font-bold text-slate-800 uppercase tracking-tight">Beranda</h2>
-                        <p id="menuSub" class="text-slate-500 text-sm">Statistik dan ringkasan sistem hari ini.</p>
+                        <h2 id="menuTitle" class="text-xl md:text-2xl font-bold text-slate-800 uppercase tracking-tight">Beranda</h2>
+                        <p id="menuSub" class="text-slate-500 text-xs md:text-sm">Statistik dan ringkasan sistem hari ini.</p>
                     </div>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <div id="syncStatus" class="flex items-center space-x-2 bg-green-50 px-3 py-1 rounded-full text-green-700 text-[10px] font-bold">
+                <div class="flex items-center space-x-2 md:space-x-4">
+                    <!-- Tombol Keluar Langsung (Hanya Tampil di HP/Mobile) -->
+                    <button onclick="showLogoutModal()" class="block md:hidden p-2.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition shadow-sm border border-red-100">
+                        <i data-lucide="log-out" class="w-5 h-5"></i>
+                    </button>
+                    <div id="syncStatus" class="hidden sm:flex items-center space-x-2 bg-green-50 px-3 py-1 rounded-full text-green-700 text-[10px] font-bold">
                         <div class="w-2 h-2 bg-green-500 rounded-full"></div>
                         <span>TERHUBUNG SHEETS</span>
                     </div>
-                    <div class="text-right">
+                    <div class="text-right hidden sm:block">
                         <p class="font-bold text-slate-800">Yelmi Putri</p>
                         <p class="text-xs text-blue-600">Administrator</p>
                     </div>
-                    <div class="w-14 h-14 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center font-black text-xl border-2 border-blue-200">YP</div>
+                    <div class="w-10 h-10 md:w-14 md:h-14 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center font-black text-sm md:text-xl border-2 border-blue-200">YP</div>
                 </div>
             </header>
 
@@ -241,6 +298,13 @@
         let editingIndex = null;
         let currentPage = 1;
         let activeFilters = {}; 
+        let html5QrcodeScanner = null;
+        let confirmCallback = null;
+
+        // --- UTILITY: DETEKSI HP ---
+        function checkMobileViewport() {
+            return window.innerWidth < 768;
+        }
 
         // --- UTILITY: LOCK DATE STRING ---
         function forceLocalDate(dateValue) {
@@ -258,6 +322,23 @@
             return dateValue;
         }
 
+        // --- CUSTOM CONFIRM MODAL CONTROLLERS ---
+        function showCustomConfirm(title, message, callback) {
+            document.getElementById('confirmTitle').innerText = title;
+            document.getElementById('confirmMessage').innerText = message;
+            document.getElementById('confirmModal').style.display = 'flex';
+            confirmCallback = callback;
+            refreshIcons();
+        }
+
+        function closeConfirmModal(accepted) {
+            document.getElementById('confirmModal').style.display = 'none';
+            if (accepted && confirmCallback) {
+                confirmCallback();
+            }
+            confirmCallback = null;
+        }
+
         // --- NOTIFICATION HELPERS ---
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
@@ -272,6 +353,25 @@
             }, 3000);
         }
 
+        // --- AUDIO BEEP INTERNAL ---
+        function playBeep() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); 
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.15); 
+            } catch (e) {
+                console.warn("AudioContext gagal dijalankan:", e);
+            }
+        }
+
+        // --- STREAMING_CHUNK: Menyediakan fungsi sinkronisasi Google Sheets awan ---
         // --- SYNC FUNCTIONS ---
         async function fetchFromSheets() {
             if(!GOOGLE_SCRIPT_URL) return;
@@ -325,11 +425,17 @@
                 
                 if (progress >= 100 && isFetched) {
                     clearInterval(interval);
-                    document.getElementById('loadingText').innerText = "LOGIN BERHASIL!";
+                    document.getElementById('loadingText').innerText = "SINKRONISASI BERHASIL!";
                     setTimeout(() => {
                         overlay.style.display = 'none';
                         loginScreen.classList.add('hidden');
                         appInterface.classList.remove('hidden');
+                        
+                        // Kunci Absensi jika dijalankan di HP sejak awal login
+                        if (checkMobileViewport()) {
+                            currentMenu = 'absensi';
+                        }
+                        
                         renderMenu();
                         refreshIcons();
                         showToast("SELAMAT DATANG, " + credentials.user.toUpperCase());
@@ -389,20 +495,25 @@
         function refreshIcons() { if (typeof lucide !== 'undefined') lucide.createIcons(); }
         
         function switchMenu(menu, event) {
-            currentMenu = menu;
+            // Bila di HP, Guru dikunci hanya pada menu Absensi Siswa
+            if (checkMobileViewport()) {
+                currentMenu = 'absensi';
+            } else {
+                currentMenu = menu;
+            }
             editingIndex = null;
             currentPage = 1;
             activeFilters = {}; 
             document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
-            if (event) event.currentTarget.classList.add('active');
+            if (event && !checkMobileViewport()) event.currentTarget.classList.add('active');
             renderMenu();
         }
 
         function resetData() {
-            if(confirm("Hapus seluruh data?")) {
+            showCustomConfirm("Reset Seluruh Data", "Apakah Anda yakin ingin menghapus seluruh basis data aplikasi secara permanen?", () => {
                 localStorage.removeItem('admin_guru_db');
                 location.reload();
-            }
+            });
         }
 
         function formatTanggalIndo(dateStr) {
@@ -439,7 +550,13 @@
             reader.readAsText(file);
         }
 
+        // --- STREAMING_CHUNK: Menyusun logika penarikan antarmuka/menu master akademis ---
         function renderMenu() {
+            // Evaluasi ulang viewport untuk memastikan kepatuhan tampilan HP saat layar berubah
+            if (checkMobileViewport()) {
+                currentMenu = 'absensi';
+            }
+
             const body = document.getElementById('contentBody');
             const title = document.getElementById('menuTitle');
             const sub = document.getElementById('menuSub');
@@ -499,7 +616,7 @@
                 case 'data_siswa': renderFormMaster('Data Siswa', 'Database Murid', 'siswa', [{key: 'nama', label: 'Nama', type: 'text'}, {key: 'nisn', label: 'NISN', type: 'text'}, {key: 'kelas', label: 'Kelas', type: 'text'}, {key: 'gender', label: 'Jenis Kelamin', type: 'select', options: ['Laki-laki', 'Perempuan']}, {key: 'foto', label: 'URL Foto', type: 'text'}]); break;
                 case 'input_nilai': renderAkademik('Input Nilai', 'Pencatatan Nilai', 'nilai'); break;
                 case 'penilaian': renderAkademik('Penilaian', 'Rekap Nilai', 'penilaian'); break;
-                case 'absensi': renderAkademik('Absensi', 'Kehadiran Siswa', 'absensi'); break;
+                case 'absensi': renderAkademik('Absensi Siswa', 'Kehadiran Siswa', 'absensi'); break;
                 case 'jurnal': renderAkademik('Jurnal', 'Jurnal Mengajar', 'jurnal'); break;
                 case 'kisi_kisi': renderAkademik('Kisi-Kisi', 'Struktur Soal', 'kisi_kisi'); break;
                 case 'kop_surat': renderFormMaster('KOP Surat', 'Header Dokumen', 'kop', [{key: 'logo_kiri', label: 'URL Logo Kiri', type: 'text'}, {key: 'logo_kanan', label: 'URL Logo Kanan', type: 'text'}, {key: 'pemda', label: 'Pemda', type: 'text'}, {key: 'dinas', label: 'Dinas', type: 'text'}, {key: 'sekolah', label: 'Sekolah', type: 'text'}, {key: 'kecamatan', label: 'Kecamatan', type: 'text'}, {key: 'alamat', label: 'Alamat', type: 'text'}, {key: 'email', label: 'Email', type: 'email'}, {key: 'website', label: 'Website', type: 'text'}], true); break;
@@ -516,7 +633,7 @@
                 <div id="formMaster" class="${!isSingle && editingIndex === null ? 'hidden' : ''} mb-8 p-6 bg-slate-50 rounded-xl border">
                     <form id="mainForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         ${fields.map(f => `<div><label class="block text-xs font-bold uppercase mb-1">${f.label}</label>
-                        ${f.type === 'select' ? `<select name="${f.key}" class="w-full px-4 py-2 border rounded-lg">${f.options.map(o => `<option value="${o}">${o}</option>`)}</select>` : `<input type="${f.type}" name="${f.key}" value="${isSingle ? (db[dbKey][f.key] || '') : ''}" class="w-full px-4 py-2 border rounded-lg">`}</div>`).join('')}
+                        ${f.type === 'select' ? `<select name="${f.key}" class="w-full px-4 py-2 border rounded-lg bg-white">${f.options.map(o => `<option value="${o}">${o}</option>`)}</select>` : `<input type="${f.type}" name="${f.key}" value="${isSingle ? (db[dbKey][f.key] || '') : ''}" class="w-full px-4 py-2 border rounded-lg bg-white">`}</div>`).join('')}
                         <div class="md:col-span-2 flex justify-end space-x-3 mt-4"><button type="submit" class="bg-blue-700 text-white px-8 py-2 rounded-lg font-bold">Simpan</button></div>
                     </form>
                 </div>
@@ -545,6 +662,7 @@
                                     return `<td class="px-4 py-3 border-black">${item[f.key] || '-'}</td>`;
                                 }).join('')}
                                 <td class="px-4 py-3 border-black flex space-x-2">
+                                    ${dbKey === 'siswa' ? `<button onclick="showQRViewer('${item.nama}', '${item.nisn}')" class="bg-blue-50 text-blue-700 px-2 py-1 rounded font-bold hover:bg-blue-100 transition flex items-center space-x-1"><i data-lucide="qr-code" class="w-3.5 h-3.5"></i><span>QR</span></button>` : ''}
                                     <button onclick="editData('${dbKey}', ${idx})" class="text-green-600 font-bold hover:underline">Edit</button>
                                     <button onclick="deleteData('${dbKey}', ${idx})" class="text-red-600 font-bold hover:underline">Hapus</button>
                                 </td>
@@ -587,6 +705,7 @@
             });
         }
 
+        // --- STREAMING_CHUNK: Mengontrol filter perubahan data absensi siswa ---
         function handleFilterChange(key, filterType, value) {
             if (!activeFilters[key]) activeFilters[key] = {};
             activeFilters[key][filterType] = value;
@@ -601,28 +720,28 @@
             
             const filters = activeFilters[dbKey] || {};
 
-            let filtersHtml = `<div class="flex-1 min-w-[200px]"><label class="text-[10px] font-bold uppercase">Cari Nama</label><input type="text" value="${filters.search || ''}" onkeyup="handleFilterChange('${dbKey}', 'search', this.value)" class="w-full px-4 py-2 border rounded-lg" placeholder="Cari..."></div>`;
+            let filtersHtml = `<div class="flex-1 min-w-[150px] md:min-w-[200px]"><label class="text-[10px] font-bold uppercase">Cari Nama</label><input type="text" value="${filters.search || ''}" onkeyup="handleFilterChange('${dbKey}', 'search', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white" placeholder="Cari..."></div>`;
             if (['nilai', 'penilaian', 'jurnal', 'kisi_kisi'].includes(dbKey)) {
-                filtersHtml += `<div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Mapel</label><select onchange="handleFilterChange('${dbKey}', 'mapel', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua Mapel</option>${db.mapel.map(m => `<option value="${m.nama}" ${filters.mapel === m.nama ? 'selected' : ''}>${m.nama}</option>`).join('')}</select></div>`;
+                filtersHtml += `<div class="min-w-[120px] md:min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Mapel</label><select onchange="handleFilterChange('${dbKey}', 'mapel', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua Mapel</option>${db.mapel.map(m => `<option value="${m.nama}" ${filters.mapel === m.nama ? 'selected' : ''}>${m.nama}</option>`).join('')}</select></div>`;
             }
             if (['nilai', 'penilaian'].includes(dbKey)) {
                 filtersHtml += `
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Tahun</label><select onchange="handleFilterChange('${dbKey}', 'tahun', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua Tahun</option>${db.tahun_pelajaran.map(t => `<option value="${t.nama}" ${filters.tahun === t.nama ? 'selected' : ''}>${t.nama}</option>`).join('')}</select></div>
-                    <div class="min-w-[120px]"><label class="text-[10px] font-bold uppercase">Filter Smt</label><select onchange="handleFilterChange('${dbKey}', 'semester', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua</option><option value="Semester 1" ${filters.semester === "Semester 1" ? 'selected' : ''}>Semester 1</option><option value="Semester 2" ${filters.semester === "Semester 2" ? 'selected' : ''}>Semester 2</option></select></div>
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Kategori</label><select onchange="handleFilterChange('${dbKey}', 'kategori', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua Kategori</option>${db.kategori_soal.map(k => `<option value="${k.nama}" ${filters.kategori === k.nama ? 'selected' : ''}>${k.nama}</option>`).join('')}</select></div>
+                    <div class="min-w-[120px] md:min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Tahun</label><select onchange="handleFilterChange('${dbKey}', 'tahun', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua Tahun</option>${db.tahun_pelajaran.map(t => `<option value="${t.nama}" ${filters.tahun === t.nama ? 'selected' : ''}>${t.nama}</option>`).join('')}</select></div>
+                    <div class="min-w-[100px] md:min-w-[120px]"><label class="text-[10px] font-bold uppercase">Filter Smt</label><select onchange="handleFilterChange('${dbKey}', 'semester', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua</option><option value="Semester 1" ${filters.semester === "Semester 1" ? 'selected' : ''}>Semester 1</option><option value="Semester 2" ${filters.semester === "Semester 2" ? 'selected' : ''}>Semester 2</option></select></div>
+                    <div class="min-w-[120px] md:min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Kategori</label><select onchange="handleFilterChange('${dbKey}', 'kategori', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua Kategori</option>${db.kategori_soal.map(k => `<option value="${k.nama}" ${filters.kategori === k.nama ? 'selected' : ''}>${k.nama}</option>`).join('')}</select></div>
                 `;
             }
             if (['absensi', 'jurnal'].includes(dbKey)) {
                 filtersHtml += `
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Dari Tanggal</label><input type="date" value="${filters.dateStart || ''}" onchange="handleFilterChange('${dbKey}', 'dateStart', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"></div>
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Ke Tanggal</label><input type="date" value="${filters.dateEnd || ''}" onchange="handleFilterChange('${dbKey}', 'dateEnd', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"></div>
+                    <div class="min-w-[120px] md:min-w-[150px]"><label class="text-[10px] font-bold uppercase">Dari Tanggal</label><input type="date" value="${filters.dateStart || ''}" onchange="handleFilterChange('${dbKey}', 'dateStart', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"></div>
+                    <div class="min-w-[120px] md:min-w-[150px]"><label class="text-[10px] font-bold uppercase">Ke Tanggal</label><input type="date" value="${filters.dateEnd || ''}" onchange="handleFilterChange('${dbKey}', 'dateEnd', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"></div>
                 `;
             }
             if (dbKey === 'kisi_kisi') {
                 filtersHtml += `
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Tahun</label><select onchange="handleFilterChange('${dbKey}', 'tahun', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua Tahun</option>${db.tahun_pelajaran.map(t => `<option value="${t.nama}" ${filters.tahun === t.nama ? 'selected' : ''}>${t.nama}</option>`).join('')}</select></div>
-                    <div class="min-w-[120px]"><label class="text-[10px] font-bold uppercase">Filter Smt</label><select onchange="handleFilterChange('${dbKey}', 'semester', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua</option><option value="Semester 1" ${filters.semester === "Semester 1" ? 'selected' : ''}>1</option><option value="Semester 2" ${filters.semester === "Semester 2" ? 'selected' : ''}>2</option></select></div>
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Bentuk</label><input type="text" value="${filters.bentuk || ''}" onkeyup="handleFilterChange('${dbKey}', 'bentuk', this.value)" class="w-full px-4 py-2 border rounded-lg" placeholder="Cari Bentuk..."></div>
+                    <div class="min-w-[120px] md:min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Tahun</label><select onchange="handleFilterChange('${dbKey}', 'tahun', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua Tahun</option>${db.tahun_pelajaran.map(t => `<option value="${t.nama}" ${filters.tahun === t.nama ? 'selected' : ''}>${t.nama}</option>`).join('')}</select></div>
+                    <div class="min-w-[100px] md:min-w-[120px]"><label class="text-[10px] font-bold uppercase">Filter Smt</label><select onchange="handleFilterChange('${dbKey}', 'semester', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua</option><option value="Semester 1" ${filters.semester === "Semester 1" ? 'selected' : ''}>1</option><option value="Semester 2" ${filters.semester === "Semester 2" ? 'selected' : ''}>2</option></select></div>
+                    <div class="min-w-[120px] md:min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Bentuk</label><input type="text" value="${filters.bentuk || ''}" onkeyup="handleFilterChange('${dbKey}', 'bentuk', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white" placeholder="Cari Bentuk..."></div>
                 `;
             }
 
@@ -635,7 +754,7 @@
 
             let rekapHtml = "";
             if(dbKey === 'absensi') {
-                rekapHtml = `<div class="mt-8 bg-white p-6 rounded-xl shadow-sm border">
+                rekapHtml = `<div class="mt-8 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <h3 class="text-lg font-bold mb-4 text-blue-900 uppercase">Rekap Total Absensi Siswa (Sesuai Filter)</h3>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs custom-table">
@@ -664,8 +783,8 @@
 
             body.innerHTML = `
                 <div class="space-y-6">
-                    <div class="bg-white p-6 rounded-xl shadow-sm border flex flex-wrap gap-4 items-end">${filtersHtml}<button onclick="toggleForm('formAkademik')" class="bg-blue-700 text-white px-4 py-2 rounded-lg font-bold">+ Entry</button><button onclick="cetakData('${dbKey}')" class="bg-slate-700 text-white px-4 py-2 rounded-lg font-bold">Cetak</button></div>
-                    <div id="formAkademik" class="${editingIndex !== null ? '' : 'hidden'} bg-white p-8 rounded-xl border"><form id="academicForm" class="grid grid-cols-1 md:grid-cols-3 gap-6">${getAcademicFields(dbKey)}<div class="md:col-span-3 flex justify-end"><button type="submit" class="bg-blue-700 text-white px-10 py-2 rounded-lg font-bold">Simpan</button></div></form></div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border flex flex-wrap gap-4 items-end">${filtersHtml}<button onclick="toggleForm('formAkademik')" class="bg-blue-700 text-white px-4 py-2 rounded-lg font-bold shadow-sm hover:bg-blue-800 transition">+ Entry</button><button onclick="cetakData('${dbKey}')" class="bg-slate-700 text-white px-4 py-2 rounded-lg font-bold shadow-sm hover:bg-slate-800 transition">Cetak</button></div>
+                    <div id="formAkademik" class="${editingIndex !== null ? '' : 'hidden'} bg-white p-4 md:p-8 rounded-xl border border-slate-200"><form id="academicForm" class="grid grid-cols-1 md:grid-cols-3 gap-6">${getAcademicFields(dbKey)}<div class="md:col-span-3 flex justify-end space-x-3"><button type="button" onclick="cancelEditing()" class="bg-slate-100 text-slate-700 px-6 py-2 rounded-lg font-bold">Batal</button><button type="submit" class="bg-blue-700 text-white px-10 py-2 rounded-lg font-bold">Simpan</button></div></form></div>
                     <div class="bg-white rounded-xl shadow overflow-x-auto border border-black">
                         <table class="w-full text-left text-xs custom-table">
                             <thead class="bg-blue-800 text-white">
@@ -688,8 +807,8 @@
                                 }
                             </tbody>
                         </table>
-                        <div class="p-4 flex justify-between items-center bg-slate-50 border-t border-black">
-                            <span class="text-xs text-slate-500 font-semibold">Menampilkan ${totalItems > 0 ? startIndex + 1 : 0} - ${Math.min(startIndex + ITEMS_PER_PAGE, totalItems)} dari ${totalItems} data filter</span>
+                        <div class="p-4 flex flex-col md:flex-row gap-4 justify-between items-center bg-slate-50 border-t border-black">
+                            <span class="text-xs text-slate-500 font-semibold text-center md:text-left">Menampilkan ${totalItems > 0 ? startIndex + 1 : 0} - ${Math.min(startIndex + ITEMS_PER_PAGE, totalItems)} dari ${totalItems} data filter</span>
                             <div class="flex space-x-2">
                                 <button onclick="changePage('${dbKey}', -1)" ${currentPage === 1 ? 'disabled' : ''} class="page-btn bg-white border border-black px-3 py-1 rounded text-xs font-bold hover:bg-slate-100 transition">Sebelumnya</button>
                                 <span class="px-3 py-1 text-xs font-bold bg-blue-100 text-blue-700 rounded border border-black">${currentPage}</span>
@@ -720,17 +839,37 @@
             refreshIcons();
         }
 
+        // --- STREAMING_CHUNK: Menyediakan form absensi siswa dual mode (manual & scan QR) ---
         function getAcademicFields(key) {
             const sOpt = `<option value="">-- Pilih Siswa --</option>` + db.siswa.map(s => `<option value="${s.nama}">${s.nama}</option>`).join('');
-            const basic = `<div><label class="text-[10px] font-bold">Nama Siswa</label><select name="nama_siswa" onchange="autoFillStudent(this)" class="w-full p-2 border rounded" required>${sOpt}</select></div><div><label class="text-[10px] font-bold">NISN</label><input type="text" name="nisn" readonly class="w-full p-2 border rounded bg-slate-100"></div><div><label class="text-[10px] font-bold">Kelas</label><input type="text" name="kelas" readonly class="w-full p-2 border rounded bg-slate-100"></div>`;
-            const mapel = `<div><label class="text-[10px] font-bold">Mapel</label><select name="mapel" class="w-full p-2 border rounded">${db.mapel.map(m => `<option>${m.nama}</option>`)}</select></div>`;
-            const tahun = `<div><label class="text-[10px] font-bold">Tahun</label><select name="tahun" class="w-full p-2 border rounded">${db.tahun_pelajaran.map(t => `<option>${t.nama}</option>`)}</select></div>`;
-            const semester = `<div><label class="text-[10px] font-bold">Semester</label><select name="semester" class="w-full p-2 border rounded"><option>Semester 1</option><option>Semester 2</option></select></div>`;
-            if(key === 'nilai') return basic + mapel + tahun + semester + `<div><label class="text-[10px] font-bold">Kategori</label><select name="kategori" class="w-full p-2 border rounded">${db.kategori_soal.map(k => `<option>${k.nama}</option>`)}</select></div><div><label class="text-[10px] font-bold">Nilai</label><input type="number" name="nilai" class="w-full p-2 border rounded"></div>`;
-            if(key === 'penilaian') return basic + mapel + tahun + semester + `<div class="md:col-span-3 grid grid-cols-3 gap-2">${db.kategori_soal.map(k => `<div><label class="text-[10px]">${k.nama}</label><input type="number" name="${k.nama}" class="w-full p-1 border rounded"></div>`).join('')}</div>`;
-            if(key === 'absensi') return basic + `<div><label class="text-[10px] font-bold">Tanggal</label><input type="date" name="tanggal" class="w-full p-2 border rounded"></div><div><label class="text-[10px] font-bold">Status</label><select name="status" class="w-full p-2 border rounded"><option>Hadir</option><option>Izin</option><option>Sakit</option><option>Tanpa Keterangan</option></select></div><div><label class="text-[10px] font-bold">Ket</label><input type="text" name="keterangan" class="w-full p-2 border rounded"></div>`;
-            if(key === 'jurnal') return mapel + tahun + `<div><label class="text-[10px] font-bold">Tanggal</label><input type="date" name="tanggal" class="w-full p-2 border rounded"></div><div class="md:col-span-3"><label class="text-[10px] font-bold">Materi</label><input type="text" name="materi" class="w-full p-2 border rounded"></div><div class="md:col-span-3"><label class="text-[10px] font-bold">Kegiatan</label><textarea name="kegiatan" class="w-full p-2 border rounded"></textarea></div><div class="md:col-span-3 grid grid-cols-2 gap-4"><div><label class="text-[10px] font-bold">URL Foto 1</label><input type="text" name="doc1" class="w-full p-2 border rounded"></div><div><label class="text-[10px] font-bold">URL Foto 2</label><input type="text" name="doc2" class="w-full p-2 border rounded"></div></div>`;
-            if(key === 'kisi_kisi') return mapel + tahun + semester + `<div><label class="text-[10px] font-bold">Bentuk</label><input type="text" name="bentuk" class="w-full p-2 border rounded"></div><div><label class="text-[10px] font-bold">Bobot</label><input type="number" name="bobot" class="w-full p-2 border rounded"></div><div class="md:col-span-3"><label class="text-[10px] font-bold">TP</label><textarea name="tujuan" class="w-full p-2 border rounded"></textarea></div><div class="md:col-span-3"><label class="text-[10px] font-bold">Indikator</label><textarea name="indikator" class="w-full p-2 border rounded"></textarea></div>`;
+            const basic = `<div><label class="text-[10px] font-bold uppercase">Nama Siswa</label><select name="nama_siswa" onchange="autoFillStudent(this)" class="w-full p-2 border rounded bg-white" required>${sOpt}</select></div><div><label class="text-[10px] font-bold uppercase">NISN</label><input type="text" name="nisn" readonly class="w-full p-2 border rounded bg-slate-100"></div><div><label class="text-[10px] font-bold uppercase">Kelas</label><input type="text" name="kelas" readonly class="w-full p-2 border rounded bg-slate-100"></div>`;
+            const mapel = `<div><label class="text-[10px] font-bold uppercase">Mapel</label><select name="mapel" class="w-full p-2 border rounded bg-white">${db.mapel.map(m => `<option>${m.nama}</option>`)}</select></div>`;
+            const tahun = `<div><label class="text-[10px] font-bold uppercase">Tahun</label><select name="tahun" class="w-full p-2 border rounded bg-white">${db.tahun_pelajaran.map(t => `<option>${t.nama}</option>`)}</select></div>`;
+            const semester = `<div><label class="text-[10px] font-bold uppercase">Semester</label><select name="semester" class="w-full p-2 border rounded bg-white"><option>Semester 1</option><option>Semester 2</option></select></div>`;
+            
+            if(key === 'nilai') return basic + mapel + tahun + semester + `<div><label class="text-[10px] font-bold uppercase">Kategori</label><select name="kategori" class="w-full p-2 border rounded bg-white">${db.kategori_soal.map(k => `<option>${k.nama}</option>`)}</select></div><div><label class="text-[10px] font-bold uppercase">Nilai</label><input type="number" name="nilai" class="w-full p-2 border rounded bg-white"></div>`;
+            if(key === 'penilaian') return basic + mapel + tahun + semester + `<div class="md:col-span-3 grid grid-cols-3 gap-2">${db.kategori_soal.map(k => `<div><label class="text-[10px] font-bold uppercase">${k.nama}</label><input type="number" name="${k.nama}" class="w-full p-1 border rounded bg-white"></div>`).join('')}</div>`;
+            
+            if(key === 'absensi') return `
+                <!-- Panel QR Scanner Integrasi (Sangat Mudah Diakses di HP) -->
+                <div class="md:col-span-3 bg-blue-50 p-4 rounded-xl border border-blue-200 flex flex-col sm:flex-row gap-4 items-center justify-between">
+                    <div>
+                        <h5 class="font-bold text-blue-900 text-sm">Metode Cepat: Scan QR Code Absensi</h5>
+                        <p class="text-xs text-blue-700 font-medium">Sistem akan secara otomatis mendeteksi siswa dan menyimpan status <span class="font-bold text-green-700">Hadir</span> untuk tanggal hari ini!</p>
+                    </div>
+                    <button type="button" onclick="openQRScanner()" class="w-full sm:w-auto bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 px-5 rounded-lg flex items-center justify-center space-x-2 shadow-sm transition">
+                        <i data-lucide="qr-code" class="w-4 h-4"></i>
+                        <span>Buka Scanner QR</span>
+                    </button>
+                </div>
+                ${basic}
+                <div><label class="text-[10px] font-bold uppercase">Tanggal</label><input type="date" name="tanggal" class="w-full p-2 border rounded bg-white" required></div>
+                <div><label class="text-[10px] font-bold uppercase">Status Kehadiran</label><select name="status" class="w-full p-2 border rounded bg-white"><option>Hadir</option><option>Izin</option><option>Sakit</option><option>Tanpa Keterangan</option></select></div>
+                <div><label class="text-[10px] font-bold uppercase">Keterangan Tambahan</label><input type="text" name="keterangan" class="w-full p-2 border rounded bg-white" placeholder="Sakit flu, dll..."></div>
+            `;
+            
+            if(key === 'jurnal') return mapel + tahun + `<div><label class="text-[10px] font-bold uppercase">Tanggal</label><input type="date" name="tanggal" class="w-full p-2 border rounded bg-white"></div><div class="md:col-span-3"><label class="text-[10px] font-bold uppercase">Materi</label><input type="text" name="materi" class="w-full p-2 border rounded bg-white"></div><div class="md:col-span-3"><label class="text-[10px] font-bold uppercase">Kegiatan</label><textarea name="kegiatan" class="w-full p-2 border rounded bg-white"></textarea></div><div class="md:col-span-3 grid grid-cols-2 gap-4"><div><label class="text-[10px] font-bold uppercase">URL Foto 1</label><input type="text" name="doc1" class="w-full p-2 border rounded bg-white"></div><div><label class="text-[10px] font-bold uppercase">URL Foto 2</label><input type="text" name="doc2" class="w-full p-2 border rounded bg-white"></div></div>`;
+            if(key === 'kisi_kisi') return mapel + tahun + semester + `<div><label class="text-[10px] font-bold uppercase">Bentuk</label><input type="text" name="bentuk" class="w-full p-2 border rounded bg-white"></div><div><label class="text-[10px] font-bold uppercase">Bobot</label><input type="number" name="bobot" class="w-full p-2 border rounded bg-white"></div><div class="md:col-span-3"><label class="text-[10px] font-bold uppercase">TP</label><textarea name="tujuan" class="w-full p-2 border rounded bg-white"></textarea></div><div class="md:col-span-3"><label class="text-[10px] font-bold uppercase">Indikator</label><textarea name="indikator" class="w-full p-2 border rounded bg-white"></textarea></div>`;
         }
 
         function getAcademicTableHead(key) {
@@ -758,7 +897,145 @@
             else { form.nisn.value = ""; form.kelas.value = ""; }
         }
 
-        function deleteData(key, idx) { if(confirm("Hapus data ini secara permanen?")) { db[key].splice(idx, 1); saveData(true); renderMenu(); showToast("DATA BERHASIL DIHAPUS!", "error"); } }
+        // --- STREAMING_CHUNK: Mengatur interaksi pembukaan kamera dan kontrol pemindaian QR absensi ---
+        // --- QR SCANNING CONTROLLER ---
+        function openQRScanner() {
+            document.getElementById('qrScannerModal').style.display = 'flex';
+            refreshIcons();
+            
+            setTimeout(() => {
+                if (html5QrcodeScanner) {
+                    html5QrcodeScanner.clear().catch(err => console.warn(err));
+                }
+                
+                html5QrcodeScanner = new Html5Qrcode("qr-reader");
+                const config = { fps: 10, qrbox: { width: 230, height: 230 } };
+                
+                html5QrcodeScanner.start(
+                    { facingMode: "environment" },
+                    config,
+                    (decodedText, decodedResult) => {
+                        handleQRScanned(decodedText);
+                    },
+                    (errorMessage) => {
+                        // Polling sunyi
+                    }
+                ).catch(err => {
+                    console.error("Camera fail:", err);
+                    showToast("Gagal mengakses kamera. Mohon aktifkan izin kamera!", "error");
+                    closeQRScanner();
+                });
+            }, 300);
+        }
+
+        function closeQRScanner() {
+            document.getElementById('qrScannerModal').style.display = 'none';
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.stop().then(() => {
+                    return html5QrcodeScanner.clear();
+                }).then(() => {
+                    html5QrcodeScanner = null;
+                }).catch(err => {
+                    console.warn(err);
+                    html5QrcodeScanner = null;
+                });
+            }
+        }
+
+        // --- STREAMING_CHUNK: Logika pendaftaran absensi instan / otomatis saat memindai QR Code ---
+        function handleQRScanned(text) {
+            playBeep();
+            closeQRScanner();
+            
+            const scannedValue = text.trim();
+            // Cocokkan data siswa berdasarkan NISN atau nama lengkap
+            const student = db.siswa.find(s => 
+                (s.nisn && s.nisn.trim() === scannedValue) || 
+                (s.nama && s.nama.trim().toLowerCase() === scannedValue.toLowerCase())
+            );
+            
+            if (student) {
+                // Buat format tanggal hari ini secara otomatis (lokal YYYY-MM-DD)
+                const today = new Date();
+                const y = today.getFullYear();
+                const m = String(today.getMonth() + 1).padStart(2, '0');
+                const d = String(today.getDate()).padStart(2, '0');
+                const todayStr = `${y}-${m}-${d}`;
+                
+                // Cek apakah siswa yang sama sudah melakukan absen hari ini
+                const isAlreadyPresent = db.absensi.some(a => 
+                    a.nama_siswa === student.nama && forceLocalDate(a.tanggal) === todayStr
+                );
+                
+                if (isAlreadyPresent) {
+                    showToast(`Siswa "${student.nama}" sudah melakukan absensi hari ini!`, "error");
+                    return;
+                }
+                
+                // Daftarkan entri absensi otomatis berstatus "Hadir"
+                const automaticRecord = {
+                    nama_siswa: student.nama,
+                    nisn: student.nisn || "",
+                    kelas: student.kelas || "",
+                    tanggal: todayStr,
+                    status: "Hadir",
+                    keterangan: "Hadir via QR Code"
+                };
+                
+                // Simpan ke database utama
+                db.absensi.push(automaticRecord);
+                saveData(true); // Simpan dan singkronkan
+                renderMenu(); // Segarkan tampilan tabel
+                showToast(`Absensi "${student.nama}" BERHASIL DICATAT (HADIR)!`, "success");
+            } else {
+                showToast(`QR Code "${scannedValue}" tidak terdaftar pada data siswa!`, "error");
+            }
+        }
+
+        // --- QR CODE VIEWER ACTIONS ---
+        function showQRViewer(name, nisn) {
+            document.getElementById('qrViewerName').innerText = name;
+            document.getElementById('qrViewerNisn').innerText = "NISN: " + (nisn || "-");
+            
+            const qrData = encodeURIComponent(nisn || name);
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${qrData}`;
+            document.getElementById('qrViewerImage').src = qrUrl;
+            
+            document.getElementById('qrViewerModal').style.display = 'flex';
+            refreshIcons();
+        }
+
+        function closeQRViewer() {
+            document.getElementById('qrViewerModal').style.display = 'none';
+        }
+
+        function printQR() {
+            const name = document.getElementById('qrViewerName').innerText;
+            const nisn = document.getElementById('qrViewerNisn').innerText;
+            const src = document.getElementById('qrViewerImage').src;
+            const w = window.open('', '_blank');
+            w.document.write(`
+                <div style="text-align: center; font-family: sans-serif; padding: 40px; border: 3px dashed #1e3a8a; border-radius: 20px; display: inline-block; max-width: 350px;">
+                    <h2 style="color: #1e3a8a; margin: 0 0 10px 0; text-transform: uppercase; font-size: 18px;">KARTU ABSENSI ELEKTRONIK</h2>
+                    <h1 style="margin: 0; font-size: 24px; font-weight: bold;">${name}</h1>
+                    <p style="font-family: monospace; font-size: 14px; color: #555; margin: 5px 0 20px 0;">${nisn}</p>
+                    <img src="${src}" style="width: 220px; height: 220px; margin: 10px 0;">
+                    <p style="font-size: 11px; color: #666; line-height: 1.4; margin-top: 15px;">Simpan kartu ini dengan baik.<br>Tunjukkan kode batang QR ini ke arah kamera saat mengabsen.</p>
+                </div>
+            `);
+            w.document.close();
+            setTimeout(() => w.print(), 500);
+        }
+
+        // --- OPERATOR DATA ---
+        function deleteData(key, idx) { 
+            showCustomConfirm("Hapus Data", "Apakah Anda yakin ingin menghapus data ini secara permanen?", () => {
+                db[key].splice(idx, 1); 
+                saveData(true); 
+                renderMenu(); 
+                showToast("DATA BERHASIL DIHAPUS!", "error"); 
+            });
+        }
         
         function editData(key, idx) { 
             editingIndex = idx; 
@@ -781,6 +1058,7 @@
 
         function cancelEditing() { editingIndex = null; renderMenu(); }
 
+        // --- STREAMING_CHUNK: Menyusun mesin render dokumen PDF laporan profesional ---
         function generatePrintHTML(key) {
             const kop = db.kop, ttd = db.ttd, sekolah = db.sekolah;
             const content = getFilteredData(key);
@@ -826,6 +1104,14 @@
         }
 
         function cetakData(key) { const h = generatePrintHTML(key); const w = window.open('', '_blank'); w.document.write(h); w.document.close(); setTimeout(() => w.print(), 800); }
+
+        // --- RESIZE EVENT LISTENER FOR HP LOCKING ---
+        window.addEventListener('resize', () => {
+            if (checkMobileViewport() && currentMenu !== 'absensi') {
+                currentMenu = 'absensi';
+                renderMenu();
+            }
+        });
     </script>
 </body>
 </html>
