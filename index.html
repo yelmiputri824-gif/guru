@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>YELMI PUTRI.S.Pd</title>
+    <title>Yelmi Putri, S.Pd</title>
     
     <!-- PWA & Mobile Capabilities -->
     <meta name="mobile-web-app-capable" content="yes">
@@ -68,7 +68,7 @@
         </div>
         <p id="progressPercentageText" class="text-2xl font-black font-mono text-blue-400">0%</p>
         
-        <p class="text-xs opacity-60 mt-4 italic text-center">Mohon Tunggu<br>jangan tutup browser anda</p>
+        <p class="text-xs opacity-60 mt-4 italic text-center">Silakan Tunggu<br>Mohon jangan tutup browser anda</p>
     </div>
 
     <!-- Area Tersembunyi untuk Render PDF -->
@@ -376,7 +376,7 @@
                         <p class="font-bold text-slate-800">Yelmi Putri</p>
                         <p class="text-xs text-blue-600">Guru Kelas 6</p>
                     </div>
-                    <!-- Foto Administrator Baru Tersemat di Sini -->
+                    <!-- Foto Administrator Terpilih -->
                     <img src="https://iili.io/ChijUtp.png" alt="Yelmi Putri" class="w-10 h-10 md:w-14 md:h-14 rounded-full object-cover border-2 border-blue-200 shadow-sm" onerror="this.src='https://ui-avatars.com/api/?name=Yelmi+Putri&background=1e3a8a&color=fff'">
                 </div>
             </header>
@@ -443,7 +443,6 @@
             return dateValue;
         }
 
-        // --- STREAMING_CHUNK: Creating notification toast system and custom confirmation overlays -->
         // --- NOTIFICATION HELPERS ---
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
@@ -493,7 +492,59 @@
             }
         }
 
-        // --- STREAMING_CHUNK: Connecting Google Sheets sync APIs and secure browser persistence -->
+        // --- STREAMING_CHUNK: Mendefinisikan generator ucapan suara perempuan "Terima Kasih" berbasis Web Speech API ---
+        // --- WEB SPEECH API: SUARA PEREMPUAN INDONESIA ---
+        function speakTerimaKasih() {
+            try {
+                if ('speechSynthesis' in window) {
+                    // Hentikan antrean suara sebelumnya agar respon instan
+                    window.speechSynthesis.cancel();
+                    
+                    const utterance = new SpeechSynthesisUtterance("Terima Kasih");
+                    utterance.lang = 'id-ID';
+                    utterance.rate = 1.05;  // Kecepatan sedikit lebih ceria
+                    utterance.pitch = 1.25; // Pitch ditinggikan agar murni suara perempuan / feminin yang ramah
+                    
+                    // Saring daftar suara untuk menemukan suara perempuan Indonesia
+                    const voices = window.speechSynthesis.getVoices();
+                    const idVoices = voices.filter(voice => voice.lang.includes('id') || voice.lang.includes('ID'));
+                    
+                    let selectedVoice = idVoices.find(voice => {
+                        const name = voice.name.toLowerCase();
+                        return name.includes('female') || 
+                               name.includes('gadis') || 
+                               name.includes('sari') || 
+                               name.includes('damayanti') || 
+                               name.includes('susan') || 
+                               name.includes('zira') || 
+                               name.includes('google'); // Google Indonesian default biasanya wanita
+                    });
+                    
+                    if (!selectedVoice && idVoices.length > 0) {
+                        selectedVoice = idVoices[0]; // Fallback ke lokal pertama
+                    }
+                    
+                    if (selectedVoice) {
+                        utterance.voice = selectedVoice;
+                    }
+                    
+                    window.speechSynthesis.speak(utterance);
+                } else {
+                    console.warn("Fitur Speech Synthesis tidak didukung browser ini.");
+                }
+            } catch (e) {
+                console.error("Gagal memutar audio ucapan:", e);
+            }
+        }
+
+        // Mempersiapkan memori suara sistem operasi
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                window.speechSynthesis.getVoices();
+            };
+        }
+
+        // --- STREAMING_CHUNK: Mengintegrasikan alur otentikasi login, deteksi sheets, dan sync data otomatis ---
         // --- SYNC FUNCTIONS ---
         async function fetchFromSheets() {
             if(!GOOGLE_SCRIPT_URL) return;
@@ -598,7 +649,7 @@
             overlay.style.display = 'none';
         }
 
-        // --- STREAMING_CHUNK: Registering login handlers and viewport adaptivity routines -->
+        // --- STREAMING_CHUNK: Logika pemicu login, penanganan viewport adaptif HP/Tablet, dan menu switcher ---
         // --- EVENT HANDLERS ---
         document.getElementById('loginForm').onsubmit = (e) => {
             e.preventDefault();
@@ -723,7 +774,7 @@
             reader.readAsText(file);
         }
 
-        // --- STREAMING_CHUNK: Handling desktop vs minimal mobile home view structures -->
+        // --- STREAMING_CHUNK: Menyusun struktur tampilan menu utama dan tampilan minimalis mobile ---
         // --- VIEWS CONTROLLER ---
         function renderMenu() {
             const body = document.getElementById('contentBody');
@@ -886,7 +937,7 @@
             refreshIcons();
         }
 
-        // --- STREAMING_CHUNK: Formatting master form templates with custom border values -->
+        // --- STREAMING_CHUNK: Menyusun perancangan tabel dinamis master data dan pengintegrasian pencetakan kartu ---
         function renderFormMaster(mTitle, mSub, dbKey, fields, isSingle = false) {
             const body = document.getElementById('contentBody');
             document.getElementById('menuTitle').innerText = mTitle;
@@ -932,7 +983,7 @@
                                     <button onclick="deleteData('${dbKey}', ${idx})" class="text-red-600 font-bold hover:underline">Hapus</button>
                                 </td>
                             </tr>`).join('')}
-                            ${db[dbKey].length === 0 ? '<tr><td colspan="15" class="p-10 text-center text-slate-400 font-bold uppercase">Belum ada data terdaftar</td></tr>' : ''}
+                            ${db[dbKey].length === 0 ? '<tr><td colspan="15" class="p-10 text-center text-slate-400 font-bold uppercase border-black">Belum ada data terdaftar</td></tr>' : ''}
                         </tbody>
                     </table>
                 </div>` : ''}
@@ -947,7 +998,7 @@
             };
         }
 
-        // --- STREAMING_CHUNK: Filtering academic metrics based on date ranges and categories -->
+        // --- STREAMING_CHUNK: Mengaktifkan fungsi pemfilteran filter data tingkat lanjut di bagian akademik ---
         function getFilteredData(key) {
             let data = [...db[key]];
             const filters = activeFilters[key] || {};
@@ -978,7 +1029,7 @@
             renderAkademik(document.getElementById('menuTitle').innerText, document.getElementById('menuSub').innerText, key);
         }
 
-        // --- STREAMING_CHUNK: Designing academic data tables and filter panels -->
+        // --- STREAMING_CHUNK: Menyusun perenderan panel modul akademik, data penjelajahan halaman, dan statistik presensi ---
         function renderAkademik(mTitle, mSub, dbKey) {
             const body = document.getElementById('contentBody');
             document.getElementById('menuTitle').innerText = mTitle;
@@ -1117,7 +1168,7 @@
             refreshIcons();
         }
 
-        // --- STREAMING_CHUNK: Populating list and dropdown items for the academic panels -->
+        // --- STREAMING_CHUNK: Menyusun formulir isian akademik, entri nilai siswa, absensi manual, jurnal, dan kisi-kisi ---
         function getAcademicFields(key) {
             const sOpt = `<option value="">-- Pilih Siswa --</option>` + db.siswa.map(s => `<option value="${s.nama}">${s.nama}</option>`).join('');
             const basic = `<div><label class="text-[10px] font-bold">Nama Siswa</label><select name="nama_siswa" onchange="autoFillStudent(this)" class="w-full p-2 border rounded bg-white" required>${sOpt}</select></div><div><label class="text-[10px] font-bold">NISN</label><input type="text" name="nisn" readonly class="w-full p-2 border rounded bg-slate-100"></div><div><label class="text-[10px] font-bold">Kelas</label><input type="text" name="kelas" readonly class="w-full p-2 border rounded bg-slate-100"></div>`;
@@ -1156,7 +1207,7 @@
             else { form.nisn.value = ""; form.kelas.value = ""; }
         }
 
-        // --- STREAMING_CHUNK: Managing QR Code Scanner life cycle and environment triggers -->
+        // --- STREAMING_CHUNK: Menyusun modul kamera pemindai QR, manajemen siklus hidup, dan penutupan kamera ---
         // --- QR SCANNING CONTROLLER ---
         function openQRScanner() {
             document.getElementById('qrScannerModal').style.display = 'flex';
@@ -1201,7 +1252,7 @@
             }
         }
 
-        // --- STREAMING_CHUNK: Processing continuous scan detections and applying anti-flooding logic -->
+        // --- STREAMING_CHUNK: Mengatur validasi pemindaian QR Code siswa, sistem antiduplikasi, dan keluaran suara 'Terima Kasih' ---
         // Variabel untuk melacak pemindaian terakhir guna menghindari spamming kamera
         let lastScannedValue = "";
         let lastScannedTime = 0;
@@ -1253,13 +1304,17 @@
                 db.absensi.push(automaticRecord);
                 saveData(true); 
                 renderMenu(); 
+                
+                // MAIN VOICE OUTPUT: Terima kasih suara wanita
+                speakTerimaKasih();
+                
                 showToast(`Absensi "${student.nama}" BERHASIL (HADIR)!`, "success");
             } else {
                 showToast(`QR Code "${scannedValue}" tidak terdaftar!`, "error");
             }
         }
 
-        // --- STREAMING_CHUNK: Managing QR Code Card generator view models -->
+        // --- STREAMING_CHUNK: Merancang antarmuka penampil QR Code siswa untuk pencetakan kartu satuan ---
         // --- QR CODE VIEWER ACTIONS ---
         function showQRViewer(name, nisn) {
             const student = db.siswa.find(s => s.nama === name) || { nama: name, nisn: nisn, kelas: '-', foto: '' };
@@ -1281,8 +1336,8 @@
             activeViewerStudent = null;
         }
 
-        // --- STREAMING_CHUNK: Structuring premium blue attendance card layouts with custom watermark layers -->
-        // Fungsi pembantu render kartu absensi premium 10x8 cm warna biru
+        // --- STREAMING_CHUNK: Menyusun cetakan fisik kartu absensi berukuran 10x8 cm biru premium dengan watermark logo ---
+        // Fungsi pembantu render kartu absensi premium 10x8 cm warna biru dengan logo baru
         function renderPrintCard(student) {
             const kop = db.kop || {};
             const sekolahName = kop.sekolah || 'UPT SDN 22 TANAH KERAS';
@@ -1301,15 +1356,15 @@
                     </div>
                 </div>
 
-                <!-- Content Area (With absolute watermark logo behind text) -->
+                <!-- Content Area (Dengan logo watermark transparan baru di latar belakang) -->
                 <div style="display: flex; flex-direction: column; padding: 8px; flex: 1; justify-content: space-between; box-sizing: border-box; background: radial-gradient(circle at top right, #f8fafc, #ffffff); position: relative;">
                     
-                    <!-- Watermark Logo behind content -->
+                    <!-- Watermark Logo Baru -->
                     <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; opacity: 0.05; pointer-events: none; z-index: 1;">
                         <img src="https://iili.io/ChkXJyb.png" style="width: 4.5cm; height: 4.5cm; object-fit: contain;">
                     </div>
 
-                    <!-- Content layers explicitly set above watermark using z-index -->
+                    <!-- Elemen konten diatur menggunakan z-index tinggi di atas watermark -->
                     <div style="position: relative; z-index: 5; display: flex; flex-direction: column; height: 100%; justify-content: space-between; width: 100%;">
                         <!-- Photo & QR Code Row -->
                         <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%;">
@@ -1349,7 +1404,7 @@
             `;
         }
 
-        // --- STREAMING_CHUNK: Managing printing window formats for both single and F4 paper grids -->
+        // --- STREAMING_CHUNK: Implementasi modul pencetakan kartu cetak tunggal dan bulk printing grid F4 ---
         // Cetak satu kartu absensi lewat modal detail
         function printQR() {
             if (!activeViewerStudent) {
@@ -1496,7 +1551,7 @@
             }, 1000);
         }
 
-        // --- STREAMING_CHUNK: Managing delete actions and PDF document compilers -->
+        // --- STREAMING_CHUNK: Penyuntingan dan penghapusan record database, pemicu form master, dan generator kompilasi PDF laporan ---
         // --- OPERATIONS ---
         function deleteData(key, idx) { 
             showCustomConfirm("Hapus Data", "Hapus data ini secara permanen?", () => { 
