@@ -2,8 +2,8 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Yelmi Putri,S.Pd</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>YELMI PUTRI, S.Pd</title>
     
     <!-- PWA & Mobile Capabilities -->
     <meta name="mobile-web-app-capable" content="yes">
@@ -13,7 +13,7 @@
     <meta name="theme-color" content="#1e3a8a">
     
     <!-- Manifest Inline untuk Mode Standalone (Layar Penuh pada Edge Tablet/HP) -->
-    <link rel="manifest" href="data:application/json;base64,ewogICJkZWZhdWx0X2xvY2FsZSI6ICJpZCIsCiAgIm5hbWUiOiAiU2lzdGVtIEFkbWluaXN0cmFzaSBHdXJ1IiwKICAic2hvcnRfbmFtZSI6ICJBZG1pbiBHdXJ1IiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMxZTNhOGEiLAogICJ0aGVtZV9jb2xvciI6ICIjMWUzYThhIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9paWxpLmlvL0Noa1hKeWIucG5nIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciCiAgICB9CiAgX09KfQ==">
+    <link rel="manifest" href="data:application/json;base64,ewogICJkZWZhdWx0X2xvY2FsZSI6ICJpZCIsCiAgIm5hbWUiOiAiU2lzdGVtIEFkbWluaXN0cmFzaSBHdXJ1IiwKICAic2hvcnRfbmFtZSI6ICJBZG1pbiBHdXJ1IiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMxZTNhOGEiLAogICJ0aGVtZV9jb2xvciI6ICIjMWUzYThhIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9paWxpLmlvL0Noa1hKeWIucG5nIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmdpCiAgICB9CiAgX09KfQ==">
 
     <!-- Favicon -->
     <link rel="icon" href="https://iili.io/ChkXJyb.png" type="image/png">
@@ -74,7 +74,7 @@
     <!-- Area Tersembunyi untuk Render PDF -->
     <div id="pdfRenderArea" style="position: absolute; left: -9999px; top: 0; width: 1024px; background: white; color: black; padding: 20px;"></div>
 
-    <!-- Custom Confirm Modal (MENGGANTIKAN confirm() BAWAAN BROWSER) -->
+    <!-- Custom Confirm Modal -->
     <div id="confirmModal" class="modal-overlay">
         <div class="bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl text-center m-4">
             <div class="w-20 h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -281,7 +281,7 @@
         <!-- Sidebar Desktop -->
         <aside id="sidebarDesktop" class="hidden md:flex w-64 bg-blue-900 text-white flex-col fixed h-full overflow-y-auto hide-scrollbar z-50">
             <div class="p-6 text-center border-b border-blue-800">
-                <h1 class="text-xl font-bold tracking-tight">Yelmi Putri, S.Pd</h1>
+                <h1 class="text-xl font-bold tracking-tight">YELMI PUTRI,S.Pd</h1>
                 <p class="text-xs text-blue-300">Guru Professional</p>
             </div>
             
@@ -385,7 +385,7 @@
             <div id="contentBody"></div>
         </main>
 
-        <!-- Navigasi Bawah khusus HP / Mobile View (Flat & Seimbang: Beranda, Scanner, & Keluar) -->
+        <!-- Navigasi Bawah khusus HP / Mobile View -->
         <div class="md:hidden fixed bottom-0 left-0 right-0 bg-blue-900 text-white flex justify-around items-center h-16 border-t border-blue-800 z-50 shadow-lg">
             <button onclick="switchMenu('beranda', event)" id="navMobileBeranda" class="flex flex-col items-center justify-center w-1/3 h-full text-blue-300 transition focus:outline-none">
                 <i data-lucide="home" class="w-5 h-5"></i>
@@ -419,8 +419,9 @@
         let currentPage = 1;
         let activeFilters = {}; 
         let html5QrcodeScanner = null;
-        let activeViewerStudent = null; // Menyimpan referensi siswa aktif
-        let confirmCallback = null; // Menyimpan fungsi eksekusi custom confirm
+        let activeViewerStudent = null; 
+        let confirmCallback = null; 
+        let lastIsMobile = checkMobileViewport();
 
         // --- UTILITY: DETEKSI VIEWPORT HP ---
         function checkMobileViewport() {
@@ -474,7 +475,7 @@
             confirmCallback = null;
         }
 
-        // --- AUDIO BEEP INTERNAL (BEBAS DEPENDENSI URL) ---
+        // --- AUDIO BEEP INTERNAL ---
         function playBeep() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -483,7 +484,7 @@
                 oscillator.connect(gainNode);
                 gainNode.connect(audioCtx.destination);
                 oscillator.type = 'sine';
-                oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // Pitch ringkas
+                oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
                 gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
                 oscillator.start();
                 oscillator.stop(audioCtx.currentTime + 0.15); 
@@ -492,20 +493,17 @@
             }
         }
 
-        // --- STREAMING_CHUNK: Mendefinisikan generator ucapan suara perempuan "Terima Kasih" berbasis Web Speech API ---
         // --- WEB SPEECH API: SUARA PEREMPUAN INDONESIA ---
         function speakTerimaKasih() {
             try {
                 if ('speechSynthesis' in window) {
-                    // Hentikan antrean suara sebelumnya agar respon instan
                     window.speechSynthesis.cancel();
                     
                     const utterance = new SpeechSynthesisUtterance("Terima Kasih");
                     utterance.lang = 'id-ID';
-                    utterance.rate = 1.05;  // Kecepatan sedikit lebih ceria
-                    utterance.pitch = 1.25; // Pitch ditinggikan agar murni suara perempuan / feminin yang ramah
+                    utterance.rate = 1.05;  
+                    utterance.pitch = 1.25; 
                     
-                    // Saring daftar suara untuk menemukan suara perempuan Indonesia
                     const voices = window.speechSynthesis.getVoices();
                     const idVoices = voices.filter(voice => voice.lang.includes('id') || voice.lang.includes('ID'));
                     
@@ -517,11 +515,11 @@
                                name.includes('damayanti') || 
                                name.includes('susan') || 
                                name.includes('zira') || 
-                               name.includes('google'); // Google Indonesian default biasanya wanita
+                               name.includes('google');
                     });
                     
                     if (!selectedVoice && idVoices.length > 0) {
-                        selectedVoice = idVoices[0]; // Fallback ke lokal pertama
+                        selectedVoice = idVoices[0];
                     }
                     
                     if (selectedVoice) {
@@ -537,14 +535,12 @@
             }
         }
 
-        // Mempersiapkan memori suara sistem operasi
         if ('speechSynthesis' in window) {
             window.speechSynthesis.onvoiceschanged = () => {
                 window.speechSynthesis.getVoices();
             };
         }
 
-        // --- STREAMING_CHUNK: Mengintegrasikan alur otentikasi login, deteksi sheets, dan sync data otomatis ---
         // --- SYNC FUNCTIONS ---
         async function fetchFromSheets() {
             if(!GOOGLE_SCRIPT_URL) return;
@@ -604,9 +600,7 @@
                         loginScreen.classList.add('hidden');
                         appInterface.classList.remove('hidden');
                         
-                        // Jalankan deteksi viewport awal
                         adaptLayoutToViewport();
-                        
                         renderMenu();
                         refreshIcons();
                         showToast("SELAMAT DATANG, " + credentials.user.toUpperCase());
@@ -649,7 +643,6 @@
             overlay.style.display = 'none';
         }
 
-        // --- STREAMING_CHUNK: Logika pemicu login, penanganan viewport adaptif HP/Tablet, dan menu switcher ---
         // --- EVENT HANDLERS ---
         document.getElementById('loginForm').onsubmit = (e) => {
             e.preventDefault();
@@ -674,8 +667,11 @@
                 currentMenu = 'beranda';
                 if (sidebar) sidebar.classList.add('hidden');
                 if (main) main.classList.remove('md:ml-64');
-                document.getElementById('navMobileBeranda').classList.add('text-white');
-                document.getElementById('navMobileBeranda').classList.remove('text-blue-300');
+                const navBeranda = document.getElementById('navMobileBeranda');
+                if (navBeranda) {
+                    navBeranda.classList.add('text-white');
+                    navBeranda.classList.remove('text-blue-300');
+                }
             } else {
                 if (sidebar) sidebar.classList.remove('hidden');
                 if (sidebar) sidebar.classList.add('md:flex');
@@ -774,7 +770,6 @@
             reader.readAsText(file);
         }
 
-        // --- STREAMING_CHUNK: Menyusun struktur tampilan menu utama dan tampilan minimalis mobile ---
         // --- VIEWS CONTROLLER ---
         function renderMenu() {
             const body = document.getElementById('contentBody');
@@ -790,7 +785,7 @@
                     sub.innerText = checkMobileViewport() ? "Monitoring presensi Anda hari ini." : "Statistik dan ringkasan sistem hari ini.";
                     
                     if (checkMobileViewport()) {
-                        // --- BERANDA KHUSUS MOBILE / HP (HANYA DATA PRESENSI) ---
+                        // BERANDA KHUSUS MOBILE / HP
                         const today = new Date();
                         const y = today.getFullYear();
                         const m = String(today.getMonth() + 1).padStart(2, '0');
@@ -874,7 +869,7 @@
                             </div>
                         </div>`;
                     } else {
-                        // --- BERANDA DESKTOP / TABLET (LENGKAP) ---
+                        // BERANDA DESKTOP / TABLET
                         body.innerHTML = `
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                             <div class="bg-yellow-400 p-6 rounded-xl shadow-md border border-yellow-500 text-white">
@@ -937,25 +932,38 @@
             refreshIcons();
         }
 
-        // --- STREAMING_CHUNK: Menyusun perancangan tabel dinamis master data dan pengintegrasian pencetakan kartu ---
         function renderFormMaster(mTitle, mSub, dbKey, fields, isSingle = false) {
             const body = document.getElementById('contentBody');
             document.getElementById('menuTitle').innerText = mTitle;
             document.getElementById('menuSub').innerText = mSub;
-            let html = `<div class="bg-white p-8 rounded-xl shadow-sm border border-slate-200">
-                <div id="formMaster" class="${!isSingle && editingIndex === null ? 'hidden' : ''} mb-8 p-6 bg-slate-50 rounded-xl border">
-                    <form id="mainForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        ${fields.map(f => `<div><label class="block text-xs font-bold uppercase mb-1">${f.label}</label>
-                        ${f.type === 'select' ? `<select name="${f.key}" class="w-full px-4 py-2 border rounded-lg bg-white">${f.options.map(o => `<option value="${o}">${o}</option>`)}</select>` : `<input type="${f.type}" name="${f.key}" value="${isSingle ? (db[dbKey][f.key] || '') : ''}" class="w-full px-4 py-2 border rounded-lg bg-white">`}</div>`).join('')}
-                        <div class="md:col-span-2 flex justify-end space-x-3 mt-4"><button type="submit" class="bg-blue-700 text-white px-8 py-2 rounded-lg font-bold">Simpan</button></div>
+
+            const currentObj = isSingle ? (db[dbKey] || {}) : (editingIndex !== null && db[dbKey][editingIndex] ? db[dbKey][editingIndex] : {});
+
+            let html = `<div class="bg-white p-4 md:p-8 rounded-xl shadow-sm border border-slate-200">
+                <div id="formMaster" class="${!isSingle && editingIndex === null ? 'hidden' : ''} mb-8 p-4 md:p-6 bg-slate-50 rounded-xl border border-slate-200">
+                    <form id="mainForm" class="grid grid-cols-1 md:grid-cols-2 gap-4" autocomplete="off">
+                        ${fields.map(f => {
+                            const fieldVal = currentObj[f.key] !== undefined ? currentObj[f.key] : '';
+                            return `<div>
+                                <label class="block text-xs font-bold uppercase mb-1 text-slate-700">${f.label}</label>
+                                ${f.type === 'select' 
+                                    ? `<select name="${f.key}" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none text-slate-800 font-medium">${f.options.map(o => `<option value="${o}" ${fieldVal === o ? 'selected' : ''}>${o}</option>`).join('')}</select>` 
+                                    : `<input type="${f.type}" name="${f.key}" value="${fieldVal}" autocomplete="off" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none text-slate-800 font-medium">`
+                                }
+                            </div>`;
+                        }).join('')}
+                        <div class="md:col-span-2 flex justify-end space-x-3 mt-4">
+                            ${!isSingle && editingIndex !== null ? `<button type="button" onclick="cancelEditing()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-6 py-2.5 rounded-lg font-bold text-xs transition">Batal</button>` : ''}
+                            <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-white px-8 py-2.5 rounded-lg font-bold text-xs shadow transition">Simpan</button>
+                        </div>
                     </form>
                 </div>
                 ${!isSingle ? `
                 <div class="flex justify-between items-center mb-6">
-                    <h4 class="font-bold">Data Terdaftar</h4>
+                    <h4 class="font-bold text-slate-800">Data Terdaftar</h4>
                     <div class="flex space-x-2">
-                        ${dbKey === 'siswa' ? `<button onclick="printAllStudentCards()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center space-x-1.5 transition"><i data-lucide="printer" class="w-4 h-4"></i><span>Cetak Semua Kartu QR</span></button>` : ''}
-                        <button onclick="toggleForm('formMaster')" class="bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold">+ Tambah Data</button>
+                        ${dbKey === 'siswa' ? `<button onclick="printAllStudentCards()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs md:text-sm font-bold flex items-center space-x-1.5 transition"><i data-lucide="printer" class="w-4 h-4"></i><span>Cetak Semua Kartu QR</span></button>` : ''}
+                        <button onclick="toggleForm('formMaster')" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition">+ Tambah Data</button>
                     </div>
                 </div>
                 <div class="bg-white rounded-xl shadow overflow-x-auto border border-black">
@@ -998,7 +1006,6 @@
             };
         }
 
-        // --- STREAMING_CHUNK: Mengaktifkan fungsi pemfilteran filter data tingkat lanjut di bagian akademik ---
         function getFilteredData(key) {
             let data = [...db[key]];
             const filters = activeFilters[key] || {};
@@ -1029,7 +1036,6 @@
             renderAkademik(document.getElementById('menuTitle').innerText, document.getElementById('menuSub').innerText, key);
         }
 
-        // --- STREAMING_CHUNK: Menyusun perenderan panel modul akademik, data penjelajahan halaman, dan statistik presensi ---
         function renderAkademik(mTitle, mSub, dbKey) {
             const body = document.getElementById('contentBody');
             document.getElementById('menuTitle').innerText = mTitle;
@@ -1098,7 +1104,6 @@
                 </div>`;
             }
 
-            // Menambahkan tombol Buka QR Scanner langsung pada tampilan modul Absensi di Desktop
             let dynamicButtons = `<button onclick="toggleForm('formAkademik')" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-lg font-bold transition flex items-center space-x-1.5 shadow-sm"><i data-lucide="plus" class="w-4 h-4"></i><span>+ Entry Manual</span></button>`;
             if (dbKey === 'absensi') {
                 dynamicButtons += `<button onclick="openQRScanner()" class="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded-lg font-bold transition flex items-center space-x-1.5 shadow-sm"><i data-lucide="qr-code" class="w-4 h-4"></i><span>Buka Scanner QR</span></button>`;
@@ -1113,7 +1118,7 @@
                             <button onclick="cetakData('${dbKey}')" class="bg-slate-700 hover:bg-slate-800 text-white px-4 py-2 rounded-lg font-bold transition">Cetak</button>
                         </div>
                     </div>
-                    <div id="formAkademik" class="${editingIndex !== null ? '' : 'hidden'} bg-white p-8 rounded-xl border"><form id="academicForm" class="grid grid-cols-1 md:grid-cols-3 gap-6">${getAcademicFields(dbKey)}<div class="md:col-span-3 flex justify-end"><button type="submit" class="bg-blue-700 text-white px-10 py-2 rounded-lg font-bold">Simpan</button></div></form></div>
+                    <div id="formAkademik" class="${editingIndex !== null ? '' : 'hidden'} bg-white p-8 rounded-xl border"><form id="academicForm" class="grid grid-cols-1 md:grid-cols-3 gap-6" autocomplete="off">${getAcademicFields(dbKey)}<div class="md:col-span-3 flex justify-end"><button type="submit" class="bg-blue-700 text-white px-10 py-2 rounded-lg font-bold">Simpan</button></div></form></div>
                     <div class="bg-white rounded-xl shadow overflow-x-auto border border-black">
                         <table class="w-full text-left text-xs custom-table">
                             <thead class="bg-blue-800 text-white">
@@ -1168,18 +1173,17 @@
             refreshIcons();
         }
 
-        // --- STREAMING_CHUNK: Menyusun formulir isian akademik, entri nilai siswa, absensi manual, jurnal, dan kisi-kisi ---
         function getAcademicFields(key) {
             const sOpt = `<option value="">-- Pilih Siswa --</option>` + db.siswa.map(s => `<option value="${s.nama}">${s.nama}</option>`).join('');
-            const basic = `<div><label class="text-[10px] font-bold">Nama Siswa</label><select name="nama_siswa" onchange="autoFillStudent(this)" class="w-full p-2 border rounded bg-white" required>${sOpt}</select></div><div><label class="text-[10px] font-bold">NISN</label><input type="text" name="nisn" readonly class="w-full p-2 border rounded bg-slate-100"></div><div><label class="text-[10px] font-bold">Kelas</label><input type="text" name="kelas" readonly class="w-full p-2 border rounded bg-slate-100"></div>`;
-            const mapel = `<div><label class="text-[10px] font-bold">Mapel</label><select name="mapel" class="w-full p-2 border rounded bg-white">${db.mapel.map(m => `<option>${m.nama}</option>`)}</select></div>`;
-            const tahun = `<div><label class="text-[10px] font-bold">Tahun</label><select name="tahun" class="w-full p-2 border rounded bg-white">${db.tahun_pelajaran.map(t => `<option>${t.nama}</option>`)}</select></div>`;
-            const semester = `<div><label class="text-[10px] font-bold">Semester</label><select name="semester" class="w-full p-2 border rounded bg-white"><option>Semester 1</option><option>Semester 2</option></select></div>`;
-            if(key === 'nilai') return basic + mapel + tahun + semester + `<div><label class="text-[10px] font-bold">Kategori</label><select name="kategori" class="w-full p-2 border rounded bg-white">${db.kategori_soal.map(k => `<option>${k.nama}</option>`)}</select></div><div><label class="text-[10px] font-bold">Nilai</label><input type="number" name="nilai" class="w-full p-2 border rounded bg-white"></div>`;
-            if(key === 'penilaian') return basic + mapel + tahun + semester + `<div class="md:col-span-3 grid grid-cols-3 gap-2">${db.kategori_soal.map(k => `<div><label class="text-[10px]">${k.nama}</label><input type="number" name="${k.nama}" class="w-full p-1 border rounded bg-white"></div>`).join('')}</div>`;
-            if(key === 'absensi') return basic + `<div><label class="text-[10px] font-bold">Tanggal</label><input type="date" name="tanggal" class="w-full p-2 border rounded bg-white"></div><div><label class="text-[10px] font-bold">Status</label><select name="status" class="w-full p-2 border rounded bg-white"><option>Hadir</option><option>Izin</option><option>Sakit</option><option>Tanpa Keterangan</option></select></div><div><label class="text-[10px] font-bold">Ket</label><input type="text" name="keterangan" class="w-full p-2 border rounded bg-white"></div>`;
-            if(key === 'jurnal') return mapel + tahun + `<div><label class="text-[10px] font-bold">Tanggal</label><input type="date" name="tanggal" class="w-full p-2 border rounded bg-white"></div><div class="md:col-span-3"><label class="text-[10px] font-bold">Materi</label><input type="text" name="materi" class="w-full p-2 border rounded bg-white"></div><div class="md:col-span-3"><label class="text-[10px] font-bold">Kegiatan</label><textarea name="kegiatan" class="w-full p-2 border rounded bg-white"></textarea></div><div class="md:col-span-3 grid grid-cols-2 gap-4"><div><label class="text-[10px] font-bold">URL Foto 1</label><input type="text" name="doc1" class="w-full p-2 border rounded bg-white"></div><div><label class="text-[10px] font-bold">URL Foto 2</label><input type="text" name="doc2" class="w-full p-2 border rounded bg-white"></div></div>`;
-            if(key === 'kisi_kisi') return mapel + tahun + semester + `<div><label class="text-[10px] font-bold">Bentuk</label><input type="text" name="bentuk" class="w-full p-2 border rounded bg-white"></div><div><label class="text-[10px] font-bold">Bobot</label><input type="number" name="bobot" class="w-full p-2 border rounded bg-white"></div><div class="md:col-span-3"><label class="text-[10px] font-bold">TP</label><textarea name="tujuan" class="w-full p-2 border rounded bg-white"></textarea></div><div class="md:col-span-3"><label class="text-[10px] font-bold">Indikator</label><textarea name="indikator" class="w-full p-2 border rounded bg-white"></textarea></div>`;
+            const basic = `<div><label class="text-[10px] font-bold">Nama Siswa</label><select name="nama_siswa" onchange="autoFillStudent(this)" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none" required>${sOpt}</select></div><div><label class="text-[10px] font-bold">NISN</label><input type="text" name="nisn" readonly class="w-full p-2.5 border rounded bg-slate-100"></div><div><label class="text-[10px] font-bold">Kelas</label><input type="text" name="kelas" readonly class="w-full p-2.5 border rounded bg-slate-100"></div>`;
+            const mapel = `<div><label class="text-[10px] font-bold">Mapel</label><select name="mapel" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none">${db.mapel.map(m => `<option>${m.nama}</option>`)}</select></div>`;
+            const tahun = `<div><label class="text-[10px] font-bold">Tahun</label><select name="tahun" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none">${db.tahun_pelajaran.map(t => `<option>${t.nama}</option>`)}</select></div>`;
+            const semester = `<div><label class="text-[10px] font-bold">Semester</label><select name="semester" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"><option>Semester 1</option><option>Semester 2</option></select></div>`;
+            if(key === 'nilai') return basic + mapel + tahun + semester + `<div><label class="text-[10px] font-bold">Kategori</label><select name="kategori" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none">${db.kategori_soal.map(k => `<option>${k.nama}</option>`)}</select></div><div><label class="text-[10px] font-bold">Nilai</label><input type="number" name="nilai" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div>`;
+            if(key === 'penilaian') return basic + mapel + tahun + semester + `<div class="md:col-span-3 grid grid-cols-3 gap-2">${db.kategori_soal.map(k => `<div><label class="text-[10px]">${k.nama}</label><input type="number" name="${k.nama}" autocomplete="off" class="w-full p-2 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div>`).join('')}</div>`;
+            if(key === 'absensi') return basic + `<div><label class="text-[10px] font-bold">Tanggal</label><input type="date" name="tanggal" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div><div><label class="text-[10px] font-bold">Status</label><select name="status" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"><option>Hadir</option><option>Izin</option><option>Sakit</option><option>Tanpa Keterangan</option></select></div><div><label class="text-[10px] font-bold">Ket</label><input type="text" name="keterangan" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div>`;
+            if(key === 'jurnal') return mapel + tahun + `<div><label class="text-[10px] font-bold">Tanggal</label><input type="date" name="tanggal" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div><div class="md:col-span-3"><label class="text-[10px] font-bold">Materi</label><input type="text" name="materi" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div><div class="md:col-span-3"><label class="text-[10px] font-bold">Kegiatan</label><textarea name="kegiatan" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></textarea></div><div class="md:col-span-3 grid grid-cols-2 gap-4"><div><label class="text-[10px] font-bold">URL Foto 1</label><input type="text" name="doc1" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div><div><label class="text-[10px] font-bold">URL Foto 2</label><input type="text" name="doc2" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div></div>`;
+            if(key === 'kisi_kisi') return mapel + tahun + semester + `<div><label class="text-[10px] font-bold">Bentuk</label><input type="text" name="bentuk" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div><div><label class="text-[10px] font-bold">Bobot</label><input type="number" name="bobot" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div><div class="md:col-span-3"><label class="text-[10px] font-bold">TP</label><textarea name="tujuan" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></textarea></div><div class="md:col-span-3"><label class="text-[10px] font-bold">Indikator</label><textarea name="indikator" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></textarea></div>`;
         }
 
         function getAcademicTableHead(key) {
@@ -1207,7 +1211,6 @@
             else { form.nisn.value = ""; form.kelas.value = ""; }
         }
 
-        // --- STREAMING_CHUNK: Menyusun modul kamera pemindai QR, manajemen siklus hidup, dan penutupan kamera ---
         // --- QR SCANNING CONTROLLER ---
         function openQRScanner() {
             document.getElementById('qrScannerModal').style.display = 'flex';
@@ -1252,8 +1255,6 @@
             }
         }
 
-        // --- STREAMING_CHUNK: Mengatur validasi pemindaian QR Code siswa, sistem antiduplikasi, dan keluaran suara 'Terima Kasih' ---
-        // Variabel untuk melacak pemindaian terakhir guna menghindari spamming kamera
         let lastScannedValue = "";
         let lastScannedTime = 0;
 
@@ -1261,7 +1262,7 @@
             const now = Date.now();
             const scannedValue = text.trim();
             
-            // COOLDOWN SCANNER: Hindari mencatat murid yang sama berkali-kali dalam rentang 3 detik
+            // COOLDOWN SCANNER
             if (scannedValue === lastScannedValue && (now - lastScannedTime) < 3000) {
                 return;
             }
@@ -1305,7 +1306,6 @@
                 saveData(true); 
                 renderMenu(); 
                 
-                // MAIN VOICE OUTPUT: Terima kasih suara wanita
                 speakTerimaKasih();
                 
                 showToast(`Absensi "${student.nama}" BERHASIL (HADIR)!`, "success");
@@ -1314,7 +1314,6 @@
             }
         }
 
-        // --- STREAMING_CHUNK: Merancang antarmuka penampil QR Code siswa untuk pencetakan kartu satuan ---
         // --- QR CODE VIEWER ACTIONS ---
         function showQRViewer(name, nisn) {
             const student = db.siswa.find(s => s.nama === name) || { nama: name, nisn: nisn, kelas: '-', foto: '' };
@@ -1336,8 +1335,6 @@
             activeViewerStudent = null;
         }
 
-        // --- STREAMING_CHUNK: Menyusun cetakan fisik kartu absensi berukuran 10x8 cm biru premium dengan watermark logo ---
-        // Fungsi pembantu render kartu absensi premium 10x8 cm warna biru dengan logo baru
         function renderPrintCard(student) {
             const kop = db.kop || {};
             const sekolahName = kop.sekolah || 'UPT SDN 22 TANAH KERAS';
@@ -1356,15 +1353,15 @@
                     </div>
                 </div>
 
-                <!-- Content Area (Dengan logo watermark transparan baru di latar belakang) -->
+                <!-- Content Area -->
                 <div style="display: flex; flex-direction: column; padding: 8px; flex: 1; justify-content: space-between; box-sizing: border-box; background: radial-gradient(circle at top right, #f8fafc, #ffffff); position: relative;">
                     
-                    <!-- Watermark Logo Baru -->
+                    <!-- Watermark Logo -->
                     <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; opacity: 0.05; pointer-events: none; z-index: 1;">
                         <img src="https://iili.io/ChkXJyb.png" style="width: 4.5cm; height: 4.5cm; object-fit: contain;">
                     </div>
 
-                    <!-- Elemen konten diatur menggunakan z-index tinggi di atas watermark -->
+                    <!-- Elemen konten -->
                     <div style="position: relative; z-index: 5; display: flex; flex-direction: column; height: 100%; justify-content: space-between; width: 100%;">
                         <!-- Photo & QR Code Row -->
                         <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; width: 100%;">
@@ -1404,8 +1401,6 @@
             `;
         }
 
-        // --- STREAMING_CHUNK: Implementasi modul pencetakan kartu cetak tunggal dan bulk printing grid F4 ---
-        // Cetak satu kartu absensi lewat modal detail
         function printQR() {
             if (!activeViewerStudent) {
                 showToast("Data siswa tidak terpilih!", "error");
@@ -1432,22 +1427,10 @@
                             -webkit-print-color-adjust: exact;
                             print-color-adjust: exact;
                         }
-                        @page {
-                            size: A4 portrait;
-                            margin: 0;
-                        }
+                        @page { size: A4 portrait; margin: 0; }
                         @media print {
-                            body {
-                                background: #ffffff;
-                                padding: 0;
-                                min-height: auto;
-                            }
-                            .card-wrapper {
-                                position: absolute;
-                                top: 4cm;
-                                left: 50%;
-                                transform: translateX(-50%);
-                            }
+                            body { background: #ffffff; padding: 0; min-height: auto; }
+                            .card-wrapper { position: absolute; top: 4cm; left: 50%; transform: translateX(-50%); }
                         }
                     </style>
                 </head>
@@ -1459,12 +1442,9 @@
                 </html>
             `);
             printWindow.document.close();
-            setTimeout(() => {
-                printWindow.print();
-            }, 1000);
+            setTimeout(() => { printWindow.print(); }, 1000);
         }
 
-        // Cetak Semua Kartu Absensi Sekaligus pada Kertas F4 (6 Kartu per halaman)
         function printAllStudentCards() {
             if (!db.siswa || db.siswa.length === 0) {
                 showToast("Belum ada data siswa untuk dicetak!", "error");
@@ -1472,9 +1452,7 @@
             }
 
             const printWindow = window.open('', '_blank');
-            
             let cardsGrid = '';
-            // Bagi data siswa menjadi kelompok berisi 6 siswa untuk muat F4 (2 kolom x 3 baris)
             for (let i = 0; i < db.siswa.length; i += 6) {
                 const chunk = db.siswa.slice(i, i + 6);
                 cardsGrid += `
@@ -1494,50 +1472,12 @@
                     <title>Cetak Semua Kartu Absensi Siswa - F4</title>
                     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
                     <style>
-                        body {
-                            margin: 0;
-                            padding: 0;
-                            background: #f1f5f9;
-                            font-family: 'Inter', sans-serif;
-                            -webkit-print-color-adjust: exact;
-                            print-color-adjust: exact;
-                        }
-                        /* F4 Size styling: 21.5cm x 33cm */
-                        @page {
-                            size: 21.5cm 33.0cm;
-                            margin: 1.2cm 0.7cm;
-                        }
-                        .page-container {
-                            width: 21.5cm;
-                            height: 33.0cm;
-                            box-sizing: border-box;
-                            padding: 0.5cm 0;
-                            display: flex;
-                            justify-content: center;
-                            align-items: flex-start;
-                            background: #ffffff;
-                        }
-                        .grid-container {
-                            display: grid;
-                            grid-template-columns: repeat(2, 8cm);
-                            grid-gap: 0.8cm 1.5cm;
-                            justify-content: center;
-                            align-content: start;
-                            width: 100%;
-                        }
-                        .page-break {
-                            page-break-after: always;
-                        }
-                        @media print {
-                            body {
-                                background: #ffffff;
-                            }
-                            .page-container {
-                                width: auto;
-                                height: auto;
-                                padding: 0;
-                            }
-                        }
+                        body { margin: 0; padding: 0; background: #f1f5f9; font-family: 'Inter', sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                        @page { size: 21.5cm 33.0cm; margin: 1.2cm 0.7cm; }
+                        .page-container { width: 21.5cm; height: 33.0cm; box-sizing: border-box; padding: 0.5cm 0; display: flex; justify-content: center; align-items: flex-start; background: #ffffff; }
+                        .grid-container { display: grid; grid-template-columns: repeat(2, 8cm); grid-gap: 0.8cm 1.5cm; justify-content: center; align-content: start; width: 100%; }
+                        .page-break { page-break-after: always; }
+                        @media print { body { background: #ffffff; } .page-container { width: auto; height: auto; padding: 0; } }
                     </style>
                 </head>
                 <body>
@@ -1546,12 +1486,9 @@
                 </html>
             `);
             printWindow.document.close();
-            setTimeout(() => {
-                printWindow.print();
-            }, 1000);
+            setTimeout(() => { printWindow.print(); }, 1000);
         }
 
-        // --- STREAMING_CHUNK: Penyuntingan dan penghapusan record database, pemicu form master, dan generator kompilasi PDF laporan ---
         // --- OPERATIONS ---
         function deleteData(key, idx) { 
             showCustomConfirm("Hapus Data", "Hapus data ini secara permanen?", () => { 
@@ -1630,9 +1567,14 @@
 
         function cetakData(key) { const h = generatePrintHTML(key); const w = window.open('', '_blank'); w.document.write(h); w.document.close(); setTimeout(() => w.print(), 800); }
 
+        // RESIZE LISTENER PINTAR (TIDAK MERESET FORM SAAT VIRTUAL KEYBOARD TABLET TERBUKA)
         window.addEventListener('resize', () => {
-            adaptLayoutToViewport();
-            renderMenu();
+            const currentIsMobile = checkMobileViewport();
+            if (currentIsMobile !== lastIsMobile) {
+                lastIsMobile = currentIsMobile;
+                adaptLayoutToViewport();
+                renderMenu();
+            }
         });
     </script>
 </body>
