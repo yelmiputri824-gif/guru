@@ -9,16 +9,16 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Admin Guru">
+    <meta name="apple-mobile-web-app-title" content="Yelmi Putri,S.Pd">
     <meta name="theme-color" content="#1e3a8a">
     
     <!-- Manifest Inline untuk Mode Standalone (Layar Penuh pada Edge Tablet/HP) -->
-    <link rel="manifest" href="data:application/json;base64,ewogICJkZWZhdWx0X2xvY2FsZSI6ICJpZCIsCiAgIm5hbWUiOiAiU2lzdGVtIEFkbWluaXN0cmFzaSBHdXJ1IiwKICAic2hvcnRfbmFtZSI6ICJBZG1pbiBHdXJ1IiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMxZTNhOGEiLAogICJ0aGVtZV9jb2xvciI6ICIjMWUzYThhIiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiaHR0cHM6Ly9paWxpLmlvL0Noa1hKeWIucG5nIiwKICAgICAgInNpemVzIjogIjUxMng1MTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmdpCiAgICB9CiAgX09KfQ==">
+    <link rel="manifest" href="data:application/json;base64,eyJkZWZhdWx0X2xvY2FsZSI6ImlkIiwibmFtZSI6IlNpc3RlbSBBZG1pbmlzdHJhc2kgR3VydSIsInNob3J0X25hbWUiOiJBZG1pbiBHdXJ1Iiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMxZTNhOGEiLCJ0aGVtZV9jb2xvciI6IiMxZTNhOGEiLCJpY29ucyI6W3sic3JjIjoiaHR0cHM6Ly9paWxpLmlvL0M4VDExczQucG5nIiwic2l6ZXMiOiI1MTJ4NTEyIiwidHlwZSI6ImltYWdlL3BuZyJ9XX0=">
 
     <!-- Favicon -->
-    <link rel="icon" href="https://iili.io/ChkXJyb.png" type="image/png">
-    <link rel="shortcut icon" href="https://iili.io/ChkXJyb.png" type="image/png">
-    <link rel="apple-touch-icon" href="https://iili.io/ChkXJyb.png">
+    <link rel="icon" href="https://iili.io/C8T11s4.png" type="image/png">
+    <link rel="shortcut icon" href="https://iili.io/C8T11s4.png" type="image/png">
+    <link rel="apple-touch-icon" href="https://iili.io/C8T11s4.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.0/umd/lucide.min.js"></script>
@@ -43,8 +43,14 @@
         /* Pagination Styling */
         .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         
-        /* Table Custom Border */
+        /* Table Custom Border & Print Color Preservation */
         .custom-table th, .custom-table td { border: 1px solid #000; }
+        .custom-table th { background-color: #1e3a8a !important; color: #ffffff !important; }
+
+        @media print {
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+            th { background-color: #1e3a8a !important; color: #ffffff !important; }
+        }
         
         /* PWA Full Screen Adjustments */
         @media all and (display-mode: standalone) {
@@ -281,8 +287,8 @@
         <!-- Sidebar Desktop -->
         <aside id="sidebarDesktop" class="hidden md:flex w-64 bg-blue-900 text-white flex-col fixed h-full overflow-y-auto hide-scrollbar z-50">
             <div class="p-6 text-center border-b border-blue-800">
-                <h1 class="text-xl font-bold tracking-tight">YELMI PUTRI,S.Pd</h1>
-                <p class="text-xs text-blue-300">Guru Professional</p>
+                <h1 class="text-xl font-bold tracking-tight">ADMIN GURU</h1>
+                <p class="text-xs text-blue-300">Guru Profesional</p>
             </div>
             
             <nav class="flex-1 py-4">
@@ -1012,19 +1018,68 @@
 
             return data.filter(item => {
                 let match = true;
-                if (filters.search && !JSON.stringify(item).toLowerCase().includes(filters.search.toLowerCase())) match = false;
-                if (filters.mapel && item.mapel !== filters.mapel) match = false;
-                if (filters.tahun && item.tahun !== filters.tahun) match = false;
-                if (filters.semester && item.semester !== filters.semester) match = false;
-                if (filters.kategori && item.kategori !== filters.kategori) match = false;
+                
+                // 1. Filter Cari Nama / Text
+                if (filters.search && filters.search.trim() !== '') {
+                    const searchTerm = filters.search.trim().toLowerCase();
+                    const itemText = JSON.stringify(item).toLowerCase();
+                    if (!itemText.includes(searchTerm)) match = false;
+                }
+
+                // 2. Filter Mapel
+                if (filters.mapel && filters.mapel.trim() !== '') {
+                    const targetMapel = filters.mapel.trim().toLowerCase();
+                    const itemMapel = String(item.mapel || '').trim().toLowerCase();
+                    if (itemMapel !== targetMapel && !itemMapel.includes(targetMapel) && !targetMapel.includes(itemMapel)) match = false;
+                }
+
+                // 3. Filter Tahun Pelajaran
+                if (filters.tahun && filters.tahun.trim() !== '') {
+                    const targetTahun = filters.tahun.trim().toLowerCase();
+                    const itemTahun = String(item.tahun || '').trim().toLowerCase();
+                    if (itemTahun !== targetTahun) match = false;
+                }
+
+                // 4. Filter Semester
+                if (filters.semester && filters.semester.trim() !== '') {
+                    const targetSmt = filters.semester.trim().toLowerCase();
+                    const itemSmt = String(item.semester || '').trim().toLowerCase();
+                    if (itemSmt !== targetSmt) match = false;
+                }
+
+                // 5. Filter Kategori Soal / Penilaian (Presisi & Fleksibel untuk "Latihan 1 TP 1 MTK")
+                if (filters.kategori && filters.kategori.trim() !== '') {
+                    const targetKat = filters.kategori.trim().toLowerCase();
+                    if (key === 'nilai') {
+                        const itemKat = String(item.kategori || '').trim().toLowerCase();
+                        const isMatch = (itemKat === targetKat) || itemKat.includes(targetKat) || targetKat.includes(itemKat);
+                        if (!isMatch) match = false;
+                    } else if (key === 'penilaian') {
+                        const origKat = filters.kategori.trim();
+                        const hasProp = item.hasOwnProperty(origKat) && item[origKat] !== '' && item[origKat] !== null && item[origKat] !== undefined;
+                        const itemKat = String(item.kategori || '').trim().toLowerCase();
+                        const isKatMatch = itemKat && (itemKat === targetKat || itemKat.includes(targetKat) || targetKat.includes(itemKat));
+                        if (!hasProp && !isKatMatch) {
+                            const matchedKey = Object.keys(item).find(k => k.toLowerCase().includes(targetKat) && item[k] !== '' && item[k] !== null && item[k] !== undefined);
+                            if (!matchedKey) match = false;
+                        }
+                    }
+                }
+
+                // 6. Filter Rentang Tanggal (Absensi & Jurnal)
                 if (['absensi', 'jurnal'].includes(key) && item.tanggal) {
                     const itemDate = forceLocalDate(item.tanggal);
-                    if (filters.dateStart && itemDate < filters.dateStart) match = false;
-                    if (filters.dateEnd && itemDate > filters.dateEnd) match = false;
+                    if (filters.dateStart && filters.dateStart.trim() !== '' && itemDate < filters.dateStart.trim()) match = false;
+                    if (filters.dateEnd && filters.dateEnd.trim() !== '' && itemDate > filters.dateEnd.trim()) match = false;
                 }
-                if (key === 'kisi_kisi') {
-                    if (filters.bentuk && !item.bentuk?.toLowerCase().includes(filters.bentuk.toLowerCase())) match = false;
+
+                // 7. Filter Bentuk (Kisi-Kisi)
+                if (key === 'kisi_kisi' && filters.bentuk && filters.bentuk.trim() !== '') {
+                    const targetBentuk = filters.bentuk.trim().toLowerCase();
+                    const itemBentuk = String(item.bentuk || '').trim().toLowerCase();
+                    if (!itemBentuk.includes(targetBentuk)) match = false;
                 }
+
                 return match;
             });
         }
@@ -1043,15 +1098,36 @@
             
             const filters = activeFilters[dbKey] || {};
 
+            // Helper untuk membersihkan spasi tersembunyi dan menghilangkan duplikat kategori/mapel/tahun
+            const getUniqueClean = (arr) => {
+                const list = [];
+                const seen = new Set();
+                arr.forEach(item => {
+                    const str = (typeof item === 'object' && item !== null ? item.nama : item);
+                    if (str && typeof str === 'string') {
+                        const clean = str.trim();
+                        if (clean && !seen.has(clean.toLowerCase())) {
+                            seen.add(clean.toLowerCase());
+                            list.push(clean);
+                        }
+                    }
+                });
+                return list;
+            };
+
+            const allMapelList = getUniqueClean([...db.mapel, ...db[dbKey].map(i => i.mapel)]);
+            const allTahunList = getUniqueClean([...db.tahun_pelajaran, ...db[dbKey].map(i => i.tahun)]);
+            const allKategoriList = getUniqueClean([...db.kategori_soal, ...db.nilai.map(n => n.kategori)]);
+
             let filtersHtml = `<div class="flex-1 min-w-[200px]"><label class="text-[10px] font-bold uppercase">Cari Nama</label><input type="text" value="${filters.search || ''}" onkeyup="handleFilterChange('${dbKey}', 'search', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white" placeholder="Cari..."></div>`;
             if (['nilai', 'penilaian', 'jurnal', 'kisi_kisi'].includes(dbKey)) {
-                filtersHtml += `<div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Mapel</label><select onchange="handleFilterChange('${dbKey}', 'mapel', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua Mapel</option>${db.mapel.map(m => `<option value="${m.nama}" ${filters.mapel === m.nama ? 'selected' : ''}>${m.nama}</option>`).join('')}</select></div>`;
+                filtersHtml += `<div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Mapel</label><select onchange="handleFilterChange('${dbKey}', 'mapel', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua Mapel</option>${allMapelList.map(m => `<option value="${m}" ${filters.mapel === m ? 'selected' : ''}>${m}</option>`).join('')}</select></div>`;
             }
             if (['nilai', 'penilaian'].includes(dbKey)) {
                 filtersHtml += `
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Tahun</label><select onchange="handleFilterChange('${dbKey}', 'tahun', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua Tahun</option>${db.tahun_pelajaran.map(t => `<option value="${t.nama}" ${filters.tahun === t.nama ? 'selected' : ''}>${t.nama}</option>`).join('')}</select></div>
+                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Tahun</label><select onchange="handleFilterChange('${dbKey}', 'tahun', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua Tahun</option>${allTahunList.map(t => `<option value="${t}" ${filters.tahun === t ? 'selected' : ''}>${t}</option>`).join('')}</select></div>
                     <div class="min-w-[120px]"><label class="text-[10px] font-bold uppercase">Filter Smt</label><select onchange="handleFilterChange('${dbKey}', 'semester', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua</option><option value="Semester 1" ${filters.semester === "Semester 1" ? 'selected' : ''}>Semester 1</option><option value="Semester 2" ${filters.semester === "Semester 2" ? 'selected' : ''}>Semester 2</option></select></div>
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Kategori</label><select onchange="handleFilterChange('${dbKey}', 'kategori', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua Kategori</option>${db.kategori_soal.map(k => `<option value="${k.nama}" ${filters.kategori === k.nama ? 'selected' : ''}>${k.nama}</option>`).join('')}</select></div>
+                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Kategori</label><select onchange="handleFilterChange('${dbKey}', 'kategori', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua Kategori</option>${allKategoriList.map(k => `<option value="${k}" ${filters.kategori === k ? 'selected' : ''}>${k}</option>`).join('')}</select></div>
                 `;
             }
             if (['absensi', 'jurnal'].includes(dbKey)) {
@@ -1522,11 +1598,11 @@
 
         // --- RENDER PRINT LAPORAN PDF ---
         function generatePrintHTML(key) {
-            const kop = db.kop, ttd = db.ttd, sekolah = db.sekolah;
+            const kop = db.kop || {}, ttd = db.ttd || {}, sekolah = db.sekolah || {};
             const content = getFilteredData(key);
             
             const renderImg = (src, s) => src ? `<img src="${src}" style="${s}" crossorigin="anonymous">` : '<div>-</div>';
-            const thStyle = 'border:1px solid black; padding: 6px; background: #1e3a8a; color: white; font-weight: bold; text-align: center; vertical-align: middle; font-size: 9px;';
+            const thStyle = 'border:1px solid black; padding: 6px; background-color: #1e3a8a !important; color: #ffffff !important; font-weight: bold; text-align: center; vertical-align: middle; font-size: 9px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;';
             const tdStyle = 'border:1px solid black; padding: 6px; vertical-align: top; font-size: 9px; word-wrap: break-word; white-space: normal;';
             let tableHeaderHtml = ''; let tableRowsHtml = '';
             
@@ -1550,19 +1626,40 @@
                 tableRowsHtml = content.map((item, idx) => `<tr><td style="${tdStyle} text-align:center;">${idx+1}</td>${getAcademicTableRow(key, item).replace(/<td/g, `<td style="${tdStyle}"`)}</tr>`).join('');
             }
             const tglCetak = `${new Date().getDate()} ${["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"][new Date().getMonth()]} ${new Date().getFullYear()}`;
-            return `<div style="padding: 20px; font-family: sans-serif;">
-                <div style="display: flex; align-items: center; border-bottom: 3px solid black; padding-bottom: 10px; margin-bottom: 20px; text-align: center;">
-                    ${renderImg(kop.logo_kiri, "width: 75px;")}
-                    <div style="flex: 1;"><h2 style="margin: 0; font-size: 14px; text-transform: uppercase;">${kop.pemda || '-'}</h2><h2 style="margin: 0; font-size: 14px; text-transform: uppercase;">${kop.dinas || '-'}</h2><h1 style="margin: 0; font-size: 18px; text-transform: uppercase; font-weight: bold;">${kop.sekolah || '-'}</h1><p style="margin: 0; font-size: 11px;">KECAMATAN ${kop.kecamatan || '-'}</p><p style="margin: 0; font-size: 10px;">${kop.alamat || '-'}</p><p style="margin: 2px 0 0 0; font-size: 10px;"><span style="color: blue;">Email: ${kop.email || '-'}</span> | <span style="color: blue;">Website: ${kop.website || '-'}</span></p></div>
-                    ${renderImg(kop.logo_kanan, "width: 75px;")}
-                </div>
-                <h3 style="text-align:center; text-transform: uppercase; margin-bottom: 20px;">LAPORAN ${key.toUpperCase().replace('_', ' ')}</h3>
-                <table style="width:100%; border-collapse: collapse; table-layout: fixed; border: 1px solid black;"><thead><tr>${tableHeaderHtml}</tr></thead><tbody>${tableRowsHtml}</tbody></table>
-                <div style="margin-top: 40px; display: flex; justify-content: space-between; padding: 0 40px; font-size: 11px;">
-                    <div style="text-align: center;"><p>Mengetahui,</p><p>Kepala Sekolah,</p><div style="height: 70px; display: flex; align-items: center; justify-content: center;">${renderImg(ttd.ks, "height: 60px;")}</div><p><b>${sekolah.kepala || '................'}</b></p><p>NIP. ${sekolah.nip || '-'}</p></div>
-                    <div style="text-align: center;"><p>${sekolah.tempat || 'Kota'}, ${tglCetak}</p><p>Wali Kelas,</p><div style="height: 70px; display: flex; align-items: center; justify-content: center;">${renderImg(ttd.wk, "height: 60px;")}</div><p><b>${db.wali_kelas[0]?.nama || '................'}</b></p><p>NIP. ${db.wali_kelas[0]?.nip || '-'}</p></div>
-                </div>
-            </div>`;
+            
+            return `<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>LAPORAN ${key.toUpperCase().replace('_', ' ')}</title>
+    <style>
+        @page { size: auto; margin: 10mm; }
+        body { margin: 0; padding: 15px; font-family: sans-serif; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; border: 1px solid black; }
+        th { border: 1px solid black; padding: 6px; background-color: #1e3a8a !important; color: #ffffff !important; font-weight: bold; text-align: center; vertical-align: middle; font-size: 9px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        td { border: 1px solid black; padding: 6px; vertical-align: top; font-size: 9px; word-wrap: break-word; white-space: normal; }
+        @media print {
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+            th { background-color: #1e3a8a !important; color: #ffffff !important; }
+        }
+    </style>
+</head>
+<body>
+    <div style="padding: 10px; font-family: sans-serif;">
+        <div style="display: flex; align-items: center; border-bottom: 3px solid black; padding-bottom: 10px; margin-bottom: 20px; text-align: center;">
+            ${renderImg(kop.logo_kiri, "width: 75px;")}
+            <div style="flex: 1;"><h2 style="margin: 0; font-size: 14px; text-transform: uppercase;">${kop.pemda || '-'}</h2><h2 style="margin: 0; font-size: 14px; text-transform: uppercase;">${kop.dinas || '-'}</h2><h1 style="margin: 0; font-size: 18px; text-transform: uppercase; font-weight: bold;">${kop.sekolah || '-'}</h1><p style="margin: 0; font-size: 11px;">KECAMATAN ${kop.kecamatan || '-'}</p><p style="margin: 0; font-size: 10px;">${kop.alamat || '-'}</p><p style="margin: 2px 0 0 0; font-size: 10px;"><span style="color: blue;">Email: ${kop.email || '-'}</span> | <span style="color: blue;">Website: ${kop.website || '-'}</span></p></div>
+            ${renderImg(kop.logo_kanan, "width: 75px;")}
+        </div>
+        <h3 style="text-align:center; text-transform: uppercase; margin-bottom: 20px;">LAPORAN ${key.toUpperCase().replace('_', ' ')}</h3>
+        <table><thead><tr>${tableHeaderHtml}</tr></thead><tbody>${tableRowsHtml}</tbody></table>
+        <div style="margin-top: 40px; display: flex; justify-content: space-between; padding: 0 40px; font-size: 11px; page-break-inside: avoid;">
+            <div style="text-align: center;"><p>Mengetahui,</p><p>Kepala Sekolah,</p><div style="height: 70px; display: flex; align-items: center; justify-content: center;">${renderImg(ttd.ks, "height: 60px;")}</div><p><b>${sekolah.kepala || '................'}</b></p><p>NIP. ${sekolah.nip || '-'}</p></div>
+            <div style="text-align: center;"><p>${sekolah.tempat || 'Kota'}, ${tglCetak}</p><p>Wali Kelas,</p><div style="height: 70px; display: flex; align-items: center; justify-content: center;">${renderImg(ttd.wk, "height: 60px;")}</div><p><b>${db.wali_kelas[0]?.nama || '................'}</b></p><p>NIP. ${db.wali_kelas[0]?.nip || '-'}</p></div>
+        </div>
+    </div>
+</body>
+</html>`;
         }
 
         function cetakData(key) { const h = generatePrintHTML(key); const w = window.open('', '_blank'); w.document.write(h); w.document.close(); setTimeout(() => w.print(), 800); }
