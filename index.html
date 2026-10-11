@@ -67,7 +67,6 @@
     <!-- Toast Container -->
     <div id="toastContainer"></div>
 
-    <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay">
         <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 mb-6"></div>
         <p id="loadingText" class="font-bold tracking-widest uppercase text-sm mb-4 text-center">Sedang Memproses...</p>
@@ -78,13 +77,12 @@
         </div>
         <p id="progressPercentageText" class="text-2xl font-black font-mono text-blue-400">0%</p>
         
-        <p class="text-xs opacity-60 mt-4 italic text-center">Tunggu Sebentar<br>Mohon jangan tutup Aplikasi anda</p>
+        <p class="text-xs opacity-60 mt-4 italic text-center">Tunggu Sebentar<br>Mohon jangan tutup aplikasi anda</p>
     </div>
 
-    <!-- Area Tersembunyi untuk Render PDF -->
-    <div id="pdfRenderArea" style="position: absolute; left: -9999px; top: 0; width: 1024px; background: white; color: black; padding: 20px;"></div>
+    <!-- Area Tersembunyi untuk Render PDF (Diberi pointer-events: none agar tidak memblokir klik) -->
+    <div id="pdfRenderArea" style="position: absolute; left: -9999px; top: 0; width: 1024px; background: white; color: black; padding: 20px; pointer-events: none; z-index: -1;"></div>
 
-    <!-- Custom Confirm Modal -->
     <div id="confirmModal" class="modal-overlay">
         <div class="bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl text-center m-4">
             <div class="w-20 h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -186,7 +184,6 @@
         </div>
     </div>
 
-    <!-- Custom Logout Modal -->
     <div id="logoutModal" class="modal-overlay">
         <div class="bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl text-center m-4">
             <div class="w-20 h-20 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -207,7 +204,20 @@
             <button onclick="closeQRScanner()" class="absolute top-4 right-4 text-slate-500 hover:text-slate-800 transition z-20 bg-white/90 p-1.5 rounded-full shadow">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
-            <h3 class="text-lg md:text-2xl font-bold text-slate-800 mb-3 text-center">Scan QR Code Siswa</h3>
+            <h3 class="text-lg md:text-2xl font-bold text-slate-800 mb-2 text-center">Scan QR Code Siswa</h3>
+            
+            <!-- Pilihan Kamera Depan / Belakang -->
+            <div class="flex justify-center items-center space-x-2 mb-3">
+                <button type="button" id="btnCamBack" onclick="changeCameraMode('environment')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition border border-blue-600 bg-blue-700 text-white flex items-center space-x-1.5 shadow-sm">
+                    <i data-lucide="camera" class="w-4 h-4"></i>
+                    <span>Kamera Belakang</span>
+                </button>
+                <button type="button" id="btnCamFront" onclick="changeCameraMode('user')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition border border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center space-x-1.5">
+                    <i data-lucide="user" class="w-4 h-4"></i>
+                    <span>Kamera Depan</span>
+                </button>
+            </div>
+
             <div class="bg-slate-100 rounded-xl overflow-hidden aspect-square md:aspect-[4/3] flex items-center justify-center relative mb-3 border-2 border-dashed border-blue-400 min-h-[320px] sm:min-h-[450px]">
                 <div id="qr-reader" class="w-full h-full"></div>
             </div>
@@ -216,7 +226,6 @@
         </div>
     </div>
 
-    <!-- QR Code Viewer Modal -->
     <div id="qrViewerModal" class="modal-overlay">
         <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl text-center relative m-4">
             <button onclick="closeQRViewer()" class="absolute top-4 right-4 text-slate-500 hover:text-slate-800 transition">
@@ -286,7 +295,6 @@
         </div>
     </div>
 
-    <!-- MAIN APP WRAPPER -->
     <div id="appInterface" class="hidden min-h-screen flex">
         <!-- Sidebar Desktop -->
         <aside id="sidebarDesktop" class="hidden md:flex w-64 bg-blue-900 text-white flex-col fixed h-full overflow-y-auto hide-scrollbar z-50">
@@ -337,7 +345,7 @@
                 <a href="#" onclick="switchMenu('kisi_kisi', event)" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
                     <i data-lucide="layout" class="w-5 h-5"></i><span>Kisi-Kisi Soal</span>
                 </a>
-                <a href="https://paa806419-pixel.github.io/Kelola_Soal/" target="_blank" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
+                <a href="https://www-ceritaqu.my.canva.site/banksoal" target="_blank" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
                     <i data-lucide="plus-circle" class="w-5 h-5 text-yellow-400"></i><span class="text-yellow-400 font-bold">Buat Soal</span>
                 </a>
 
@@ -363,7 +371,6 @@
             </nav>
         </aside>
 
-        <!-- Main Content -->
         <main id="mainContainer" class="flex-1 ml-0 md:ml-64 p-4 md:p-8 pb-24 md:pb-8">
             <!-- Header Utama -->
             <header class="flex justify-between items-center mb-6 bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 sticky top-0 z-40">
@@ -432,6 +439,7 @@
         let activeViewerStudent = null; 
         let confirmCallback = null; 
         let lastIsMobile = checkMobileViewport();
+        let currentFacingMode = 'environment'; // 'environment' (kamera belakang) atau 'user' (kamera depan)
 
         // --- UTILITY: DETEKSI VIEWPORT HP ---
         function checkMobileViewport() {
@@ -485,7 +493,6 @@
             confirmCallback = null;
         }
 
-        // --- AUDIO BEEP INTERNAL ---
         function playBeep() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -499,35 +506,47 @@
                 oscillator.start();
                 oscillator.stop(audioCtx.currentTime + 0.15); 
             } catch (e) {
-                console.warn("AudioContext gagal dijalankan:", e);
+                console.warn("Audio context error:", e);
             }
         }
 
-        // --- WEB SPEECH API: SUARA PEREMPUAN INDONESIA ---
+        // --- WEB SPEECH API: SUARA PEREMPUAN INDONESIA (HANYA TERIMA KASIH) ---
         function speakTerimaKasih() {
             try {
                 if ('speechSynthesis' in window) {
+                    // Buka kunci dan atur ulang status synthesizer untuk Komputer, Laptop, Tablet, dan HP
+                    window.speechSynthesis.resume();
                     window.speechSynthesis.cancel();
                     
-                    const utterance = new SpeechSynthesisUtterance("Terima Kasih");
+                    const teks = "Terima kasih";
+                    const utterance = new SpeechSynthesisUtterance(teks);
                     utterance.lang = 'id-ID';
-                    utterance.rate = 1.05;  
-                    utterance.pitch = 1.25; 
+                    utterance.rate = 0.95;  
+                    utterance.pitch = 1.45; // Pitch dinaikkan agar suara terdengar jelas sebagai wanita/perempuan
                     
                     const voices = window.speechSynthesis.getVoices();
-                    const idVoices = voices.filter(voice => voice.lang.includes('id') || voice.lang.includes('ID'));
+                    const idVoices = voices.filter(voice => voice.lang.includes('id') || voice.lang.includes('ID') || voice.lang.startsWith('id'));
+                    
+                    // Filter khusus untuk menghindari suara laki-laki (seperti Microsoft Aris / Male)
+                    const maleKeywords = ['male', 'aris', 'pria', 'david', 'guy', 'boy', 'man'];
+                    const nonMaleIndoVoices = idVoices.filter(v => 
+                        !maleKeywords.some(m => v.name.toLowerCase().includes(m))
+                    );
+                    
+                    // Cari suara yang secara eksplisit bertema perempuan / wanita
+                    const femaleKeywords = ['female', 'gadis', 'damayanti', 'sari', 'wanita', 'perempuan', 'zira', 'yuni', 'wita', 'susan', 'lisa', 'google', 'id-id-x-dfz', 'id-id-x-fid', 'id-id-x-iie'];
                     
                     let selectedVoice = idVoices.find(voice => {
                         const name = voice.name.toLowerCase();
-                        return name.includes('female') || 
-                               name.includes('gadis') || 
-                               name.includes('sari') || 
-                               name.includes('damayanti') || 
-                               name.includes('susan') || 
-                               name.includes('zira') || 
-                               name.includes('google');
+                        return femaleKeywords.some(f => name.includes(f));
                     });
                     
+                    // Jika tidak ada keyword perempuan khusus, gunakan suara ID yang bukan laki-laki
+                    if (!selectedVoice && nonMaleIndoVoices.length > 0) {
+                        selectedVoice = nonMaleIndoVoices[0];
+                    }
+                    
+                    // Jika masih belum ketemu, gunakan suara ID apa saja
                     if (!selectedVoice && idVoices.length > 0) {
                         selectedVoice = idVoices[0];
                     }
@@ -551,7 +570,6 @@
             };
         }
 
-        // --- SYNC FUNCTIONS ---
         async function fetchFromSheets() {
             if(!GOOGLE_SCRIPT_URL) return;
             document.getElementById('syncStatus').innerHTML = '<div class="w-2 h-2 bg-yellow-500 rounded-full"></div><span>MENGAMBIL DATA...</span>';
@@ -653,7 +671,6 @@
             overlay.style.display = 'none';
         }
 
-        // --- EVENT HANDLERS ---
         document.getElementById('loginForm').onsubmit = (e) => {
             e.preventDefault();
             const u = document.getElementById('username').value.trim();
@@ -780,7 +797,6 @@
             reader.readAsText(file);
         }
 
-        // --- VIEWS CONTROLLER ---
         function renderMenu() {
             const body = document.getElementById('contentBody');
             const title = document.getElementById('menuTitle');
@@ -1092,7 +1108,82 @@
             if (!activeFilters[key]) activeFilters[key] = {};
             activeFilters[key][filterType] = value;
             currentPage = 1; 
-            renderAkademik(document.getElementById('menuTitle').innerText, document.getElementById('menuSub').innerText, key);
+            updateAcademicTable(key);
+        }
+
+        function updateAcademicTable(dbKey) {
+            const dataTableBody = document.getElementById('dataTableBody');
+            const paginationInfo = document.getElementById('paginationInfo');
+            const paginationControls = document.getElementById('paginationControls');
+            const rekapContainer = document.getElementById('rekapContainer');
+
+            if (!dataTableBody) return;
+
+            const filteredData = getFilteredData(dbKey);
+            const totalItems = filteredData.length;
+            const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE) || 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+            const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+            const pageData = filteredData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+            if (pageData.length > 0) {
+                dataTableBody.innerHTML = pageData.map((item, idx) => {
+                    const originalIdx = db[dbKey].indexOf(item);
+                    return `<tr class="border-black academic-row">
+                        <td class="px-6 py-4 border-black">${startIndex + idx + 1}</td>
+                        ${getAcademicTableRow(dbKey, item)}
+                        <td class="px-6 py-4 flex space-x-2 border-black">
+                            <button onclick="editData('${dbKey}', ${originalIdx})" class="text-green-600 font-bold hover:underline">Edit</button>
+                            <button onclick="deleteData('${dbKey}', ${originalIdx})" class="text-red-600 font-bold hover:underline">Hapus</button>
+                        </td>
+                    </tr>`;
+                }).join('');
+            } else {
+                dataTableBody.innerHTML = '<tr><td colspan="15" class="p-10 text-center text-slate-400 font-bold uppercase border-black">Tidak ada data yang sesuai filter</td></tr>';
+            }
+
+            if (paginationInfo) {
+                paginationInfo.innerText = `Menampilkan ${totalItems > 0 ? startIndex + 1 : 0} - ${Math.min(startIndex + ITEMS_PER_PAGE, totalItems)} dari ${totalItems} data filter`;
+            }
+
+            if (paginationControls) {
+                paginationControls.innerHTML = `
+                    <button onclick="changePage('${dbKey}', -1)" ${currentPage === 1 ? 'disabled' : ''} class="page-btn bg-white border border-black px-3 py-1 rounded text-xs font-bold hover:bg-slate-100 transition">Sebelumnya</button>
+                    <span class="px-3 py-1 text-xs font-bold bg-blue-100 text-blue-700 rounded border border-black">${currentPage}</span>
+                    <button onclick="changePage('${dbKey}', 1)" ${currentPage >= totalPages ? 'disabled' : ''} class="page-btn bg-white border border-black px-3 py-1 rounded text-xs font-bold hover:bg-slate-100 transition">Selanjutnya</button>
+                `;
+            }
+
+            if (rekapContainer && dbKey === 'absensi') {
+                const filters = activeFilters[dbKey] || {};
+                rekapContainer.innerHTML = `
+                    <div class="mt-8 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                        <h3 class="text-lg font-bold mb-4 text-blue-900 uppercase">Rekap Total Absensi Siswa (Sesuai Filter)</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs custom-table">
+                                <thead class="bg-blue-800 text-white">
+                                    <tr class="border-black">
+                                        <th class="px-4 py-3 border-black">Nama Siswa</th>
+                                        <th class="px-4 py-3 text-center border-black">Hadir</th>
+                                        <th class="px-4 py-3 text-center border-black">Izin</th>
+                                        <th class="px-4 py-3 text-center border-black">Sakit</th>
+                                        <th class="px-4 py-3 text-center border-black">Tanpa Keterangan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>${db.siswa.map(s => {
+                                    const rec = filteredData.filter(a => a.nama_siswa === s.nama);
+                                    const h = rec.filter(r => r.status === 'Hadir').length;
+                                    const i = rec.filter(r => r.status === 'Izin').length;
+                                    const sk = rec.filter(r => r.status === 'Sakit').length;
+                                    const tk = rec.filter(r => r.status === 'Tanpa Keterangan').length;
+                                    if(rec.length === 0 && filters.search) return ''; 
+                                    return `<tr class="border-black"><td class="border-black">${s.nama}</td><td class="text-center font-bold text-green-600 border-black">${h}</td><td class="text-center font-bold text-blue-600 border-black">${i}</td><td class="text-center font-bold text-yellow-600 border-black">${sk}</td><td class="text-center font-bold text-red-600 border-black">${tk}</td></tr>`;
+                                }).join('')}</tbody>
+                            </table>
+                        </div>
+                    </div>`;
+            }
         }
 
         function renderAkademik(mTitle, mSub, dbKey) {
@@ -1123,65 +1214,29 @@
             const allTahunList = getUniqueClean([...db.tahun_pelajaran, ...db[dbKey].map(i => i.tahun)]);
             const allKategoriList = getUniqueClean([...db.kategori_soal, ...db.nilai.map(n => n.kategori)]);
 
-            let filtersHtml = `<div class="flex-1 min-w-[200px]"><label class="text-[10px] font-bold uppercase">Cari Nama</label><input type="text" value="${filters.search || ''}" onkeyup="handleFilterChange('${dbKey}', 'search', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white" placeholder="Cari..."></div>`;
+            let filtersHtml = `<div class="flex-1 min-w-[200px]"><label class="text-[10px] font-bold uppercase">Cari Nama</label><input type="text" value="${filters.search || ''}" oninput="handleFilterChange('${dbKey}', 'search', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none" placeholder="Cari..."></div>`;
             if (['nilai', 'penilaian', 'jurnal', 'kisi_kisi'].includes(dbKey)) {
-                filtersHtml += `<div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Mapel</label><select onchange="handleFilterChange('${dbKey}', 'mapel', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua Mapel</option>${allMapelList.map(m => `<option value="${m}" ${filters.mapel === m ? 'selected' : ''}>${m}</option>`).join('')}</select></div>`;
+                filtersHtml += `<div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Mapel</label><select onchange="handleFilterChange('${dbKey}', 'mapel', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"><option value="">Semua Mapel</option>${allMapelList.map(m => `<option value="${m}" ${filters.mapel === m ? 'selected' : ''}>${m}</option>`).join('')}</select></div>`;
             }
             if (['nilai', 'penilaian'].includes(dbKey)) {
                 filtersHtml += `
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Tahun</label><select onchange="handleFilterChange('${dbKey}', 'tahun', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua Tahun</option>${allTahunList.map(t => `<option value="${t}" ${filters.tahun === t ? 'selected' : ''}>${t}</option>`).join('')}</select></div>
-                    <div class="min-w-[120px]"><label class="text-[10px] font-bold uppercase">Filter Smt</label><select onchange="handleFilterChange('${dbKey}', 'semester', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua</option><option value="Semester 1" ${filters.semester === "Semester 1" ? 'selected' : ''}>Semester 1</option><option value="Semester 2" ${filters.semester === "Semester 2" ? 'selected' : ''}>Semester 2</option></select></div>
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Kategori</label><select onchange="handleFilterChange('${dbKey}', 'kategori', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua Kategori</option>${allKategoriList.map(k => `<option value="${k}" ${filters.kategori === k ? 'selected' : ''}>${k}</option>`).join('')}</select></div>
+                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Tahun</label><select onchange="handleFilterChange('${dbKey}', 'tahun', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"><option value="">Semua Tahun</option>${allTahunList.map(t => `<option value="${t}" ${filters.tahun === t ? 'selected' : ''}>${t}</option>`).join('')}</select></div>
+                    <div class="min-w-[120px]"><label class="text-[10px] font-bold uppercase">Filter Smt</label><select onchange="handleFilterChange('${dbKey}', 'semester', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"><option value="">Semua</option><option value="Semester 1" ${filters.semester === "Semester 1" ? 'selected' : ''}>Semester 1</option><option value="Semester 2" ${filters.semester === "Semester 2" ? 'selected' : ''}>Semester 2</option></select></div>
+                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Kategori</label><select onchange="handleFilterChange('${dbKey}', 'kategori', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"><option value="">Semua Kategori</option>${allKategoriList.map(k => `<option value="${k}" ${filters.kategori === k ? 'selected' : ''}>${k}</option>`).join('')}</select></div>
                 `;
             }
             if (['absensi', 'jurnal'].includes(dbKey)) {
                 filtersHtml += `
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Dari Tanggal</label><input type="date" value="${filters.dateStart || ''}" onchange="handleFilterChange('${dbKey}', 'dateStart', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"></div>
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Ke Tanggal</label><input type="date" value="${filters.dateEnd || ''}" onchange="handleFilterChange('${dbKey}', 'dateEnd', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"></div>
+                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Dari Tanggal</label><input type="date" value="${filters.dateStart || ''}" onchange="handleFilterChange('${dbKey}', 'dateStart', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div>
+                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Ke Tanggal</label><input type="date" value="${filters.dateEnd || ''}" onchange="handleFilterChange('${dbKey}', 'dateEnd', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div>
                 `;
             }
             if (dbKey === 'kisi_kisi') {
                 filtersHtml += `
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Tahun</label><select onchange="handleFilterChange('${dbKey}', 'tahun', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua Tahun</option>${db.tahun_pelajaran.map(t => `<option value="${t.nama}" ${filters.tahun === t.nama ? 'selected' : ''}>${t.nama}</option>`).join('')}</select></div>
-                    <div class="min-w-[120px]"><label class="text-[10px] font-bold uppercase">Filter Smt</label><select onchange="handleFilterChange('${dbKey}', 'semester', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white"><option value="">Semua</option><option value="Semester 1" ${filters.semester === "Semester 1" ? 'selected' : ''}>1</option><option value="Semester 2" ${filters.semester === "Semester 2" ? 'selected' : ''}>2</option></select></div>
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Bentuk</label><input type="text" value="${filters.bentuk || ''}" onkeyup="handleFilterChange('${dbKey}', 'bentuk', this.value)" class="w-full px-4 py-2 border rounded-lg" placeholder="Cari Bentuk..."></div>
+                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Tahun</label><select onchange="handleFilterChange('${dbKey}', 'tahun', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"><option value="">Semua Tahun</option>${db.tahun_pelajaran.map(t => `<option value="${t.nama}" ${filters.tahun === t.nama ? 'selected' : ''}>${t.nama}</option>`).join('')}</select></div>
+                    <div class="min-w-[120px]"><label class="text-[10px] font-bold uppercase">Filter Smt</label><select onchange="handleFilterChange('${dbKey}', 'semester', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"><option value="">Semua</option><option value="Semester 1" ${filters.semester === "Semester 1" ? 'selected' : ''}>1</option><option value="Semester 2" ${filters.semester === "Semester 2" ? 'selected' : ''}>2</option></select></div>
+                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Bentuk</label><input type="text" value="${filters.bentuk || ''}" oninput="handleFilterChange('${dbKey}', 'bentuk', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none" placeholder="Cari Bentuk..."></div>
                 `;
-            }
-
-            const filteredData = getFilteredData(dbKey);
-            const totalItems = filteredData.length;
-            const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE) || 1;
-            if(currentPage > totalPages) currentPage = totalPages;
-            const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-            const pageData = filteredData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-
-            let rekapHtml = "";
-            if(dbKey === 'absensi') {
-                rekapHtml = `<div class="mt-8 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <h3 class="text-lg font-bold mb-4 text-blue-900 uppercase">Rekap Total Absensi Siswa (Sesuai Filter)</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs custom-table">
-                            <thead class="bg-blue-800 text-white">
-                                <tr class="border-black">
-                                    <th class="px-4 py-3 border-black">Nama Siswa</th>
-                                    <th class="px-4 py-3 text-center border-black">Hadir</th>
-                                    <th class="px-4 py-3 text-center border-black">Izin</th>
-                                    <th class="px-4 py-3 text-center border-black">Sakit</th>
-                                    <th class="px-4 py-3 text-center border-black">Tanpa Keterangan</th>
-                                </tr>
-                            </thead>
-                            <tbody>${db.siswa.map(s => {
-                                const rec = filteredData.filter(a => a.nama_siswa === s.nama);
-                                const h = rec.filter(r => r.status === 'Hadir').length;
-                                const i = rec.filter(r => r.status === 'Izin').length;
-                                const sk = rec.filter(r => r.status === 'Sakit').length;
-                                const tk = rec.filter(r => r.status === 'Tanpa Keterangan').length;
-                                if(rec.length === 0 && filters.search) return ''; 
-                                return `<tr class="border-black"><td class="border-black">${s.nama}</td><td class="text-center font-bold text-green-600 border-black">${h}</td><td class="text-center font-bold text-blue-600 border-black">${i}</td><td class="text-center font-bold text-yellow-600 border-black">${sk}</td><td class="text-center font-bold text-red-600 border-black">${tk}</td></tr>`;
-                            }).join('')}</tbody>
-                        </table>
-                    </div>
-                </div>`;
             }
 
             let dynamicButtons = `<button onclick="toggleForm('formAkademik')" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-lg font-bold transition flex items-center space-x-1.5 shadow-sm"><i data-lucide="plus" class="w-4 h-4"></i><span>+ Entry Manual</span></button>`;
@@ -1191,7 +1246,7 @@
 
             body.innerHTML = `
                 <div class="space-y-6">
-                    <div class="bg-white p-6 rounded-xl shadow-sm border flex flex-wrap gap-4 items-end">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border flex flex-wrap gap-4 items-end relative z-10">
                         ${filtersHtml}
                         <div class="flex space-x-2">
                             ${dynamicButtons}
@@ -1205,34 +1260,22 @@
                                 <tr class="border-black"><th class="px-6 py-4 border-black">No</th>${getAcademicTableHead(dbKey)}<th class="px-6 py-4 border-black">Aksi</th></tr>
                             </thead>
                             <tbody id="dataTableBody">
-                                ${pageData.length > 0 
-                                    ? pageData.map((item, idx) => {
-                                        const originalIdx = db[dbKey].indexOf(item);
-                                        return `<tr class="border-black academic-row">
-                                            <td class="px-6 py-4 border-black">${startIndex + idx + 1}</td>
-                                            ${getAcademicTableRow(dbKey, item)}
-                                            <td class="px-6 py-4 flex space-x-2 border-black">
-                                                <button onclick="editData('${dbKey}', ${originalIdx})" class="text-green-600 font-bold hover:underline">Edit</button>
-                                                <button onclick="deleteData('${dbKey}', ${originalIdx})" class="text-red-600 font-bold hover:underline">Hapus</button>
-                                            </td>
-                                        </tr>`;
-                                    }).join('') 
-                                    : '<tr><td colspan="15" class="p-10 text-center text-slate-400 font-bold uppercase border-black">Tidak ada data yang sesuai filter</td></tr>'
-                                }
+                                <!-- Diisi secara cepat dan langsung oleh updateAcademicTable -->
                             </tbody>
                         </table>
                         <div class="p-4 flex justify-between items-center bg-slate-50 border-t border-black">
-                            <span class="text-xs text-slate-500 font-semibold">Menampilkan ${totalItems > 0 ? startIndex + 1 : 0} - ${Math.min(startIndex + ITEMS_PER_PAGE, totalItems)} dari ${totalItems} data filter</span>
-                            <div class="flex space-x-2">
-                                <button onclick="changePage('${dbKey}', -1)" ${currentPage === 1 ? 'disabled' : ''} class="page-btn bg-white border border-black px-3 py-1 rounded text-xs font-bold hover:bg-slate-100 transition">Sebelumnya</button>
-                                <span class="px-3 py-1 text-xs font-bold bg-blue-100 text-blue-700 rounded border border-black">${currentPage}</span>
-                                <button onclick="changePage('${dbKey}', 1)" ${currentPage >= totalPages ? 'disabled' : ''} class="page-btn bg-white border border-black px-3 py-1 rounded text-xs font-bold hover:bg-slate-100 transition">Selanjutnya</button>
+                            <span id="paginationInfo" class="text-xs text-slate-500 font-semibold">Menampilkan 0 data filter</span>
+                            <div id="paginationControls" class="flex space-x-2">
+                                <!-- Diisi secara cepat oleh updateAcademicTable -->
                             </div>
                         </div>
                     </div>
-                    ${rekapHtml}
+                    <div id="rekapContainer"></div>
                 </div>`;
             
+            // Panggil langsung untuk mengisi tabel tanpa merusak elemen filter
+            updateAcademicTable(dbKey);
+
             document.getElementById('academicForm').onsubmit = (e) => {
                 e.preventDefault();
                 const fd = new FormData(e.target);
@@ -1249,7 +1292,7 @@
 
         function changePage(key, dir) {
             currentPage += dir;
-            renderAkademik(document.getElementById('menuTitle').innerText, document.getElementById('menuSub').innerText, key);
+            updateAcademicTable(key);
             refreshIcons();
         }
 
@@ -1291,41 +1334,84 @@
             else { form.nisn.value = ""; form.kelas.value = ""; }
         }
 
-        // --- QR SCANNING CONTROLLER ---
+        function updateCameraButtons() {
+            const btnBack = document.getElementById('btnCamBack');
+            const btnFront = document.getElementById('btnCamFront');
+            if (btnBack && btnFront) {
+                if (currentFacingMode === 'environment') {
+                    btnBack.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition border border-blue-600 bg-blue-700 text-white flex items-center space-x-1.5 shadow-sm";
+                    btnFront.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition border border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center space-x-1.5";
+                } else {
+                    btnBack.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition border border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center space-x-1.5";
+                    btnFront.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition border border-blue-600 bg-blue-700 text-white flex items-center space-x-1.5 shadow-sm";
+                }
+            }
+        }
+
+        async function changeCameraMode(mode) {
+            if (currentFacingMode === mode) return;
+            currentFacingMode = mode;
+            updateCameraButtons();
+            
+            if (html5QrcodeScanner) {
+                try {
+                    await html5QrcodeScanner.stop();
+                    await html5QrcodeScanner.clear();
+                } catch (e) {
+                    console.warn("Beralih kamera:", e);
+                }
+                html5QrcodeScanner = null;
+            }
+            startQRScanner();
+        }
+
         function openQRScanner() {
             document.getElementById('qrScannerModal').style.display = 'flex';
+            updateCameraButtons();
             refreshIcons();
             
+            // Menyiapkan dan membuka kunci modul suara di Laptop, PC, Tablet & HP saat tombol dipencet
+            if ('speechSynthesis' in window) {
+                try {
+                    window.speechSynthesis.resume();
+                    window.speechSynthesis.getVoices();
+                } catch (e) {}
+            }
+
             setTimeout(() => {
-                if (html5QrcodeScanner) {
-                    html5QrcodeScanner.clear().catch(err => console.warn(err));
-                }
-                
-                html5QrcodeScanner = new Html5Qrcode("qr-reader");
-                
-                // Menentukan Ukuran Kotak Bidik Scanner Secara Dinamis (85% dari ukuran layar)
-                const qrBoxCalc = (viewfinderWidth, viewfinderHeight) => {
-                    const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
-                    const size = Math.floor(minEdge * 0.85);
-                    return { width: size, height: size };
-                };
-                const config = { fps: 20, qrbox: qrBoxCalc, aspectRatio: 1.0 };
-                
-                html5QrcodeScanner.start(
-                    { facingMode: "environment" },
-                    config,
-                    (decodedText, decodedResult) => {
-                        handleQRScanned(decodedText);
-                    },
-                    (errorMessage) => {
-                        // Polling sunyi kamera
-                    }
-                ).catch(err => {
-                    console.error("Camera fail:", err);
-                    showToast("Gagal mengakses kamera. Mohon aktifkan izin kamera!", "error");
-                    closeQRScanner();
-                });
+                startQRScanner();
             }, 300);
+        }
+
+        function startQRScanner() {
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.clear().catch(err => console.warn(err));
+            }
+            
+            html5QrcodeScanner = new Html5Qrcode("qr-reader");
+            
+            // Menentukan Ukuran Kotak Bidik Scanner Secara Dinamis (85% dari ukuran layar)
+            const qrBoxCalc = (viewfinderWidth, viewfinderHeight) => {
+                const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
+                const size = Math.floor(minEdge * 0.85);
+                return { width: size, height: size };
+            };
+            const config = { fps: 20, qrbox: qrBoxCalc, aspectRatio: 1.0 };
+            
+            html5QrcodeScanner.start(
+                { facingMode: currentFacingMode },
+                config,
+                (decodedText, decodedResult) => {
+                    handleQRScanned(decodedText);
+                },
+                (errorMessage) => {
+                    // Polling sunyi kamera
+                }
+            ).catch(err => {
+                console.error("Camera fail:", err);
+                const modeText = currentFacingMode === 'user' ? 'Depan' : 'Belakang';
+                showToast(`Gagal mengakses Kamera ${modeText}. Mohon periksa izin kamera!`, "error");
+            });
         }
 
         function closeQRScanner() {
@@ -1393,6 +1479,7 @@
                 saveData(true); 
                 renderMenu(); 
                 
+                // Panggil suara ucapan "Terima kasih" saja (Suara Wanita)
                 speakTerimaKasih();
                 
                 showToast(`Absensi "${student.nama}" BERHASIL (HADIR)!`, "success");
@@ -1401,7 +1488,6 @@
             }
         }
 
-        // --- QR CODE VIEWER ACTIONS ---
         function showQRViewer(name, nisn) {
             const student = db.siswa.find(s => s.nama === name) || { nama: name, nisn: nisn, kelas: '-', foto: '' };
             activeViewerStudent = student;
@@ -1446,7 +1532,7 @@
                 <!-- Content Area -->
                 <div style="display: flex; flex-direction: column; padding: 12px; flex: 1; justify-content: space-between; box-sizing: border-box; background: radial-gradient(circle at top right, #f8fafc, #ffffff); position: relative;">
                     
-                    <!-- Watermark Logo (Ditingkatkan Kejelasannya Untuk Hasil Cetak Print) -->
+                    <!-- Watermark Logo (Opasitas 0.15) -->
                     <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; opacity: 0.15; pointer-events: none; z-index: 1;">
                         <img src="https://iili.io/ChkXJyb.png" style="width: 6.5cm; height: 6.5cm; object-fit: contain;">
                     </div>
@@ -1579,7 +1665,6 @@
             setTimeout(() => { printWindow.print(); }, 1000);
         }
 
-        // --- OPERATIONS ---
         function deleteData(key, idx) { 
             showCustomConfirm("Hapus Data", "Hapus data ini secara permanen?", () => { 
                 db[key].splice(idx, 1); 
@@ -1610,7 +1695,6 @@
 
         function cancelEditing() { editingIndex = null; renderMenu(); }
 
-        // --- RENDER PRINT LAPORAN PDF ---
         function generatePrintHTML(key) {
             const kop = db.kop || {}, ttd = db.ttd || {}, sekolah = db.sekolah || {};
             const content = getFilteredData(key);
