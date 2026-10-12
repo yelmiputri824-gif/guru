@@ -345,7 +345,7 @@
                 <a href="#" onclick="switchMenu('kisi_kisi', event)" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
                     <i data-lucide="layout" class="w-5 h-5"></i><span>Kisi-Kisi Soal</span>
                 </a>
-                <a href="https://paa806419-pixel.github.io/Kelola_Soal/" target="_blank" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
+                <a href="https://www-ceritaqu.my.canva.site/banksoal" target="_blank" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
                     <i data-lucide="plus-circle" class="w-5 h-5 text-yellow-400"></i><span class="text-yellow-400 font-bold">Buat Soal</span>
                 </a>
 
@@ -440,6 +440,7 @@
         let confirmCallback = null; 
         let lastIsMobile = checkMobileViewport();
         let currentFacingMode = 'environment'; // 'environment' (kamera belakang) atau 'user' (kamera depan)
+        let globalAudioCtx = null; // AudioContext tunggal universal untuk PWA Standalone Edge Huawei
 
         // --- UTILITY: DETEKSI VIEWPORT HP ---
         function checkMobileViewport() {
@@ -493,28 +494,98 @@
             confirmCallback = null;
         }
 
+        // --- INITIALIZE & UNLOCK UNIVERSAL AUDIO (PWA STANDALONE EDGE HUAWEI FIX) ---
+        function initGlobalAudio() {
+            try {
+                if (!globalAudioCtx) {
+                    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContextClass) {
+                        globalAudioCtx = new AudioContextClass();
+                    }
+                }
+                if (globalAudioCtx && globalAudioCtx.state === 'suspended') {
+                    globalAudioCtx.resume();
+                }
+                // Membunyikan sampel buffer tersembunyi untuk membuka kunci penuh Audio Policy Edge Standalone
+                if (globalAudioCtx) {
+                    const buffer = globalAudioCtx.createBuffer(1, 1, 22050);
+                    const source = globalAudioCtx.createBufferSource();
+                    source.buffer = buffer;
+                    source.connect(globalAudioCtx.destination);
+                    source.start(0);
+                }
+            } catch (e) {
+                console.warn("Global Audio Init error:", e);
+            }
+
+            try {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.resume();
+                    const dummy = new SpeechSynthesisUtterance(' ');
+                    dummy.volume = 0.01;
+                    window.speechSynthesis.speak(dummy);
+                    window.speechSynthesis.getVoices();
+                }
+            } catch (e) {}
+        }
+
         function playBeep() {
             try {
-                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
+                initGlobalAudio();
+                if (!globalAudioCtx) return;
+
+                const ctx = globalAudioCtx;
+                const oscillator = ctx.createOscillator();
+                const gainNode = ctx.createGain();
                 oscillator.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
+                gainNode.connect(ctx.destination);
                 oscillator.type = 'sine';
-                oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                oscillator.frequency.setValueAtTime(880, ctx.currentTime);
+                gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
                 oscillator.start();
-                oscillator.stop(audioCtx.currentTime + 0.15); 
+                oscillator.stop(ctx.currentTime + 0.15); 
             } catch (e) {
                 console.warn("Audio context error:", e);
             }
         }
 
-        // --- WEB SPEECH API: SUARA PEREMPUAN INDONESIA (HANYA TERIMA KASIH) ---
+        // --- WEB SPEECH API & AUDIO CHIME FALLBACK (EDGE STANDALONE PWA HUAWEI) ---
+        function playHuaweiVoiceFallback() {
+            try {
+                initGlobalAudio();
+                if (!globalAudioCtx) return;
+
+                const ctx = globalAudioCtx;
+                const now = ctx.currentTime;
+                
+                // Melodic vocal-range chime sequence khusus Tablet Huawei Edge PWA Standalone
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6 (Harmonis & Jelas)
+                notes.forEach((freq, idx) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + (idx * 0.12));
+                    
+                    gain.gain.setValueAtTime(0, now + (idx * 0.12));
+                    gain.gain.linearRampToValueAtTime(0.3, now + (idx * 0.12) + 0.03);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + (idx * 0.12) + 0.35);
+                    
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + (idx * 0.12));
+                    osc.stop(now + (idx * 0.12) + 0.35);
+                });
+            } catch (e) {
+                console.warn("Audio Context fallback error:", e);
+            }
+        }
+
         function speakTerimaKasih() {
             try {
+                initGlobalAudio();
+                let spokenWithSpeech = false;
+                
                 if ('speechSynthesis' in window) {
-                    // Buka kunci dan atur ulang status synthesizer untuk Komputer, Laptop, Tablet, dan HP
                     window.speechSynthesis.resume();
                     window.speechSynthesis.cancel();
                     
@@ -522,45 +593,44 @@
                     const utterance = new SpeechSynthesisUtterance(teks);
                     utterance.lang = 'id-ID';
                     utterance.rate = 0.95;  
-                    utterance.pitch = 1.45; // Pitch dinaikkan agar suara terdengar jelas sebagai wanita/perempuan
+                    utterance.pitch = 1.45; 
+
+                    utterance.onerror = () => {
+                        playHuaweiVoiceFallback();
+                    };
                     
                     const voices = window.speechSynthesis.getVoices();
-                    const idVoices = voices.filter(voice => voice.lang.includes('id') || voice.lang.includes('ID') || voice.lang.startsWith('id'));
                     
-                    // Filter khusus untuk menghindari suara laki-laki (seperti Microsoft Aris / Male)
-                    const maleKeywords = ['male', 'aris', 'pria', 'david', 'guy', 'boy', 'man'];
-                    const nonMaleIndoVoices = idVoices.filter(v => 
-                        !maleKeywords.some(m => v.name.toLowerCase().includes(m))
-                    );
-                    
-                    // Cari suara yang secara eksplisit bertema perempuan / wanita
-                    const femaleKeywords = ['female', 'gadis', 'damayanti', 'sari', 'wanita', 'perempuan', 'zira', 'yuni', 'wita', 'susan', 'lisa', 'google', 'id-id-x-dfz', 'id-id-x-fid', 'id-id-x-iie'];
-                    
-                    let selectedVoice = idVoices.find(voice => {
-                        const name = voice.name.toLowerCase();
-                        return femaleKeywords.some(f => name.includes(f));
-                    });
-                    
-                    // Jika tidak ada keyword perempuan khusus, gunakan suara ID yang bukan laki-laki
-                    if (!selectedVoice && nonMaleIndoVoices.length > 0) {
-                        selectedVoice = nonMaleIndoVoices[0];
+                    if (voices && voices.length > 0) {
+                        const idVoices = voices.filter(voice => voice.lang.includes('id') || voice.lang.includes('ID') || voice.lang.startsWith('id'));
+                        const maleKeywords = ['male', 'aris', 'pria', 'david', 'guy', 'boy', 'man'];
+                        const nonMaleIndoVoices = idVoices.filter(v => 
+                            !maleKeywords.some(m => v.name.toLowerCase().includes(m))
+                        );
+                        const femaleKeywords = ['female', 'gadis', 'damayanti', 'sari', 'wanita', 'perempuan', 'zira', 'yuni', 'wita', 'susan', 'lisa', 'google', 'id-id-x-dfz', 'id-id-x-fid', 'id-id-x-iie'];
+                        
+                        let selectedVoice = idVoices.find(voice => {
+                            const name = voice.name.toLowerCase();
+                            return femaleKeywords.some(f => name.includes(f));
+                        });
+                        
+                        if (!selectedVoice && nonMaleIndoVoices.length > 0) selectedVoice = nonMaleIndoVoices[0];
+                        if (!selectedVoice && idVoices.length > 0) selectedVoice = idVoices[0];
+                        
+                        if (selectedVoice) {
+                            utterance.voice = selectedVoice;
+                        }
+                        
+                        window.speechSynthesis.speak(utterance);
+                        spokenWithSpeech = true;
                     }
-                    
-                    // Jika masih belum ketemu, gunakan suara ID apa saja
-                    if (!selectedVoice && idVoices.length > 0) {
-                        selectedVoice = idVoices[0];
-                    }
-                    
-                    if (selectedVoice) {
-                        utterance.voice = selectedVoice;
-                    }
-                    
-                    window.speechSynthesis.speak(utterance);
-                } else {
-                    console.warn("Fitur Speech Synthesis tidak didukung browser ini.");
                 }
+                
+                // Selalu jalankan chime ucapan harmonis untuk menjamin kepastian audio 100% pada Edge PWA Standalone Tablet Huawei
+                playHuaweiVoiceFallback();
             } catch (e) {
                 console.error("Gagal memutar audio ucapan:", e);
+                playHuaweiVoiceFallback();
             }
         }
 
@@ -1370,13 +1440,8 @@
             updateCameraButtons();
             refreshIcons();
             
-            // Menyiapkan dan membuka kunci modul suara di Laptop, PC, Tablet & HP saat tombol dipencet
-            if ('speechSynthesis' in window) {
-                try {
-                    window.speechSynthesis.resume();
-                    window.speechSynthesis.getVoices();
-                } catch (e) {}
-            }
+            // Buka kunci modul audio global (Stand-alone PWA Edge Tablet Huawei)
+            initGlobalAudio();
 
             setTimeout(() => {
                 startQRScanner();
