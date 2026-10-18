@@ -10,10 +10,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Admin Guru">
-    <meta name="theme-color" content="#1e3a8a">
+    <meta name="theme-color" content="#8b5cf6">
     
-    <!-- Manifest Inline untuk Mode Standalone (Layar Penuh pada Edge Tablet/HP) -->
-    <link rel="manifest" href="data:application/json;base64,eyJkZWZhdWx0X2xvY2FsZSI6ImlkIiwibmFtZSI6IlNpc3RlbSBBZG1pbmlzdHJhc2kgR3VydSIsInNob3J0X25hbWUiOiJBZG1pbiBHdXJ1Iiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMxZTNhOGEiLCJ0aGVtZV9jb2xvciI6IiMxZTNhOGEiLCJpY29ucyI6W3sic3JjIjoiaHR0cHM6Ly9paWxpLmlvL0M4VDExczQucG5nIiwic2l6ZXMiOiI1MTJ4NTEyIiwidHlwZSI6ImltYWdlL3BuZyJ9XX0=">
+    <!-- Manifest Inline untuk Mode Standalone -->
+    <link rel="manifest" href="data:application/json;base64,eyJkZWZhdWx0X2xvY2FsZSI6ImlkIiwibmFtZSI6IlNpc3RlbSBBZG1pbmlzdHJhc2kgR3VydSIsInNob3J0X25hbWUiOiJBZG1pbiBHdXJ1Iiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiM4YjVjZjYiLCJ0aGVtZV9jb2xvciI6IiM4YjVjZjYiLCJpY29ucyI6W3sic3JjIjoiaHR0cHM6Ly9paWxpLmlvL0M4VDExczQucG5nIiwic2l6ZXMiOiI1MTJ4NTEyIiwidHlwZSI6ImltYWdlL3BuZyJ9XX0=">
 
     <!-- Favicon -->
     <link rel="icon" href="https://iili.io/C8T11s4.png" type="image/png">
@@ -28,28 +28,147 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; -webkit-tap-highlight-color: transparent; }
-        .sidebar-item.active { background-color: #1e40af; border-left: 4px solid #f8fafc; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap');
+        
+        body { 
+            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; 
+            background-color: #eef0f8; 
+            color: #332845;
+            -webkit-tap-highlight-color: transparent; 
+        }
+
+        /* 3D Claymorphism & Neumorphism Shadow & Elevation Cards */
+        .clay-card {
+            background: #ffffff;
+            border-radius: 1.75rem;
+            box-shadow: 
+                10px 14px 28px rgba(139, 92, 246, 0.12), 
+                -8px -8px 20px rgba(255, 255, 255, 0.95),
+                inset 1px 1px 2px rgba(255, 255, 255, 0.8),
+                inset -2px -2px 6px rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(233, 222, 248, 0.8);
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .clay-card-purple {
+            background: linear-gradient(145deg, #9333ea, #7c3aed);
+            border-radius: 1.75rem;
+            box-shadow: 
+                8px 14px 24px rgba(124, 58, 237, 0.35), 
+                -4px -4px 12px rgba(255, 255, 255, 0.5),
+                inset 2px 2px 6px rgba(255, 255, 255, 0.35),
+                inset -3px -3px 8px rgba(0, 0, 0, 0.2);
+            color: white;
+        }
+
+        /* 3D Interactive Buttons */
+        .clay-btn-purple {
+            background: linear-gradient(145deg, #8b5cf6, #7c3aed);
+            color: white;
+            border-radius: 1.25rem;
+            box-shadow: 
+                0 6px 0 #5b21b6,
+                0 10px 20px rgba(124, 58, 237, 0.3),
+                inset 0 2px 2px rgba(255, 255, 255, 0.4);
+            transition: all 0.15s ease;
+            position: relative;
+            top: 0;
+        }
+        .clay-btn-purple:hover {
+            transform: translateY(-1px);
+            box-shadow: 
+                0 7px 0 #5b21b6,
+                0 12px 24px rgba(124, 58, 237, 0.4),
+                inset 0 2px 2px rgba(255, 255, 255, 0.4);
+        }
+        .clay-btn-purple:active {
+            transform: translateY(4px);
+            box-shadow: 
+                0 2px 0 #5b21b6,
+                0 4px 8px rgba(124, 58, 237, 0.2),
+                inset 0 1px 1px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 3D Inset Input Fields for Recessed Effect */
+        .clay-input {
+            background: #f8fafc;
+            border-radius: 1rem;
+            box-shadow: 
+                inset 3px 3px 6px rgba(160, 150, 185, 0.2),
+                inset -3px -3px 6px rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(220, 210, 240, 0.8);
+            transition: all 0.2s ease;
+        }
+        .clay-input:focus {
+            background: #ffffff;
+            box-shadow: 
+                inset 1px 1px 3px rgba(124, 58, 237, 0.2),
+                0 0 0 3px rgba(139, 92, 246, 0.25);
+            outline: none;
+        }
+
+        /* Sidebar 3D Convex Convex Styling */
+        .sidebar-clay {
+            background: linear-gradient(180deg, #9061f9 0%, #7c3aed 50%, #6d28d9 100%);
+            box-shadow: 8px 0 28px rgba(109, 40, 217, 0.25), inset -2px 0 6px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-item {
+            color: rgba(255, 255, 255, 0.85);
+            border-radius: 1.25rem;
+            margin: 0.25rem 0.75rem;
+            font-weight: 700;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 0 transparent;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            transform: translateX(4px);
+        }
+
+        .sidebar-item.active {
+            background: #ffffff !important;
+            color: #6d28d9 !important;
+            box-shadow: 
+                4px 6px 16px rgba(0, 0, 0, 0.15), 
+                inset 1px 2px 4px rgba(255,255,255,1),
+                inset -2px -2px 4px rgba(109, 40, 217, 0.15) !important;
+            transform: translateX(4px);
+        }
+
         .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; color: white; flex-direction: column; backdrop-filter: blur(10px); }
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(43, 30, 62, 0.85); z-index: 9999; justify-content: center; align-items: center; color: white; flex-direction: column; backdrop-filter: blur(12px); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(30, 20, 50, 0.55); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(6px); }
         
         /* Toast Notification Styling */
         #toastContainer { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-        .toast { padding: 12px 24px; border-radius: 99px; color: white; font-weight: 700; font-size: 14px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: slideDown 0.3s ease-out; pointer-events: auto; }
+        .toast { padding: 14px 28px; border-radius: 99px; color: white; font-weight: 800; font-size: 14px; box-shadow: 0 12px 28px rgba(124, 58, 237, 0.4), 0 4px 0 rgba(0,0,0,0.1); animation: slideDown 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: auto; }
         @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
         /* Pagination Styling */
         .page-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         
-        /* Table Custom Border & Print Color Preservation */
-        .custom-table th, .custom-table td { border: 1px solid #000; }
-        .custom-table th { background-color: #1e3a8a !important; color: #ffffff !important; }
+        /* Table Custom Border & Print Color Preservation with 3D Depth */
+        .custom-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 1.25rem;
+            overflow: hidden;
+            box-shadow: inset 0 0 0 1px #1e1b4b;
+        }
+        .custom-table th, .custom-table td { border: 1px solid #1e1b4b; }
+        .custom-table th { 
+            background: linear-gradient(145deg, #7c3aed, #6d28d9) !important; 
+            color: #ffffff !important; 
+            box-shadow: inset 0 2px 2px rgba(255,255,255,0.3);
+            font-weight: 800;
+        }
 
         @media print {
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
-            th { background-color: #1e3a8a !important; color: #ffffff !important; }
+            th { background-color: #6d28d9 !important; color: #ffffff !important; }
         }
         
         /* PWA Full Screen Adjustments */
@@ -59,342 +178,367 @@
 
         /* Tampilan Kamera Scanner HP & Tablet Lebih Besar */
         #qr-reader { border: none !important; width: 100% !important; height: 100% !important; }
-        #qr-reader video { object-fit: cover !important; width: 100% !important; height: 100% !important; border-radius: 0.75rem; }
+        #qr-reader video { object-fit: cover !important; width: 100% !important; height: 100% !important; border-radius: 1.25rem; }
     </style>
 </head>
-<body class="bg-slate-50">
+<body class="bg-[#eef0f8]">
 
     <!-- Toast Container -->
     <div id="toastContainer"></div>
 
     <div id="loadingOverlay" class="loading-overlay">
-        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 mb-6"></div>
-        <p id="loadingText" class="font-bold tracking-widest uppercase text-sm mb-4 text-center">Sedang Memproses...</p>
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-purple-300 mb-6 shadow-2xl"></div>
+        <p id="loadingText" class="font-extrabold tracking-widest uppercase text-sm mb-4 text-center text-purple-100">Sedang Memproses...</p>
         
         <!-- Progress Bar -->
-        <div id="progressBarWrapper" class="w-72 bg-white/10 rounded-full h-3 overflow-hidden mb-2 border border-white/20">
-            <div id="progressBarInner" class="bg-blue-500 h-full transition-all duration-300" style="width: 0%"></div>
+        <div id="progressBarWrapper" class="w-72 bg-white/20 rounded-full h-3 overflow-hidden mb-2 border border-white/30 shadow-inner">
+            <div id="progressBarInner" class="bg-gradient-to-r from-purple-400 to-indigo-300 h-full transition-all duration-300" style="width: 0%"></div>
         </div>
-        <p id="progressPercentageText" class="text-2xl font-black font-mono text-blue-400">0%</p>
+        <p id="progressPercentageText" class="text-2xl font-black font-mono text-purple-200">0%</p>
         
-        <p class="text-xs opacity-60 mt-4 italic text-center">Tunggu Sebentar<br>Mohon jangan tutup aplikasi anda</p>
+        <p class="text-xs opacity-70 mt-4 italic text-center text-purple-200">Tunggu Sebentar<br>Jangan Tutup Aplikasi Anda!</p>
     </div>
 
-    <!-- Area Tersembunyi untuk Render PDF (Diberi pointer-events: none agar tidak memblokir klik) -->
+    <!-- Area Tersembunyi untuk Render PDF -->
     <div id="pdfRenderArea" style="position: absolute; left: -9999px; top: 0; width: 1024px; background: white; color: black; padding: 20px; pointer-events: none; z-index: -1;"></div>
 
     <div id="confirmModal" class="modal-overlay">
-        <div class="bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl text-center m-4">
-            <div class="w-20 h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-6">
+        <div class="clay-card p-8 max-w-sm w-full text-center m-4 border border-purple-100">
+            <div class="w-20 h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner border border-amber-200">
                 <i data-lucide="alert-triangle" class="w-10 h-10"></i>
             </div>
-            <h3 id="confirmTitle" class="text-xl font-bold text-slate-800 mb-2">Konfirmasi Tindakan</h3>
-            <p id="confirmMessage" class="text-slate-500 mb-8">Apakah Anda yakin ingin melanjutkan tindakan ini?</p>
-            <div class="flex space-x-4">
-                <button onclick="closeConfirmModal(false)" class="flex-1 px-4 py-3 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition">Batal</button>
-                <button onclick="closeConfirmModal(true)" class="flex-1 px-4 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition">Ya, Lanjutkan</button>
+            <h3 id="confirmTitle" class="text-xl font-black text-purple-950 mb-2">Konfirmasi Tindakan</h3>
+            <p id="confirmMessage" class="text-slate-500 text-sm mb-8 font-medium">Apakah Anda yakin ingin melanjutkan tindakan ini?</p>
+            <div class="flex space-x-3">
+                <button onclick="closeConfirmModal(false)" class="flex-1 px-4 py-3 bg-purple-100 text-purple-800 rounded-2xl font-bold hover:bg-purple-200 transition text-xs shadow-sm">Batal</button>
+                <button onclick="closeConfirmModal(true)" class="flex-1 px-4 py-3 bg-red-600 text-white rounded-2xl font-bold hover:bg-red-700 transition text-xs shadow-md border-b-2 border-red-800">Ya, Lanjutkan</button>
             </div>
         </div>
     </div>
 
     <!-- Custom Selective Reset Data Modal -->
     <div id="selectiveResetModal" class="modal-overlay">
-        <div class="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl m-4 overflow-y-auto max-h-[90vh]">
-            <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+        <div class="clay-card p-6 max-w-md w-full m-4 overflow-y-auto max-h-[90vh] border border-purple-100">
+            <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
                 <i data-lucide="trash-2" class="w-8 h-8"></i>
             </div>
-            <h3 class="text-xl font-bold text-slate-800 mb-2 text-center">Reset Data Terpilih</h3>
-            <p class="text-xs text-slate-500 mb-4 text-center">Silakan centang data yang ingin dihapus secara permanen dari sistem harian.</p>
+            <h3 class="text-xl font-black text-purple-950 mb-1 text-center">Reset Data Terpilih</h3>
+            <p class="text-xs text-slate-500 mb-4 text-center font-medium">Silakan centang data yang ingin dihapus secara permanen dari sistem harian.</p>
             
             <!-- Pilih Semua -->
-            <div class="flex items-center space-x-2 pb-2 mb-4 border-b border-slate-200">
-                <input type="checkbox" id="selectAllReset" onchange="toggleSelectAllReset(this)" class="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500">
-                <label for="selectAllReset" class="text-xs font-bold text-slate-700 uppercase cursor-pointer">Pilih Semua Kategori</label>
+            <div class="flex items-center space-x-2 pb-2 mb-4 border-b border-purple-100">
+                <input type="checkbox" id="selectAllReset" onchange="toggleSelectAllReset(this)" class="w-4 h-4 text-purple-600 border-slate-300 rounded focus:ring-purple-500">
+                <label for="selectAllReset" class="text-xs font-black text-purple-900 uppercase cursor-pointer">Pilih Semua Kategori</label>
             </div>
 
             <form id="resetDataForm" class="space-y-3">
                 <div class="grid grid-cols-1 gap-2 max-h-[300px] overflow-y-auto pr-1">
                     <!-- Kelompok Master Data -->
-                    <div class="text-[10px] font-bold text-blue-600 uppercase tracking-wider border-b pb-1 mt-1">Master Data</div>
-                    <label class="flex items-center space-x-2 p-2 hover:bg-slate-50 rounded-lg cursor-pointer">
+                    <div class="text-[10px] font-black text-purple-600 uppercase tracking-wider border-b border-purple-100 pb-1 mt-1">Master Data</div>
+                    <label class="flex items-center space-x-2 p-2 hover:bg-purple-50 rounded-xl cursor-pointer">
                         <input type="checkbox" name="reset_key" value="sekolah" class="reset-item-chk w-4 h-4 text-red-600 border-slate-300 rounded">
-                        <span class="text-xs text-slate-700 font-semibold">Data Sekolah</span>
+                        <span class="text-xs text-slate-700 font-bold">Data Sekolah</span>
                     </label>
-                    <label class="flex items-center space-x-2 p-2 hover:bg-slate-50 rounded-lg cursor-pointer">
+                    <label class="flex items-center space-x-2 p-2 hover:bg-purple-50 rounded-xl cursor-pointer">
                         <input type="checkbox" name="reset_key" value="wali_kelas" class="reset-item-chk w-4 h-4 text-red-600 border-slate-300 rounded">
-                        <span class="text-xs text-slate-700 font-semibold">Wali Kelas</span>
+                        <span class="text-xs text-slate-700 font-bold">Wali Kelas</span>
                     </label>
-                    <label class="flex items-center space-x-2 p-2 hover:bg-slate-50 rounded-lg cursor-pointer">
+                    <label class="flex items-center space-x-2 p-2 hover:bg-purple-50 rounded-xl cursor-pointer">
                         <input type="checkbox" name="reset_key" value="mapel" class="reset-item-chk w-4 h-4 text-red-600 border-slate-300 rounded">
-                        <span class="text-xs text-slate-700 font-semibold">Mata Pelajaran</span>
+                        <span class="text-xs text-slate-700 font-bold">Mata Pelajaran</span>
                     </label>
-                    <label class="flex items-center space-x-2 p-2 hover:bg-slate-50 rounded-lg cursor-pointer">
+                    <label class="flex items-center space-x-2 p-2 hover:bg-purple-50 rounded-xl cursor-pointer">
                         <input type="checkbox" name="reset_key" value="tahun_pelajaran" class="reset-item-chk w-4 h-4 text-red-600 border-slate-300 rounded">
-                        <span class="text-xs text-slate-700 font-semibold">Tahun Pelajaran</span>
+                        <span class="text-xs text-slate-700 font-bold">Tahun Pelajaran</span>
                     </label>
-                    <label class="flex items-center space-x-2 p-2 hover:bg-slate-50 rounded-lg cursor-pointer">
+                    <label class="flex items-center space-x-2 p-2 hover:bg-purple-50 rounded-xl cursor-pointer">
                         <input type="checkbox" name="reset_key" value="kategori_soal" class="reset-item-chk w-4 h-4 text-red-600 border-slate-300 rounded">
-                        <span class="text-xs text-slate-700 font-semibold">Kategori Soal</span>
+                        <span class="text-xs text-slate-700 font-bold">Kategori Soal</span>
                     </label>
-                    <label class="flex items-center space-x-2 p-2 hover:bg-slate-50 rounded-lg cursor-pointer">
+                    <label class="flex items-center space-x-2 p-2 hover:bg-purple-50 rounded-xl cursor-pointer">
                         <input type="checkbox" name="reset_key" value="siswa" class="reset-item-chk w-4 h-4 text-red-600 border-slate-300 rounded">
-                        <span class="text-xs text-slate-700 font-semibold">Data Siswa</span>
+                        <span class="text-xs text-slate-700 font-bold">Data Siswa</span>
                     </label>
 
                     <!-- Kelompok Akademik -->
-                    <div class="text-[10px] font-bold text-blue-600 uppercase tracking-wider border-b pb-1 mt-3">Akademik</div>
-                    <label class="flex items-center space-x-2 p-2 hover:bg-slate-50 rounded-lg cursor-pointer">
+                    <div class="text-[10px] font-black text-purple-600 uppercase tracking-wider border-b border-purple-100 pb-1 mt-3">Akademik</div>
+                    <label class="flex items-center space-x-2 p-2 hover:bg-purple-50 rounded-xl cursor-pointer">
                         <input type="checkbox" name="reset_key" value="nilai" class="reset-item-chk w-4 h-4 text-red-600 border-slate-300 rounded">
-                        <span class="text-xs text-slate-700 font-semibold">Input Nilai</span>
+                        <span class="text-xs text-slate-700 font-bold">Input Nilai</span>
                     </label>
-                    <label class="flex items-center space-x-2 p-2 hover:bg-slate-50 rounded-lg cursor-pointer">
+                    <label class="flex items-center space-x-2 p-2 hover:bg-purple-50 rounded-xl cursor-pointer">
                         <input type="checkbox" name="reset_key" value="penilaian" class="reset-item-chk w-4 h-4 text-red-600 border-slate-300 rounded">
-                        <span class="text-xs text-slate-700 font-semibold">Penilaian</span>
+                        <span class="text-xs text-slate-700 font-bold">Penilaian</span>
                     </label>
-                    <label class="flex items-center space-x-2 p-2 hover:bg-slate-50 rounded-lg cursor-pointer">
+                    <label class="flex items-center space-x-2 p-2 hover:bg-purple-50 rounded-xl cursor-pointer">
                         <input type="checkbox" name="reset_key" value="absensi" class="reset-item-chk w-4 h-4 text-red-600 border-slate-300 rounded">
-                        <span class="text-xs text-slate-700 font-semibold">Absensi Siswa</span>
+                        <span class="text-xs text-slate-700 font-bold">Absensi Siswa</span>
                     </label>
-                    <label class="flex items-center space-x-2 p-2 hover:bg-slate-50 rounded-lg cursor-pointer">
+                    <label class="flex items-center space-x-2 p-2 hover:bg-purple-50 rounded-xl cursor-pointer">
                         <input type="checkbox" name="reset_key" value="jurnal" class="reset-item-chk w-4 h-4 text-red-600 border-slate-300 rounded">
-                        <span class="text-xs text-slate-700 font-semibold">Jurnal Mengajar</span>
+                        <span class="text-xs text-slate-700 font-bold">Jurnal Mengajar</span>
                     </label>
-                    <label class="flex items-center space-x-2 p-2 hover:bg-slate-50 rounded-lg cursor-pointer">
+                    <label class="flex items-center space-x-2 p-2 hover:bg-purple-50 rounded-xl cursor-pointer">
                         <input type="checkbox" name="reset_key" value="kisi_kisi" class="reset-item-chk w-4 h-4 text-red-600 border-slate-300 rounded">
-                        <span class="text-xs text-slate-700 font-semibold">Kisi-Kisi Soal</span>
+                        <span class="text-xs text-slate-700 font-bold">Kisi-Kisi Soal</span>
                     </label>
 
                     <!-- Kelompok Pengaturan -->
-                    <div class="text-[10px] font-bold text-blue-600 uppercase tracking-wider border-b pb-1 mt-3">Pengaturan</div>
-                    <label class="flex items-center space-x-2 p-2 hover:bg-slate-50 rounded-lg cursor-pointer">
+                    <div class="text-[10px] font-black text-purple-600 uppercase tracking-wider border-b border-purple-100 pb-1 mt-3">Pengaturan</div>
+                    <label class="flex items-center space-x-2 p-2 hover:bg-purple-50 rounded-xl cursor-pointer">
                         <input type="checkbox" name="reset_key" value="kop" class="reset-item-chk w-4 h-4 text-red-600 border-slate-300 rounded">
-                        <span class="text-xs text-slate-700 font-semibold">KOP Surat</span>
+                        <span class="text-xs text-slate-700 font-bold">KOP Surat</span>
                     </label>
-                    <label class="flex items-center space-x-2 p-2 hover:bg-slate-50 rounded-lg cursor-pointer">
+                    <label class="flex items-center space-x-2 p-2 hover:bg-purple-50 rounded-xl cursor-pointer">
                         <input type="checkbox" name="reset_key" value="ttd" class="reset-item-chk w-4 h-4 text-red-600 border-slate-300 rounded">
-                        <span class="text-xs text-slate-700 font-semibold">TTD</span>
+                        <span class="text-xs text-slate-700 font-bold">TTD</span>
                     </label>
                 </div>
 
-                <div class="flex space-x-3 pt-4 border-t border-slate-100">
-                    <button type="button" onclick="closeResetModal()" class="flex-1 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold transition text-xs">Batal</button>
-                    <button type="button" onclick="executeSelectiveReset()" class="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold transition text-xs">Ya, Hapus Terpilih</button>
+                <div class="flex space-x-3 pt-4 border-t border-purple-100">
+                    <button type="button" onclick="closeResetModal()" class="flex-1 px-4 py-3 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-2xl font-bold transition text-xs shadow-sm">Batal</button>
+                    <button type="button" onclick="executeSelectiveReset()" class="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-bold transition text-xs shadow-md border-b-2 border-red-800">Ya, Hapus Terpilih</button>
                 </div>
             </form>
         </div>
     </div>
 
     <div id="logoutModal" class="modal-overlay">
-        <div class="bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl text-center m-4">
-            <div class="w-20 h-20 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+        <div class="clay-card p-8 max-w-sm w-full text-center m-4 border border-purple-100">
+            <div class="w-20 h-20 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
                 <i data-lucide="log-out" class="w-10 h-10"></i>
             </div>
-            <h3 class="text-xl font-bold text-slate-800 mb-2">Konfirmasi Keluar</h3>
-            <p class="text-slate-500 mb-8">Apakah Anda yakin ingin keluar dari sistem?</p>
-            <div class="flex space-x-4">
-                <button onclick="closeLogoutModal()" class="flex-1 px-4 py-3 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition">Batal</button>
-                <button onclick="confirmLogout()" class="flex-1 px-4 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition">Ya, Keluar</button>
+            <h3 class="text-xl font-black text-purple-950 mb-2">Konfirmasi Keluar</h3>
+            <p class="text-slate-500 text-xs mb-8 font-medium">Apakah Anda yakin ingin keluar dari sistem?</p>
+            <div class="flex space-x-3">
+                <button onclick="closeLogoutModal()" class="flex-1 px-4 py-3 bg-purple-100 text-purple-800 rounded-2xl font-bold hover:bg-purple-200 transition text-xs shadow-sm">Batal</button>
+                <button onclick="confirmLogout()" class="flex-1 px-4 py-3 bg-red-600 text-white rounded-2xl font-bold hover:bg-red-700 transition text-xs shadow-md border-b-2 border-red-800">Ya, Keluar</button>
             </div>
         </div>
     </div>
 
     <!-- QR Scanner Modal -->
     <div id="qrScannerModal" class="modal-overlay">
-        <div class="bg-white rounded-2xl p-4 md:p-6 max-w-lg md:max-w-2xl lg:max-w-3xl w-full shadow-2xl relative m-3 md:m-6">
-            <button onclick="closeQRScanner()" class="absolute top-4 right-4 text-slate-500 hover:text-slate-800 transition z-20 bg-white/90 p-1.5 rounded-full shadow">
+        <div class="clay-card p-4 md:p-6 max-w-lg md:max-w-2xl lg:max-w-3xl w-full relative m-3 md:m-6 border border-purple-100">
+            <button onclick="closeQRScanner()" class="absolute top-4 right-4 text-purple-700 hover:text-purple-950 transition z-20 bg-purple-100 p-2 rounded-full shadow-sm">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
-            <h3 class="text-lg md:text-2xl font-bold text-slate-800 mb-2 text-center">Scan QR Code Siswa</h3>
+            <h3 class="text-lg md:text-2xl font-black text-purple-950 mb-2 text-center">Scan QR Code Siswa</h3>
             
             <!-- Pilihan Kamera Depan / Belakang -->
             <div class="flex justify-center items-center space-x-2 mb-3">
-                <button type="button" id="btnCamBack" onclick="changeCameraMode('environment')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition border border-blue-600 bg-blue-700 text-white flex items-center space-x-1.5 shadow-sm">
+                <button type="button" id="btnCamBack" onclick="changeCameraMode('environment')" class="px-3.5 py-2 rounded-xl text-xs font-extrabold transition border border-purple-300 bg-purple-600 text-white flex items-center space-x-1.5 shadow-md">
                     <i data-lucide="camera" class="w-4 h-4"></i>
                     <span>Kamera Belakang</span>
                 </button>
-                <button type="button" id="btnCamFront" onclick="changeCameraMode('user')" class="px-3 py-1.5 rounded-lg text-xs font-bold transition border border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center space-x-1.5">
+                <button type="button" id="btnCamFront" onclick="changeCameraMode('user')" class="px-3.5 py-2 rounded-xl text-xs font-extrabold transition border border-purple-200 bg-purple-100 text-purple-700 hover:bg-purple-200 flex items-center space-x-1.5 shadow-sm">
                     <i data-lucide="user" class="w-4 h-4"></i>
                     <span>Kamera Depan</span>
                 </button>
             </div>
 
-            <div class="bg-slate-100 rounded-xl overflow-hidden aspect-square md:aspect-[4/3] flex items-center justify-center relative mb-3 border-2 border-dashed border-blue-400 min-h-[320px] sm:min-h-[450px]">
+            <div class="bg-purple-50 rounded-2xl overflow-hidden aspect-square md:aspect-[4/3] flex items-center justify-center relative mb-3 border-2 border-dashed border-purple-300 min-h-[320px] sm:min-h-[450px] shadow-inner">
                 <div id="qr-reader" class="w-full h-full"></div>
             </div>
-            <p class="text-xs md:text-sm font-semibold text-slate-600 text-center">Arahkan kamera ke QR Code NISN siswa</p>
-            <button onclick="closeQRScanner()" class="mt-3 w-full px-4 py-3 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition text-sm md:text-base">Selesai / Tutup</button>
+            <p class="text-xs md:text-sm font-bold text-purple-800 text-center">Arahkan kamera ke QR Code NISN siswa</p>
+            <button onclick="closeQRScanner()" class="mt-3 w-full px-4 py-3 bg-purple-100 text-purple-900 rounded-2xl font-black hover:bg-purple-200 transition text-sm shadow-sm">Selesai / Tutup</button>
         </div>
     </div>
 
     <div id="qrViewerModal" class="modal-overlay">
-        <div class="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl text-center relative m-4">
-            <button onclick="closeQRViewer()" class="absolute top-4 right-4 text-slate-500 hover:text-slate-800 transition">
+        <div class="clay-card p-6 max-w-sm w-full text-center relative m-4 border border-purple-100">
+            <button onclick="closeQRViewer()" class="absolute top-4 right-4 text-purple-500 hover:text-purple-900 transition">
                 <i data-lucide="x" class="w-6 h-6"></i>
             </button>
-            <h3 id="qrViewerName" class="text-xl font-bold text-slate-800 mb-1">Nama Siswa</h3>
-            <p id="qrViewerNisn" class="text-sm text-slate-500 mb-6 font-mono">NISN: -</p>
-            <div class="bg-slate-50 p-4 rounded-2xl border flex justify-center items-center mb-6">
+            <h3 id="qrViewerName" class="text-xl font-black text-purple-950 mb-1">Nama Siswa</h3>
+            <p id="qrViewerNisn" class="text-xs text-purple-600 mb-6 font-mono font-bold">NISN: -</p>
+            <div class="bg-purple-50 p-4 rounded-2xl border border-purple-100 flex justify-center items-center mb-6 shadow-inner">
                 <img id="qrViewerImage" src="" alt="QR Code" class="w-48 h-48">
             </div>
-            <button onclick="printQR()" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 rounded-xl shadow transition mb-2 flex items-center justify-center space-x-2">
+            <button onclick="printQR()" class="w-full clay-btn-purple font-black py-3.5 rounded-2xl shadow-lg transition mb-2 flex items-center justify-center space-x-2 text-sm">
                 <i data-lucide="printer" class="w-4 h-4"></i><span>Cetak Kartu Absensi</span>
             </button>
-            <button onclick="closeQRViewer()" class="w-full px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-bold hover:bg-slate-200 transition">Tutup</button>
         </div>
     </div>
 
-    <!-- LOGIN SCREEN -->
-    <div id="loginScreen" class="fixed inset-0 z-[100] flex bg-slate-100">
-        <div class="w-full lg:w-1/2 flex items-center justify-center p-8 bg-slate-100">
-            <!-- Login Card Container -->
-            <div class="max-w-md w-full bg-white p-10 rounded-2xl shadow-xl border border-slate-200 relative overflow-hidden">
-                <!-- Watermark Background Logo -->
-                <div class="absolute inset-0 pointer-events-none flex items-center justify-center opacity-[0.05] z-0">
-                    <img src="https://iili.io/ChkXJyb.png" class="w-72 h-72 object-contain" alt="Watermark logo">
-                </div>
+    <!-- TAMPILAN LOGIN SPLIT 2 LAYAR PERSIS REFERENSI (KIRI FORM DENGAN KARAKTER 3D MENGINTIP, KANAN BANNER UNGU & FOTO/KUTIPAN) -->
+    <div id="loginScreen" class="fixed inset-0 z-[100] flex flex-col md:flex-row bg-[#f1f3f9] overflow-y-auto">
+        
+        <!-- SEKSI KIRI: FORM LOGIN DENGAN KARAKTER 3D MENGINTIP DI ATAS KARTU 3D WHITE CLAY -->
+        <div class="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12 lg:p-16 min-h-screen relative pt-24 md:pt-28">
+            <div class="w-full max-w-md clay-card p-8 md:p-10 relative bg-white rounded-[2.2rem] shadow-[0_22px_45px_rgba(139,92,246,0.18)] border border-purple-100/80 mt-12 md:mt-16">
                 
-                <!-- Content Area -->
-                <div class="relative z-10">
-                    <!-- Top Right Logo -->
-                    <div class="absolute top-0 right-0 w-16 h-16">
-                        <img src="https://iili.io/ChkXJyb.png" alt="Logo Kanan Atas" class="w-full h-full object-contain">
+                <!-- KARAKTER 3D MENGINTIP DI ATAS KARTU LOGIN (POSISI TINGGI SUPAYA TIDAK MENUTUPI TULISAN SELAMAT DATANG) -->
+                <div class="absolute -top-20 md:-top-24 left-1/2 -translate-x-1/2 w-36 md:w-44 pointer-events-none z-20 drop-shadow-[0_10px_15px_rgba(124,58,237,0.2)]">
+                    <img src="https://iili.io/njZtuVI.png" alt="Karakter 3D Mengintip" class="w-full h-auto object-contain mx-auto mix-blend-multiply" onerror="this.src='https://iili.io/njZtuVI.png'">
+                </div>
+
+                <!-- Header Card dengan Logo Badge di Kanan Top (TULISAN SELAMAT DATANG DIBERIKAN MARGIN TOP AGAR KELIHATAN DENGAN JELAS DAN TERBACA) -->
+                <div class="flex justify-between items-start mb-6 pt-10 md:pt-12">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-black text-purple-950 tracking-tight leading-tight">Selamat Datang</h2>
+                        <p class="text-purple-600 text-xs mt-1.5 font-extrabold">Silakan login ke sistem administrasi guru</p>
                     </div>
-                    
-                    <div class="mb-8 text-left pr-20">
-                        <h2 class="text-3xl font-bold text-blue-900 leading-none">Selamat Datang</h2>
-                        <p class="text-slate-500 text-xs mt-2">Silakan login ke sistem administrasi guru</p>
+                    <!-- Badge Logo Tut Wuri / Sekolah di Pojok Kanan Atas Card -->
+                    <div class="w-12 h-12 bg-purple-50 rounded-2xl p-1 shadow-md border border-purple-200 flex items-center justify-center shrink-0">
+                        <img src="https://iili.io/ChkXJyb.png" alt="Logo" class="w-9 h-9 object-contain" onerror="this.src='https://iili.io/C8T11s4.png'">
                     </div>
-                    <form id="loginForm" class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700">Username</label>
-                            <input type="text" id="username" placeholder="Yelmi Putri" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none transition bg-white/90" required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700">Kata Sandi</label>
-                            <input type="password" id="password" placeholder="••••••••" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 focus:outline-none transition bg-white/90" required>
-                        </div>
-                        <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 rounded-lg shadow-lg transition-all duration-200">
-                            Masuk Ke Aplikasi
-                        </button>
-                    </form>
+                </div>
+
+                <form id="loginForm" class="space-y-5">
+                    <div>
+                        <label class="block text-[11px] font-black uppercase tracking-wider text-purple-900 mb-2">
+                            Username
+                        </label>
+                        <input type="text" id="username" placeholder="Yelmi Putri" value="Yelmi Putri" class="w-full px-4 py-3.5 clay-input text-purple-950 font-bold text-sm" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-black uppercase tracking-wider text-purple-900 mb-2">
+                            Kata Sandi
+                        </label>
+                        <input type="password" id="password" placeholder="••••••••" value="12345" class="w-full px-4 py-3.5 clay-input text-purple-950 font-bold text-sm" required>
+                    </div>
+
+                    <button type="submit" class="w-full clay-btn-purple font-black py-4 rounded-2xl transition-all duration-200 text-xs uppercase tracking-wider shadow-[0_10px_20px_rgba(124,58,237,0.35)] mt-4">
+                        Masuk Ke Aplikasi
+                    </button>
+                </form>
+
+                <!-- Footer Informasi Guru -->
+                <div class="mt-8 pt-4 border-t border-purple-100/80 text-center">
+                    <p class="text-[11px] text-purple-700 font-extrabold">Sistem Administrasi Guru &bull; Yelmi Putri, S.Pd</p>
                 </div>
             </div>
         </div>
-        <div class="hidden lg:flex w-1/2 bg-blue-700 items-center justify-center p-12 text-white relative overflow-hidden">
-            <div class="absolute inset-0 opacity-10">
-                <svg width="100%" height="100%"><rect width="100%" height="100%" fill="url(#pattern)"/></svg>
-            </div>
-            <div class="relative z-10 text-center px-8">
-                <div class="mb-10">
-                    <img src="https://iili.io/qC3htJS.jpg" alt="Login Graphic" class="w-64 h-64 mx-auto rounded-3xl object-cover shadow-2xl border-4 border-white/20 transform hover:scale-105 transition duration-500">
+
+        <!-- SEKSI KANAN: BANNER UNGU DENGAN FOTO PORTRAIT & KUTIPAN NELSON MANDELA -->
+        <div class="hidden md:flex w-1/2 bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-700 p-12 lg:p-16 flex-col items-center justify-center text-center relative overflow-hidden min-h-screen">
+            <!-- Background Soft Overlay Effect -->
+            <div class="absolute inset-0 bg-white/5 backdrop-blur-[2px]"></div>
+
+            <div class="relative z-10 max-w-md flex flex-col items-center">
+                <!-- Frame Foto Portrait Guru -->
+                <div class="w-56 h-64 rounded-3xl p-1 bg-white/30 shadow-[0_20px_35px_rgba(0,0,0,0.25)] backdrop-blur-md mb-8 border-2 border-white/60 overflow-hidden transform hover:scale-102 transition duration-300">
+                    <img src="https://iili.io/ChijUtp.png" alt="Yelmi Putri, S.Pd" class="w-full h-full object-cover rounded-[1.25rem]" onerror="this.src='https://ui-avatars.com/api/?name=Yelmi+Putri&background=8b5cf6&color=fff'">
                 </div>
-                <i data-lucide="quote" class="w-12 h-12 mb-6 mx-auto opacity-50"></i>
-                <h1 class="text-3xl font-extrabold mb-4 leading-tight">"Pendidikan adalah senjata paling ampuh untuk mengubah dunia."</h1>
-                <p class="text-xl text-blue-100 italic">— Nelson Mandela</p>
+
+                <!-- Kutipan Inspiratif -->
+                <blockquote class="text-white font-extrabold text-lg lg:text-xl leading-relaxed tracking-wide drop-shadow-sm">
+                    "Pendidikan adalah senjata paling ampuh untuk mengubah dunia."
+                </blockquote>
+                <p class="text-purple-200 font-black text-xs uppercase tracking-widest mt-3">— Nelson Mandela</p>
             </div>
         </div>
+
     </div>
 
+    <!-- MAIN APP INTERFACE WITH 3D PASTEL SIDEBAR -->
     <div id="appInterface" class="hidden min-h-screen flex">
-        <!-- Sidebar Desktop -->
-        <aside id="sidebarDesktop" class="hidden md:flex w-64 bg-blue-900 text-white flex-col fixed h-full overflow-y-auto hide-scrollbar z-50">
-            <div class="p-6 text-center border-b border-blue-800">
-                <h1 class="text-xl font-bold tracking-tight">ADMIN GURU</h1>
-                <p class="text-xs text-blue-300">Guru Profesional</p>
+        <!-- Sidebar Desktop (Soft Lavender Clay Theme) -->
+        <aside id="sidebarDesktop" class="hidden md:flex w-64 sidebar-clay text-white flex-col fixed h-full overflow-y-auto hide-scrollbar z-50 py-4">
+            <!-- Profile Avatar Badge Header -->
+            <div class="px-6 py-4 text-center border-b border-white/15 mb-2">
+                <div class="relative w-16 h-16 mx-auto mb-2">
+                    <img src="https://iili.io/ChijUtp.png" alt="Yelmi Putri" class="w-16 h-16 rounded-full object-cover border-2 border-white shadow-xl" onerror="this.src='https://ui-avatars.com/api/?name=Yelmi+Putri&background=8b5cf6&color=fff'">
+                    <span class="absolute bottom-0 right-0 w-4 h-4 bg-emerald-400 border-2 border-white rounded-full shadow-md"></span>
+                </div>
+                <h1 class="text-lg font-black tracking-tight text-white">Yelmi Putri, S.Pd</h1>
+                <p class="text-xs text-purple-200 font-extrabold mt-0.5">Guru Kelas 6 &bull; Profesional</p>
             </div>
             
-            <nav class="flex-1 py-4">
-                <div class="px-4 mb-2 text-[10px] font-bold text-blue-400 uppercase tracking-widest">Utama</div>
-                <a href="#" onclick="switchMenu('beranda', event)" class="sidebar-item active flex items-center px-6 py-3 space-x-3 transition">
+            <nav class="flex-1 py-2 space-y-1">
+                <div class="px-6 my-2 text-[10px] font-black text-purple-200 uppercase tracking-widest opacity-80">Utama</div>
+                <a href="#" onclick="switchMenu('beranda', event)" class="sidebar-item active flex items-center px-5 py-3 space-x-3 transition">
                     <i data-lucide="home" class="w-5 h-5"></i><span>Beranda</span>
                 </a>
                 
-                <div class="px-4 mt-6 mb-2 text-[10px] font-bold text-blue-400 uppercase tracking-widest">Master Data</div>
-                <a href="#" onclick="switchMenu('data_sekolah', event)" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
+                <div class="px-6 mt-5 mb-2 text-[10px] font-black text-purple-200 uppercase tracking-widest opacity-80">Master Data</div>
+                <a href="#" onclick="switchMenu('data_sekolah', event)" class="sidebar-item flex items-center px-5 py-3 space-x-3 transition">
                     <i data-lucide="school" class="w-5 h-5"></i><span>Data Sekolah</span>
                 </a>
-                <a href="#" onclick="switchMenu('wali_kelas', event)" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
+                <a href="#" onclick="switchMenu('wali_kelas', event)" class="sidebar-item flex items-center px-5 py-3 space-x-3 transition">
                     <i data-lucide="user-check" class="w-5 h-5"></i><span>Wali Kelas</span>
                 </a>
-                <a href="#" onclick="switchMenu('mata_pelajaran', event)" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
+                <a href="#" onclick="switchMenu('mata_pelajaran', event)" class="sidebar-item flex items-center px-5 py-3 space-x-3 transition">
                     <i data-lucide="book" class="w-5 h-5"></i><span>Mata Pelajaran</span>
                 </a>
-                <a href="#" onclick="switchMenu('tahun_pelajaran', event)" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
+                <a href="#" onclick="switchMenu('tahun_pelajaran', event)" class="sidebar-item flex items-center px-5 py-3 space-x-3 transition">
                     <i data-lucide="calendar" class="w-5 h-5"></i><span>Tahun Pelajaran</span>
                 </a>
-                <a href="#" onclick="switchMenu('kategori_soal', event)" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
+                <a href="#" onclick="switchMenu('kategori_soal', event)" class="sidebar-item flex items-center px-5 py-3 space-x-3 transition">
                     <i data-lucide="tag" class="w-5 h-5"></i><span>Kategori Soal</span>
                 </a>
-                <a href="#" onclick="switchMenu('data_siswa', event)" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
+                <a href="#" onclick="switchMenu('data_siswa', event)" class="sidebar-item flex items-center px-5 py-3 space-x-3 transition">
                     <i data-lucide="users" class="w-5 h-5"></i><span>Data Siswa</span>
                 </a>
 
-                <div class="px-4 mt-6 mb-2 text-[10px] font-bold text-blue-400 uppercase tracking-widest">Akademik</div>
-                <a href="#" onclick="switchMenu('input_nilai', event)" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
+                <div class="px-6 mt-5 mb-2 text-[10px] font-black text-purple-200 uppercase tracking-widest opacity-80">Akademik</div>
+                <a href="#" onclick="switchMenu('input_nilai', event)" class="sidebar-item flex items-center px-5 py-3 space-x-3 transition">
                     <i data-lucide="file-edit" class="w-5 h-5"></i><span>Input Nilai</span>
                 </a>
-                <a href="#" onclick="switchMenu('penilaian', event)" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
+                <a href="#" onclick="switchMenu('penilaian', event)" class="sidebar-item flex items-center px-5 py-3 space-x-3 transition">
                     <i data-lucide="bar-chart-2" class="w-5 h-5"></i><span>Penilaian</span>
                 </a>
-                <a href="#" onclick="switchMenu('absensi', event)" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
+                <a href="#" onclick="switchMenu('absensi', event)" class="sidebar-item flex items-center px-5 py-3 space-x-3 transition">
                     <i data-lucide="clipboard-list" class="w-5 h-5"></i><span>Absensi Siswa</span>
                 </a>
-                <a href="#" onclick="switchMenu('jurnal', event)" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
+                <a href="#" onclick="switchMenu('jurnal', event)" class="sidebar-item flex items-center px-5 py-3 space-x-3 transition">
                     <i data-lucide="book-open" class="w-5 h-5"></i><span>Jurnal Mengajar</span>
                 </a>
-                <a href="#" onclick="switchMenu('kisi_kisi', event)" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
+                <a href="#" onclick="switchMenu('kisi_kisi', event)" class="sidebar-item flex items-center px-5 py-3 space-x-3 transition">
                     <i data-lucide="layout" class="w-5 h-5"></i><span>Kisi-Kisi Soal</span>
                 </a>
-                <a href="https://paa806419-pixel.github.io/Kelola_Soal/" target="_blank" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
-                    <i data-lucide="plus-circle" class="w-5 h-5 text-yellow-400"></i><span class="text-yellow-400 font-bold">Buat Soal</span>
+                <a href="https://paa806419-pixel.github.io/Kelola_Soal/" target="_blank" class="sidebar-item flex items-center px-5 py-3 space-x-3 transition">
+                    <i data-lucide="plus-circle" class="w-5 h-5 text-amber-300"></i><span class="text-amber-200 font-extrabold">Buat Soal</span>
                 </a>
 
-                <div class="px-4 mt-6 mb-2 text-[10px] font-bold text-blue-400 uppercase tracking-widest">Pengaturan</div>
-                <a href="#" onclick="switchMenu('kop_surat', event)" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
+                <div class="px-6 mt-5 mb-2 text-[10px] font-black text-purple-200 uppercase tracking-widest opacity-80">Pengaturan</div>
+                <a href="#" onclick="switchMenu('kop_surat', event)" class="sidebar-item flex items-center px-5 py-3 space-x-3 transition">
                     <i data-lucide="printer" class="w-5 h-5"></i><span>KOP Surat</span>
                 </a>
-                <a href="#" onclick="switchMenu('ttd', event)" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
+                <a href="#" onclick="switchMenu('ttd', event)" class="sidebar-item flex items-center px-5 py-3 space-x-3 transition">
                     <i data-lucide="pen-tool" class="w-5 h-5"></i><span>TTD</span>
                 </a>
-                <a href="#" onclick="switchMenu('backup_pulihkan', event)" class="sidebar-item flex items-center px-6 py-3 space-x-3 transition">
-                    <i data-lucide="database" class="w-5 h-5 text-green-400"></i><span class="text-green-400">Backup & Pulihkan</span>
+                <a href="#" onclick="switchMenu('backup_pulihkan', event)" class="sidebar-item flex items-center px-5 py-3 space-x-3 transition">
+                    <i data-lucide="database" class="w-5 h-5 text-emerald-300"></i><span class="text-emerald-200">Backup & Pulihkan</span>
                 </a>
-                <button onclick="resetData()" class="w-full text-left flex items-center px-6 py-3 space-x-3 hover:bg-red-800 transition text-red-200 mt-4">
+                <button onclick="resetData()" class="w-full text-left flex items-center px-5 py-3 space-x-3 hover:bg-red-500/20 transition text-red-200 mt-4 rounded-xl mx-2 font-bold">
                     <i data-lucide="trash-2" class="w-5 h-5"></i><span>Reset Data</span>
                 </button>
-                <button onclick="manualSync()" class="w-full text-left flex items-center px-6 py-3 space-x-3 hover:bg-blue-800 transition text-blue-200">
+                <button onclick="manualSync()" class="w-full text-left flex items-center px-5 py-3 space-x-3 hover:bg-white/10 transition text-purple-100 rounded-xl mx-2 font-bold">
                     <i data-lucide="refresh-cw" class="w-5 h-5"></i><span>SINGKRON</span>
                 </button>
-                <button onclick="showLogoutModal()" class="w-full text-left flex items-center px-6 py-3 space-x-3 hover:bg-red-700 transition text-red-100">
+                <button onclick="showLogoutModal()" class="w-full text-left flex items-center px-5 py-3 space-x-3 hover:bg-red-500/20 transition text-red-100 rounded-xl mx-2 font-bold">
                     <i data-lucide="log-out" class="w-5 h-5"></i><span>Keluar</span>
                 </button>
             </nav>
         </aside>
 
         <main id="mainContainer" class="flex-1 ml-0 md:ml-64 p-4 md:p-8 pb-24 md:pb-8">
-            <!-- Header Utama -->
-            <header class="flex justify-between items-center mb-6 bg-white p-4 md:p-6 rounded-xl shadow-sm border border-slate-200 sticky top-0 z-40">
+            <!-- Header Utama (3D Soft Pastel Clay Header) -->
+            <header class="flex justify-between items-center mb-6 clay-card p-4 md:p-6 sticky top-0 z-40 border border-purple-100">
                 <div class="flex items-center space-x-4">
                     <div>
-                        <h2 id="menuTitle" class="text-lg md:text-2xl font-bold text-slate-800 uppercase tracking-tight">Beranda</h2>
-                        <p id="menuSub" class="text-slate-500 text-xs md:text-sm">Statistik dan ringkasan sistem hari ini.</p>
+                        <h2 id="menuTitle" class="text-lg md:text-2xl font-black text-purple-950 uppercase tracking-tight">Beranda</h2>
+                        <p id="menuSub" class="text-purple-600 text-xs md:text-sm font-bold">Statistik dan ringkasan sistem hari ini.</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-2 md:space-x-4">
                     <!-- Tombol Keluar Cepat untuk Mobile -->
-                    <button onclick="showLogoutModal()" class="block md:hidden p-2 bg-red-50 text-red-600 rounded-lg border border-red-100 hover:bg-red-100 transition">
+                    <button onclick="showLogoutModal()" class="block md:hidden p-2 bg-red-50 text-red-600 rounded-xl border border-red-200 hover:bg-red-100 transition shadow-sm">
                         <i data-lucide="log-out" class="w-5 h-5"></i>
                     </button>
-                    <div id="syncStatus" class="hidden sm:flex items-center space-x-2 bg-green-50 px-3 py-1 rounded-full text-green-700 text-[10px] font-bold">
-                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <div id="syncStatus" class="hidden sm:flex items-center space-x-2 bg-emerald-100 border border-emerald-300 px-3.5 py-1.5 rounded-full text-emerald-800 text-[10px] font-black shadow-inner">
+                        <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
                         <span>TERHUBUNG SHEETS</span>
                     </div>
                     <div class="text-right hidden sm:block">
-                        <p class="font-bold text-slate-800">Yelmi Putri</p>
-                        <p class="text-xs text-blue-600">Guru Kelas 6</p>
+                        <p class="font-black text-purple-950">Yelmi Putri, S.Pd</p>
+                        <p class="text-xs text-purple-600 font-bold">Guru Kelas 6</p>
                     </div>
                     <!-- Foto Administrator Terpilih -->
-                    <img src="https://iili.io/ChijUtp.png" alt="Yelmi Putri" class="w-10 h-10 md:w-14 md:h-14 rounded-full object-cover border-2 border-blue-200 shadow-sm" onerror="this.src='https://ui-avatars.com/api/?name=Yelmi+Putri&background=1e3a8a&color=fff'">
+                    <img src="https://iili.io/ChijUtp.png" alt="Yelmi Putri" class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border-2 border-purple-400 shadow-md" onerror="this.src='https://ui-avatars.com/api/?name=Yelmi+Putri&background=8b5cf6&color=fff'">
                 </div>
             </header>
 
@@ -402,19 +546,18 @@
             <div id="contentBody"></div>
         </main>
 
-        <!-- Navigasi Bawah khusus HP / Mobile View -->
-        <div class="md:hidden fixed bottom-0 left-0 right-0 bg-blue-900 text-white flex justify-around items-center h-16 border-t border-blue-800 z-50 shadow-lg">
-            <button onclick="switchMenu('beranda', event)" id="navMobileBeranda" class="flex flex-col items-center justify-center w-1/3 h-full text-blue-300 transition focus:outline-none">
+        <div class="md:hidden fixed bottom-0 left-0 right-0 sidebar-clay text-white flex justify-around items-center h-16 border-t border-purple-400/30 z-50 shadow-2xl">
+            <button onclick="switchMenu('beranda', event)" id="navMobileBeranda" class="flex flex-col items-center justify-center w-1/3 h-full text-purple-200 transition focus:outline-none">
                 <i data-lucide="home" class="w-5 h-5"></i>
-                <span class="text-[10px] font-bold mt-1 uppercase tracking-wider">Beranda</span>
+                <span class="text-[10px] font-black mt-1 uppercase tracking-wider">Beranda</span>
             </button>
-            <button onclick="openQRScanner()" class="flex flex-col items-center justify-center w-1/3 h-full text-blue-300 transition focus:outline-none text-center">
+            <button onclick="openQRScanner()" class="flex flex-col items-center justify-center w-1/3 h-full text-purple-200 transition focus:outline-none text-center">
                 <i data-lucide="qr-code" class="w-5 h-5"></i>
-                <span class="text-[10px] font-bold mt-1 uppercase tracking-wider">Buka Scanner QR</span>
+                <span class="text-[10px] font-black mt-1 uppercase tracking-wider">Buka Scanner QR</span>
             </button>
-            <button onclick="showLogoutModal()" class="flex flex-col items-center justify-center w-1/3 h-full text-red-300 hover:text-red-100 transition focus:outline-none">
+            <button onclick="showLogoutModal()" class="flex flex-col items-center justify-center w-1/3 h-full text-red-200 hover:text-red-100 transition focus:outline-none">
                 <i data-lucide="log-out" class="w-5 h-5"></i>
-                <span class="text-[10px] font-bold mt-1 uppercase tracking-wider">Keluar</span>
+                <span class="text-[10px] font-black mt-1 uppercase tracking-wider">Keluar</span>
             </button>
         </div>
     </div>
@@ -439,8 +582,8 @@
         let activeViewerStudent = null; 
         let confirmCallback = null; 
         let lastIsMobile = checkMobileViewport();
-        let currentFacingMode = 'environment'; // 'environment' (kamera belakang) atau 'user' (kamera depan)
-        let globalAudioCtx = null; // AudioContext tunggal universal untuk PWA Standalone Edge Huawei
+        let currentFacingMode = 'environment';
+        let globalAudioCtx = null;
 
         // --- UTILITY: DETEKSI VIEWPORT HP ---
         function checkMobileViewport() {
@@ -467,7 +610,7 @@
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            toast.className = `toast ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
+            toast.className = `toast ${type === 'success' ? 'bg-purple-600' : 'bg-red-600'}`;
             toast.innerText = message;
             container.appendChild(toast);
             setTimeout(() => {
@@ -506,7 +649,6 @@
                 if (globalAudioCtx && globalAudioCtx.state === 'suspended') {
                     globalAudioCtx.resume();
                 }
-                // Membunyikan sampel buffer tersembunyi untuk membuka kunci penuh Audio Policy Edge Standalone
                 if (globalAudioCtx) {
                     const buffer = globalAudioCtx.createBuffer(1, 1, 22050);
                     const source = globalAudioCtx.createBufferSource();
@@ -549,7 +691,6 @@
             }
         }
 
-        // --- WEB SPEECH API & AUDIO CHIME FALLBACK (EDGE STANDALONE PWA HUAWEI) ---
         function playHuaweiVoiceFallback() {
             try {
                 initGlobalAudio();
@@ -558,8 +699,7 @@
                 const ctx = globalAudioCtx;
                 const now = ctx.currentTime;
                 
-                // Melodic vocal-range chime sequence khusus Tablet Huawei Edge PWA Standalone
-                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6 (Harmonis & Jelas)
+                const notes = [523.25, 659.25, 783.99, 1046.50];
                 notes.forEach((freq, idx) => {
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
@@ -626,7 +766,6 @@
                     }
                 }
                 
-                // Selalu jalankan chime ucapan harmonis untuk menjamin kepastian audio 100% pada Edge PWA Standalone Tablet Huawei
                 playHuaweiVoiceFallback();
             } catch (e) {
                 console.error("Gagal memutar audio ucapan:", e);
@@ -642,7 +781,7 @@
 
         async function fetchFromSheets() {
             if(!GOOGLE_SCRIPT_URL) return;
-            document.getElementById('syncStatus').innerHTML = '<div class="w-2 h-2 bg-yellow-500 rounded-full"></div><span>MENGAMBIL DATA...</span>';
+            document.getElementById('syncStatus').innerHTML = '<div class="w-2 h-2 bg-amber-500 rounded-full"></div><span>MENGAMBIL DATA...</span>';
             try {
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 15000); 
@@ -655,7 +794,7 @@
                     db = cloudData;
                     localStorage.setItem('admin_guru_db', JSON.stringify(db));
                     renderMenu();
-                    document.getElementById('syncStatus').innerHTML = '<div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div><span>AUTO-SYNC AKTIF</span>';
+                    document.getElementById('syncStatus').innerHTML = '<div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div><span>AUTO-SYNC AKTIF</span>';
                 }
             } catch (err) {
                 console.warn("Sinkronisasi gagal, masuk mode offline:", err);
@@ -767,7 +906,7 @@
                 const navBeranda = document.getElementById('navMobileBeranda');
                 if (navBeranda) {
                     navBeranda.classList.add('text-white');
-                    navBeranda.classList.remove('text-blue-300');
+                    navBeranda.classList.remove('text-purple-200');
                 }
             } else {
                 if (sidebar) sidebar.classList.remove('hidden');
@@ -881,7 +1020,6 @@
                     sub.innerText = checkMobileViewport() ? "Monitoring presensi Anda hari ini." : "Statistik dan ringkasan sistem hari ini.";
                     
                     if (checkMobileViewport()) {
-                        // BERANDA KHUSUS MOBILE / HP
                         const today = new Date();
                         const y = today.getFullYear();
                         const m = String(today.getMonth() + 1).padStart(2, '0');
@@ -896,68 +1034,68 @@
 
                         body.innerHTML = `
                         <div class="space-y-6">
-                            <div class="bg-gradient-to-r from-blue-700 to-indigo-800 p-6 rounded-2xl shadow-md text-white">
+                            <div class="clay-card-purple p-6 text-white">
                                 <div class="flex items-center justify-between mb-4">
-                                    <div class="p-2 bg-white/15 rounded-lg">
+                                    <div class="p-2.5 bg-white/20 rounded-xl border border-white/30 shadow-inner">
                                         <i data-lucide="clipboard-check" class="w-6 h-6 text-white"></i>
                                     </div>
-                                    <span class="bg-emerald-500 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider text-white">Live</span>
+                                    <span class="bg-emerald-400 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider text-emerald-950 shadow-sm">Live</span>
                                 </div>
-                                <h4 class="text-xs uppercase font-extrabold tracking-widest text-blue-200">Kehadiran Hari Ini</h4>
-                                <h2 class="text-3xl font-black mt-1">${todayAbsensi.length} <span class="text-lg font-medium text-blue-100">Siswa Absen</span></h2>
-                                <p class="text-[11px] text-blue-200 mt-2">${formatTanggalIndo(todayStr)}</p>
+                                <h4 class="text-xs uppercase font-black tracking-widest text-purple-200">Kehadiran Hari Ini</h4>
+                                <h2 class="text-3xl font-black mt-1">${todayAbsensi.length} <span class="text-lg font-medium text-purple-200">Siswa Absen</span></h2>
+                                <p class="text-[11px] text-purple-200 mt-2 font-bold">${formatTanggalIndo(todayStr)}</p>
                             </div>
 
                             <div class="grid grid-cols-4 gap-3">
-                                <div class="bg-white p-3 rounded-xl border border-slate-200 text-center shadow-sm">
-                                    <p class="text-[9px] font-black text-slate-400 uppercase">Hadir</p>
-                                    <h4 class="text-lg font-bold text-green-600 mt-1">${totalHadir}</h4>
+                                <div class="clay-card p-3.5 text-center">
+                                    <p class="text-[9px] font-black text-purple-500 uppercase">Hadir</p>
+                                    <h4 class="text-xl font-black text-emerald-600 mt-1">${totalHadir}</h4>
                                 </div>
-                                <div class="bg-white p-3 rounded-xl border border-slate-200 text-center shadow-sm">
-                                    <p class="text-[9px] font-black text-slate-400 uppercase">Izin</p>
-                                    <h4 class="text-lg font-bold text-blue-600 mt-1">${totalIzin}</h4>
+                                <div class="clay-card p-3.5 text-center">
+                                    <p class="text-[9px] font-black text-purple-500 uppercase">Izin</p>
+                                    <h4 class="text-xl font-black text-blue-600 mt-1">${totalIzin}</h4>
                                 </div>
-                                <div class="bg-white p-3 rounded-xl border border-slate-200 text-center shadow-sm">
-                                    <p class="text-[9px] font-black text-slate-400 uppercase">Sakit</p>
-                                    <h4 class="text-lg font-bold text-yellow-600 mt-1">${totalSakit}</h4>
+                                <div class="clay-card p-3.5 text-center">
+                                    <p class="text-[9px] font-black text-purple-500 uppercase">Sakit</p>
+                                    <h4 class="text-xl font-black text-amber-500 mt-1">${totalSakit}</h4>
                                 </div>
-                                <div class="bg-white p-3 rounded-xl border border-slate-200 text-center shadow-sm">
-                                    <p class="text-[9px] font-black text-slate-400 uppercase">Alfa</p>
-                                    <h4 class="text-lg font-bold text-red-600 mt-1">${totalTK}</h4>
+                                <div class="clay-card p-3.5 text-center">
+                                    <p class="text-[9px] font-black text-purple-500 uppercase">Alfa</p>
+                                    <h4 class="text-xl font-black text-red-500 mt-1">${totalTK}</h4>
                                 </div>
                             </div>
 
-                            <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl flex items-start space-x-3">
-                                <div class="p-1.5 bg-amber-100 text-amber-700 rounded">
+                            <div class="bg-amber-500/10 border border-amber-300/60 p-4 rounded-2xl flex items-start space-x-3 shadow-sm">
+                                <div class="p-2 bg-amber-100 text-amber-800 rounded-xl border border-amber-200">
                                     <i data-lucide="info" class="w-4 h-4"></i>
                                 </div>
-                                <div class="text-xs text-amber-800 leading-relaxed">
-                                    <p class="font-bold">Instruksi Cepat:</p>
+                                <div class="text-xs text-amber-900 leading-relaxed font-semibold">
+                                    <p class="font-black">Instruksi Cepat:</p>
                                     <p class="mt-0.5">Tekan tombol <strong>Buka Scanner QR</strong> di navigasi bawah untuk memulai pencatatan absensi otomatis berbasis kamera.</p>
                                 </div>
                             </div>
 
-                            <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200">
-                                <div class="flex items-center justify-between mb-4 pb-3 border-b">
-                                    <h3 class="text-sm font-bold text-slate-800">Siswa Absen Hari Ini</h3>
-                                    <span class="text-xs text-slate-400 font-mono">${todayAbsensi.length} Data</span>
+                            <div class="clay-card p-5">
+                                <div class="flex items-center justify-between mb-4 pb-3 border-b border-purple-100">
+                                    <h3 class="text-sm font-black text-purple-950">Siswa Absen Hari Ini</h3>
+                                    <span class="text-xs text-purple-600 font-mono font-black">${todayAbsensi.length} Data</span>
                                 </div>
                                 
                                 <div class="space-y-3 max-h-[300px] overflow-y-auto hide-scrollbar">
                                     ${todayAbsensi.length > 0 ? todayAbsensi.map(item => `
-                                        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border">
+                                        <div class="flex items-center justify-between p-3 bg-purple-50/70 rounded-2xl border border-purple-100 shadow-sm">
                                             <div>
-                                                <h5 class="text-xs font-bold text-slate-800">${item.nama_siswa}</h5>
-                                                <p class="text-[10px] text-slate-500 font-mono mt-0.5">NISN: ${item.nisn || '-'}</p>
+                                                <h5 class="text-xs font-black text-purple-950">${item.nama_siswa}</h5>
+                                                <p class="text-[10px] text-purple-600 font-mono font-bold mt-0.5">NISN: ${item.nisn || '-'}</p>
                                             </div>
-                                            <span class="px-2.5 py-1 text-[9px] font-bold rounded-full ${
-                                                item.status === 'Hadir' ? 'bg-green-100 text-green-700' :
-                                                item.status === 'Izin' ? 'bg-blue-100 text-blue-700' :
-                                                item.status === 'Sakit' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'
+                                            <span class="px-3 py-1 text-[9px] font-black rounded-full shadow-sm ${
+                                                item.status === 'Hadir' ? 'bg-emerald-100 text-emerald-800' :
+                                                item.status === 'Izin' ? 'bg-blue-100 text-blue-800' :
+                                                item.status === 'Sakit' ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800'
                                             }">${item.status.toUpperCase()}</span>
                                         </div>
                                     `).join('') : `
-                                        <div class="p-6 text-center text-xs text-slate-400 font-semibold italic">
+                                        <div class="p-6 text-center text-xs text-purple-400 font-bold italic">
                                             Belum ada siswa yang absen hari ini.
                                         </div>
                                     `}
@@ -965,40 +1103,40 @@
                             </div>
                         </div>`;
                     } else {
-                        // BERANDA DESKTOP / TABLET
+                        // BERANDA DESKTOP CLAY PASTEL STYLE
                         body.innerHTML = `
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                            <div class="bg-yellow-400 p-6 rounded-xl shadow-md border border-yellow-500 text-white">
-                                <p class="text-yellow-100 text-xs font-bold uppercase tracking-wider">Siswa</p>
-                                <h3 class="text-4xl font-black">${db.siswa.length}</h3>
+                            <div class="clay-card p-6 border-l-8 border-amber-400">
+                                <p class="text-purple-500 text-xs font-black uppercase tracking-wider">Siswa</p>
+                                <h3 class="text-4xl font-black text-purple-950 mt-1">${db.siswa.length}</h3>
                             </div>
-                            <div class="bg-green-500 p-6 rounded-xl shadow-md border border-green-600 text-white">
-                                <p class="text-green-100 text-xs font-bold uppercase tracking-wider">Mapel</p>
-                                <h3 class="text-4xl font-black">${db.mapel.length}</h3>
+                            <div class="clay-card p-6 border-l-8 border-emerald-400">
+                                <p class="text-purple-500 text-xs font-black uppercase tracking-wider">Mapel</p>
+                                <h3 class="text-4xl font-black text-purple-950 mt-1">${db.mapel.length}</h3>
                             </div>
-                            <div class="bg-blue-600 p-6 rounded-xl shadow-md border border-blue-700 text-white">
-                                <p class="text-blue-100 text-xs font-bold uppercase tracking-wider">Nilai</p>
-                                <h3 class="text-4xl font-black">${db.nilai.length}</h3>
+                            <div class="clay-card p-6 border-l-8 border-purple-500">
+                                <p class="text-purple-500 text-xs font-black uppercase tracking-wider">Nilai</p>
+                                <h3 class="text-4xl font-black text-purple-950 mt-1">${db.nilai.length}</h3>
                             </div>
-                            <div class="bg-red-500 p-6 rounded-xl shadow-md border border-red-600 text-white">
-                                <p class="text-red-100 text-xs font-bold uppercase tracking-wider">Presensi</p>
-                                <h3 class="text-4xl font-black">${db.absensi.length}</h3>
+                            <div class="clay-card p-6 border-l-8 border-rose-400">
+                                <p class="text-purple-500 text-xs font-black uppercase tracking-wider">Presensi</p>
+                                <h3 class="text-4xl font-black text-purple-950 mt-1">${db.absensi.length}</h3>
                             </div>
                         </div>
-                        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="clay-card p-8">
                             <div class="flex items-center space-x-3 mb-6">
-                                <div class="p-2 bg-blue-100 text-blue-700 rounded-lg"><i data-lucide="user" class="w-6 h-6"></i></div>
-                                <h3 class="text-xl font-bold text-slate-800">Profil Profesional</h3>
+                                <div class="p-2.5 bg-purple-100 text-purple-700 rounded-2xl shadow-sm border border-purple-200"><i data-lucide="user" class="w-6 h-6"></i></div>
+                                <h3 class="text-xl font-black text-purple-950">Profil Profesional</h3>
                             </div>
                             <div class="overflow-x-auto">
-                                <table class="w-full text-left">
-                                    <tbody class="divide-y divide-slate-100">
-                                        <tr><td class="py-4 font-semibold text-slate-500 w-1/3">Nama Lengkap</td><td class="py-4 text-slate-800 font-bold">Yelmi Putri, S.Pd</td></tr>
-                                        <tr><td class="py-4 font-semibold text-slate-500">NIP</td><td class="py-4 text-slate-800">199408312022212002</td></tr>
-                                        <tr><td class="py-4 font-semibold text-slate-500">Status Kepegawaian</td><td class="py-4"><span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold uppercase">PPPK</span></td></tr>
-                                        <tr><td class="py-4 font-semibold text-slate-500">Jabatan</td><td class="py-4 text-slate-800">Guru Kelas 6</td></tr>
-                                        <tr><td class="py-4 font-semibold text-slate-500">Unit Kerja</td><td class="py-4 text-slate-800">UPT SDN 22 Tanah Keras</td></tr>
-                                        <tr><td class="py-4 font-semibold text-slate-500">Link s.id</td><td class="py-4 font-black text-blue-700"><a href="https://s.id/yelmiputri" target="_blank" class="flex items-center space-x-2 hover:text-blue-900 transition"><span>https://s.id/yelmiputri</span><i data-lucide="external-link" class="w-4 h-4"></i></a></td></tr>
+                                <table class="w-full text-left text-sm">
+                                    <tbody class="divide-y divide-purple-100">
+                                        <tr><td class="py-4 font-bold text-purple-500 w-1/3">Nama Lengkap</td><td class="py-4 text-purple-950 font-black">Yelmi Putri, S.Pd</td></tr>
+                                        <tr><td class="py-4 font-bold text-purple-500">NIP</td><td class="py-4 text-purple-900 font-bold">199408312022212002</td></tr>
+                                        <tr><td class="py-4 font-bold text-purple-500">Status Kepegawaian</td><td class="py-4"><span class="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs font-black uppercase shadow-sm">PPPK</span></td></tr>
+                                        <tr><td class="py-4 font-bold text-purple-500">Jabatan</td><td class="py-4 text-purple-900 font-bold">Guru Kelas 6</td></tr>
+                                        <tr><td class="py-4 font-bold text-purple-500">Unit Kerja</td><td class="py-4 text-purple-900 font-bold">UPT SDN 22 Tanah Keras</td></tr>
+                                        <tr><td class="py-4 font-bold text-purple-500">Link s.id</td><td class="py-4 font-black text-purple-700"><a href="https://s.id/yelmiputri" target="_blank" class="flex items-center space-x-2 hover:text-purple-900 transition"><span>https://s.id/yelmiputri</span><i data-lucide="external-link" class="w-4 h-4"></i></a></td></tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -1008,8 +1146,8 @@
                 case 'backup_pulihkan':
                     title.innerText = "Backup & Pulihkan";
                     body.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="bg-white p-8 rounded-2xl border text-center"><button onclick="exportData()" class="bg-green-600 text-white font-bold py-3 px-8 rounded-xl w-full">Download Backup</button></div>
-                        <div class="bg-white p-8 rounded-2xl border text-center"><input type="file" id="importFile" class="hidden" accept=".json" onchange="importData(event)"><button onclick="document.getElementById('importFile').click()" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-xl w-full">Pilih File Backup</button></div>
+                        <div class="clay-card p-8 text-center"><button onclick="exportData()" class="clay-btn-purple font-black py-4 px-8 rounded-2xl w-full text-sm uppercase tracking-wider">Download Backup</button></div>
+                        <div class="clay-card p-8 text-center"><input type="file" id="importFile" class="hidden" accept=".json" onchange="importData(event)"><button onclick="document.getElementById('importFile').click()" class="bg-purple-100 hover:bg-purple-200 text-purple-900 font-black py-4 px-8 rounded-2xl w-full text-sm transition shadow-sm border border-purple-200">Pilih File Backup</button></div>
                     </div>`; break;
                 case 'data_sekolah': renderFormMaster('Data Sekolah', 'Pengaturan Dasar', 'sekolah', [{key: 'nama', label: 'Nama Sekolah', type: 'text'}, {key: 'tempat', label: 'Kota', type: 'text'}, {key: 'kepala', label: 'Nama Kepala Sekolah', type: 'text'}, {key: 'nip', label: 'NIP', type: 'text'}], true); break;
                 case 'wali_kelas': renderFormMaster('Wali Kelas', 'Master Wali Kelas', 'wali_kelas', [{key: 'nama', label: 'Nama Wali Kelas', type: 'text'}, {key: 'nip', label: 'NIP', type: 'text'}]); break;
@@ -1035,59 +1173,59 @@
 
             const currentObj = isSingle ? (db[dbKey] || {}) : (editingIndex !== null && db[dbKey][editingIndex] ? db[dbKey][editingIndex] : {});
 
-            let html = `<div class="bg-white p-4 md:p-8 rounded-xl shadow-sm border border-slate-200">
-                <div id="formMaster" class="${!isSingle && editingIndex === null ? 'hidden' : ''} mb-8 p-4 md:p-6 bg-slate-50 rounded-xl border border-slate-200">
+            let html = `<div class="clay-card p-4 md:p-8">
+                <div id="formMaster" class="${!isSingle && editingIndex === null ? 'hidden' : ''} mb-8 p-4 md:p-6 bg-purple-50/50 rounded-2xl border border-purple-100 shadow-inner">
                     <form id="mainForm" class="grid grid-cols-1 md:grid-cols-2 gap-4" autocomplete="off">
                         ${fields.map(f => {
                             const fieldVal = currentObj[f.key] !== undefined ? currentObj[f.key] : '';
                             return `<div>
-                                <label class="block text-xs font-bold uppercase mb-1 text-slate-700">${f.label}</label>
+                                <label class="block text-xs font-black uppercase mb-1 text-purple-900">${f.label}</label>
                                 ${f.type === 'select' 
-                                    ? `<select name="${f.key}" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none text-slate-800 font-medium">${f.options.map(o => `<option value="${o}" ${fieldVal === o ? 'selected' : ''}>${o}</option>`).join('')}</select>` 
-                                    : `<input type="${f.type}" name="${f.key}" value="${fieldVal}" autocomplete="off" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none text-slate-800 font-medium">`
+                                    ? `<select name="${f.key}" class="w-full px-4 py-3 clay-input text-purple-950 font-bold">${f.options.map(o => `<option value="${o}" ${fieldVal === o ? 'selected' : ''}>${o}</option>`).join('')}</select>` 
+                                    : `<input type="${f.type}" name="${f.key}" value="${fieldVal}" autocomplete="off" class="w-full px-4 py-3 clay-input text-purple-950 font-bold">`
                                 }
                             </div>`;
                         }).join('')}
                         <div class="md:col-span-2 flex justify-end space-x-3 mt-4">
-                            ${!isSingle && editingIndex !== null ? `<button type="button" onclick="cancelEditing()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-6 py-2.5 rounded-lg font-bold text-xs transition">Batal</button>` : ''}
-                            <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-white px-8 py-2.5 rounded-lg font-bold text-xs shadow transition">Simpan</button>
+                            ${!isSingle && editingIndex !== null ? `<button type="button" onclick="cancelEditing()" class="bg-purple-100 hover:bg-purple-200 text-purple-800 px-6 py-2.5 rounded-xl font-bold text-xs transition shadow-sm">Batal</button>` : ''}
+                            <button type="submit" class="clay-btn-purple px-8 py-2.5 rounded-xl font-black text-xs transition uppercase">Simpan</button>
                         </div>
                     </form>
                 </div>
                 ${!isSingle ? `
                 <div class="flex justify-between items-center mb-6">
-                    <h4 class="font-bold text-slate-800">Data Terdaftar</h4>
+                    <h4 class="font-black text-purple-950">Data Terdaftar</h4>
                     <div class="flex space-x-2">
-                        ${dbKey === 'siswa' ? `<button onclick="printAllStudentCards()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs md:text-sm font-bold flex items-center space-x-1.5 transition"><i data-lucide="printer" class="w-4 h-4"></i><span>Cetak Semua Kartu QR</span></button>` : ''}
-                        <button onclick="toggleForm('formMaster')" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition">+ Tambah Data</button>
+                        ${dbKey === 'siswa' ? `<button onclick="printAllStudentCards()" class="clay-btn-purple px-4 py-2 rounded-xl text-xs md:text-sm font-black flex items-center space-x-1.5 transition"><i data-lucide="printer" class="w-4 h-4"></i><span>Cetak Semua Kartu QR</span></button>` : ''}
+                        <button onclick="toggleForm('formMaster')" class="clay-btn-purple px-4 py-2 rounded-xl text-xs md:text-sm font-black transition">+ Tambah Data</button>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl shadow overflow-x-auto border border-black">
+                <div class="bg-white rounded-2xl shadow-md overflow-x-auto border border-purple-900">
                     <table class="w-full text-left text-sm custom-table">
-                        <thead class="bg-blue-800 text-white">
-                            <tr class="border-black">
-                                <th class="px-4 py-3 border-black">No</th>
-                                ${fields.map(f => `<th class="px-4 py-3 border-black">${f.label}</th>`).join('')}
-                                <th class="px-4 py-3 border-black">Aksi</th>
+                        <thead>
+                            <tr>
+                                <th class="px-4 py-3">No</th>
+                                ${fields.map(f => `<th class="px-4 py-3">${f.label}</th>`).join('')}
+                                <th class="px-4 py-3">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             ${db[dbKey].map((item, idx) => `
-                            <tr class="border-black">
-                                <td class="px-4 py-3 border-black">${idx + 1}</td>
+                            <tr>
+                                <td class="px-4 py-3 font-bold">${idx + 1}</td>
                                 ${fields.map(f => {
                                     if (f.key === 'foto') {
-                                        return `<td class="px-4 py-3 border-black"><img src="${item[f.key]}" class="h-10 w-10 rounded-full object-cover border-2 border-blue-100 shadow-sm" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(item.nama)}&background=1e3a8a&color=fff'"></td>`;
+                                        return `<td class="px-4 py-3"><img src="${item[f.key]}" class="h-10 w-10 rounded-full object-cover border-2 border-purple-300 shadow-sm" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(item.nama)}&background=8b5cf6&color=fff'"></td>`;
                                     }
-                                    return `<td class="px-4 py-3 border-black">${item[f.key] || '-'}</td>`;
+                                    return `<td class="px-4 py-3 font-semibold">${item[f.key] || '-'}</td>`;
                                 }).join('')}
-                                <td class="px-4 py-3 border-black flex space-x-2">
-                                    ${dbKey === 'siswa' ? `<button onclick="showQRViewer('${item.nama}', '${item.nisn}')" class="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-lg text-xs font-bold hover:bg-blue-100 transition flex items-center space-x-1"><i data-lucide="qr-code" class="w-3.5 h-3.5"></i><span>QR</span></button>` : ''}
-                                    <button onclick="editData('${dbKey}', ${idx})" class="text-green-600 font-bold hover:underline">Edit</button>
-                                    <button onclick="deleteData('${dbKey}', ${idx})" class="text-red-600 font-bold hover:underline">Hapus</button>
+                                <td class="px-4 py-3 flex space-x-2">
+                                    ${dbKey === 'siswa' ? `<button onclick="showQRViewer('${item.nama}', '${item.nisn}')" class="bg-purple-100 text-purple-800 px-2.5 py-1 rounded-lg text-xs font-black hover:bg-purple-200 transition flex items-center space-x-1 shadow-sm"><i data-lucide="qr-code" class="w-3.5 h-3.5"></i><span>QR</span></button>` : ''}
+                                    <button onclick="editData('${dbKey}', ${idx})" class="text-emerald-700 font-extrabold hover:underline">Edit</button>
+                                    <button onclick="deleteData('${dbKey}', ${idx})" class="text-red-600 font-extrabold hover:underline">Hapus</button>
                                 </td>
                             </tr>`).join('')}
-                            ${db[dbKey].length === 0 ? '<tr><td colspan="15" class="p-10 text-center text-slate-400 font-bold uppercase border-black">Belum ada data terdaftar</td></tr>' : ''}
+                            ${db[dbKey].length === 0 ? '<tr><td colspan="15" class="p-10 text-center text-slate-400 font-black uppercase">Belum ada data terdaftar</td></tr>' : ''}
                         </tbody>
                     </table>
                 </div>` : ''}
@@ -1109,35 +1247,30 @@
             return data.filter(item => {
                 let match = true;
                 
-                // 1. Filter Cari Nama / Text
                 if (filters.search && filters.search.trim() !== '') {
                     const searchTerm = filters.search.trim().toLowerCase();
                     const itemText = JSON.stringify(item).toLowerCase();
                     if (!itemText.includes(searchTerm)) match = false;
                 }
 
-                // 2. Filter Mapel
                 if (filters.mapel && filters.mapel.trim() !== '') {
                     const targetMapel = filters.mapel.trim().toLowerCase();
                     const itemMapel = String(item.mapel || '').trim().toLowerCase();
                     if (itemMapel !== targetMapel && !itemMapel.includes(targetMapel) && !targetMapel.includes(itemMapel)) match = false;
                 }
 
-                // 3. Filter Tahun Pelajaran
                 if (filters.tahun && filters.tahun.trim() !== '') {
                     const targetTahun = filters.tahun.trim().toLowerCase();
                     const itemTahun = String(item.tahun || '').trim().toLowerCase();
                     if (itemTahun !== targetTahun) match = false;
                 }
 
-                // 4. Filter Semester
                 if (filters.semester && filters.semester.trim() !== '') {
                     const targetSmt = filters.semester.trim().toLowerCase();
                     const itemSmt = String(item.semester || '').trim().toLowerCase();
                     if (itemSmt !== targetSmt) match = false;
                 }
 
-                // 5. Filter Kategori Soal / Penilaian (Presisi & Fleksibel untuk "Latihan 1 TP 1 MTK")
                 if (filters.kategori && filters.kategori.trim() !== '') {
                     const targetKat = filters.kategori.trim().toLowerCase();
                     if (key === 'nilai') {
@@ -1156,14 +1289,12 @@
                     }
                 }
 
-                // 6. Filter Rentang Tanggal (Absensi & Jurnal)
                 if (['absensi', 'jurnal'].includes(key) && item.tanggal) {
                     const itemDate = forceLocalDate(item.tanggal);
                     if (filters.dateStart && filters.dateStart.trim() !== '' && itemDate < filters.dateStart.trim()) match = false;
                     if (filters.dateEnd && filters.dateEnd.trim() !== '' && itemDate > filters.dateEnd.trim()) match = false;
                 }
 
-                // 7. Filter Bentuk (Kisi-Kisi)
                 if (key === 'kisi_kisi' && filters.bentuk && filters.bentuk.trim() !== '') {
                     const targetBentuk = filters.bentuk.trim().toLowerCase();
                     const itemBentuk = String(item.bentuk || '').trim().toLowerCase();
@@ -1200,17 +1331,17 @@
             if (pageData.length > 0) {
                 dataTableBody.innerHTML = pageData.map((item, idx) => {
                     const originalIdx = db[dbKey].indexOf(item);
-                    return `<tr class="border-black academic-row">
-                        <td class="px-6 py-4 border-black">${startIndex + idx + 1}</td>
+                    return `<tr class="academic-row">
+                        <td class="px-6 py-4 font-bold">${startIndex + idx + 1}</td>
                         ${getAcademicTableRow(dbKey, item)}
-                        <td class="px-6 py-4 flex space-x-2 border-black">
-                            <button onclick="editData('${dbKey}', ${originalIdx})" class="text-green-600 font-bold hover:underline">Edit</button>
-                            <button onclick="deleteData('${dbKey}', ${originalIdx})" class="text-red-600 font-bold hover:underline">Hapus</button>
+                        <td class="px-6 py-4 flex space-x-2">
+                            <button onclick="editData('${dbKey}', ${originalIdx})" class="text-emerald-700 font-extrabold hover:underline">Edit</button>
+                            <button onclick="deleteData('${dbKey}', ${originalIdx})" class="text-red-600 font-extrabold hover:underline">Hapus</button>
                         </td>
                     </tr>`;
                 }).join('');
             } else {
-                dataTableBody.innerHTML = '<tr><td colspan="15" class="p-10 text-center text-slate-400 font-bold uppercase border-black">Tidak ada data yang sesuai filter</td></tr>';
+                dataTableBody.innerHTML = '<tr><td colspan="15" class="p-10 text-center text-slate-400 font-black uppercase">Tidak ada data yang sesuai filter</td></tr>';
             }
 
             if (paginationInfo) {
@@ -1219,26 +1350,26 @@
 
             if (paginationControls) {
                 paginationControls.innerHTML = `
-                    <button onclick="changePage('${dbKey}', -1)" ${currentPage === 1 ? 'disabled' : ''} class="page-btn bg-white border border-black px-3 py-1 rounded text-xs font-bold hover:bg-slate-100 transition">Sebelumnya</button>
-                    <span class="px-3 py-1 text-xs font-bold bg-blue-100 text-blue-700 rounded border border-black">${currentPage}</span>
-                    <button onclick="changePage('${dbKey}', 1)" ${currentPage >= totalPages ? 'disabled' : ''} class="page-btn bg-white border border-black px-3 py-1 rounded text-xs font-bold hover:bg-slate-100 transition">Selanjutnya</button>
+                    <button onclick="changePage('${dbKey}', -1)" ${currentPage === 1 ? 'disabled' : ''} class="page-btn bg-white border border-purple-900 px-3 py-1 rounded-xl text-xs font-black hover:bg-purple-100 transition shadow-sm">Sebelumnya</button>
+                    <span class="px-3 py-1 text-xs font-black bg-purple-100 text-purple-950 rounded-xl border border-purple-900 shadow-inner">${currentPage}</span>
+                    <button onclick="changePage('${dbKey}', 1)" ${currentPage >= totalPages ? 'disabled' : ''} class="page-btn bg-white border border-purple-900 px-3 py-1 rounded-xl text-xs font-black hover:bg-purple-100 transition shadow-sm">Selanjutnya</button>
                 `;
             }
 
             if (rekapContainer && dbKey === 'absensi') {
                 const filters = activeFilters[dbKey] || {};
                 rekapContainer.innerHTML = `
-                    <div class="mt-8 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                        <h3 class="text-lg font-bold mb-4 text-blue-900 uppercase">Rekap Total Absensi Siswa (Sesuai Filter)</h3>
+                    <div class="mt-8 clay-card p-6">
+                        <h3 class="text-lg font-black mb-4 text-purple-950 uppercase">Rekap Total Absensi Siswa (Sesuai Filter)</h3>
                         <div class="overflow-x-auto">
                             <table class="w-full text-left text-xs custom-table">
-                                <thead class="bg-blue-800 text-white">
-                                    <tr class="border-black">
-                                        <th class="px-4 py-3 border-black">Nama Siswa</th>
-                                        <th class="px-4 py-3 text-center border-black">Hadir</th>
-                                        <th class="px-4 py-3 text-center border-black">Izin</th>
-                                        <th class="px-4 py-3 text-center border-black">Sakit</th>
-                                        <th class="px-4 py-3 text-center border-black">Tanpa Keterangan</th>
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-3">Nama Siswa</th>
+                                        <th class="px-4 py-3 text-center">Hadir</th>
+                                        <th class="px-4 py-3 text-center">Izin</th>
+                                        <th class="px-4 py-3 text-center">Sakit</th>
+                                        <th class="px-4 py-3 text-center">Tanpa Keterangan</th>
                                     </tr>
                                 </thead>
                                 <tbody>${db.siswa.map(s => {
@@ -1248,7 +1379,7 @@
                                     const sk = rec.filter(r => r.status === 'Sakit').length;
                                     const tk = rec.filter(r => r.status === 'Tanpa Keterangan').length;
                                     if(rec.length === 0 && filters.search) return ''; 
-                                    return `<tr class="border-black"><td class="border-black">${s.nama}</td><td class="text-center font-bold text-green-600 border-black">${h}</td><td class="text-center font-bold text-blue-600 border-black">${i}</td><td class="text-center font-bold text-yellow-600 border-black">${sk}</td><td class="text-center font-bold text-red-600 border-black">${tk}</td></tr>`;
+                                    return `<tr><td class="font-bold">${s.nama}</td><td class="text-center font-black text-emerald-700">${h}</td><td class="text-center font-black text-blue-600">${i}</td><td class="text-center font-black text-amber-600">${sk}</td><td class="text-center font-black text-red-600">${tk}</td></tr>`;
                                 }).join('')}</tbody>
                             </table>
                         </div>
@@ -1263,7 +1394,6 @@
             
             const filters = activeFilters[dbKey] || {};
 
-            // Helper untuk membersihkan spasi tersembunyi dan menghilangkan duplikat kategori/mapel/tahun
             const getUniqueClean = (arr) => {
                 const list = [];
                 const seen = new Set();
@@ -1284,66 +1414,63 @@
             const allTahunList = getUniqueClean([...db.tahun_pelajaran, ...db[dbKey].map(i => i.tahun)]);
             const allKategoriList = getUniqueClean([...db.kategori_soal, ...db.nilai.map(n => n.kategori)]);
 
-            let filtersHtml = `<div class="flex-1 min-w-[200px]"><label class="text-[10px] font-bold uppercase">Cari Nama</label><input type="text" value="${filters.search || ''}" oninput="handleFilterChange('${dbKey}', 'search', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none" placeholder="Cari..."></div>`;
+            let filtersHtml = `<div class="flex-1 min-w-[200px]"><label class="text-[10px] font-black uppercase text-purple-900">Cari Nama</label><input type="text" value="${filters.search || ''}" oninput="handleFilterChange('${dbKey}', 'search', this.value)" class="w-full px-4 py-2.5 clay-input text-purple-950 font-bold" placeholder="Cari..."></div>`;
             if (['nilai', 'penilaian', 'jurnal', 'kisi_kisi'].includes(dbKey)) {
-                filtersHtml += `<div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Mapel</label><select onchange="handleFilterChange('${dbKey}', 'mapel', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"><option value="">Semua Mapel</option>${allMapelList.map(m => `<option value="${m}" ${filters.mapel === m ? 'selected' : ''}>${m}</option>`).join('')}</select></div>`;
+                filtersHtml += `<div class="min-w-[150px]"><label class="text-[10px] font-black uppercase text-purple-900">Filter Mapel</label><select onchange="handleFilterChange('${dbKey}', 'mapel', this.value)" class="w-full px-4 py-2.5 clay-input text-purple-950 font-bold"><option value="">Semua Mapel</option>${allMapelList.map(m => `<option value="${m}" ${filters.mapel === m ? 'selected' : ''}>${m}</option>`).join('')}</select></div>`;
             }
             if (['nilai', 'penilaian'].includes(dbKey)) {
                 filtersHtml += `
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Tahun</label><select onchange="handleFilterChange('${dbKey}', 'tahun', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"><option value="">Semua Tahun</option>${allTahunList.map(t => `<option value="${t}" ${filters.tahun === t ? 'selected' : ''}>${t}</option>`).join('')}</select></div>
-                    <div class="min-w-[120px]"><label class="text-[10px] font-bold uppercase">Filter Smt</label><select onchange="handleFilterChange('${dbKey}', 'semester', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"><option value="">Semua</option><option value="Semester 1" ${filters.semester === "Semester 1" ? 'selected' : ''}>Semester 1</option><option value="Semester 2" ${filters.semester === "Semester 2" ? 'selected' : ''}>Semester 2</option></select></div>
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Kategori</label><select onchange="handleFilterChange('${dbKey}', 'kategori', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"><option value="">Semua Kategori</option>${allKategoriList.map(k => `<option value="${k}" ${filters.kategori === k ? 'selected' : ''}>${k}</option>`).join('')}</select></div>
+                    <div class="min-w-[150px]"><label class="text-[10px] font-black uppercase text-purple-900">Filter Tahun</label><select onchange="handleFilterChange('${dbKey}', 'tahun', this.value)" class="w-full px-4 py-2.5 clay-input text-purple-950 font-bold"><option value="">Semua Tahun</option>${allTahunList.map(t => `<option value="${t}" ${filters.tahun === t ? 'selected' : ''}>${t}</option>`).join('')}</select></div>
+                    <div class="min-w-[120px]"><label class="text-[10px] font-black uppercase text-purple-900">Filter Smt</label><select onchange="handleFilterChange('${dbKey}', 'semester', this.value)" class="w-full px-4 py-2.5 clay-input text-purple-950 font-bold"><option value="">Semua</option><option value="Semester 1" ${filters.semester === "Semester 1" ? 'selected' : ''}>Semester 1</option><option value="Semester 2" ${filters.semester === "Semester 2" ? 'selected' : ''}>Semester 2</option></select></div>
+                    <div class="min-w-[150px]"><label class="text-[10px] font-black uppercase text-purple-900">Filter Kategori</label><select onchange="handleFilterChange('${dbKey}', 'kategori', this.value)" class="w-full px-4 py-2.5 clay-input text-purple-950 font-bold"><option value="">Semua Kategori</option>${allKategoriList.map(k => `<option value="${k}" ${filters.kategori === k ? 'selected' : ''}>${k}</option>`).join('')}</select></div>
                 `;
             }
             if (['absensi', 'jurnal'].includes(dbKey)) {
                 filtersHtml += `
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Dari Tanggal</label><input type="date" value="${filters.dateStart || ''}" onchange="handleFilterChange('${dbKey}', 'dateStart', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div>
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Ke Tanggal</label><input type="date" value="${filters.dateEnd || ''}" onchange="handleFilterChange('${dbKey}', 'dateEnd', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div>
+                    <div class="min-w-[150px]"><label class="text-[10px] font-black uppercase text-purple-900">Dari Tanggal</label><input type="date" value="${filters.dateStart || ''}" onchange="handleFilterChange('${dbKey}', 'dateStart', this.value)" class="w-full px-4 py-2.5 clay-input text-purple-950 font-bold"></div>
+                    <div class="min-w-[150px]"><label class="text-[10px] font-black uppercase text-purple-900">Ke Tanggal</label><input type="date" value="${filters.dateEnd || ''}" onchange="handleFilterChange('${dbKey}', 'dateEnd', this.value)" class="w-full px-4 py-2.5 clay-input text-purple-950 font-bold"></div>
                 `;
             }
             if (dbKey === 'kisi_kisi') {
                 filtersHtml += `
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Tahun</label><select onchange="handleFilterChange('${dbKey}', 'tahun', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"><option value="">Semua Tahun</option>${db.tahun_pelajaran.map(t => `<option value="${t.nama}" ${filters.tahun === t.nama ? 'selected' : ''}>${t.nama}</option>`).join('')}</select></div>
-                    <div class="min-w-[120px]"><label class="text-[10px] font-bold uppercase">Filter Smt</label><select onchange="handleFilterChange('${dbKey}', 'semester', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"><option value="">Semua</option><option value="Semester 1" ${filters.semester === "Semester 1" ? 'selected' : ''}>1</option><option value="Semester 2" ${filters.semester === "Semester 2" ? 'selected' : ''}>2</option></select></div>
-                    <div class="min-w-[150px]"><label class="text-[10px] font-bold uppercase">Filter Bentuk</label><input type="text" value="${filters.bentuk || ''}" oninput="handleFilterChange('${dbKey}', 'bentuk', this.value)" class="w-full px-4 py-2 border rounded-lg bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none" placeholder="Cari Bentuk..."></div>
+                    <div class="min-w-[150px]"><label class="text-[10px] font-black uppercase text-purple-900">Filter Tahun</label><select onchange="handleFilterChange('${dbKey}', 'tahun', this.value)" class="w-full px-4 py-2.5 clay-input text-purple-950 font-bold"><option value="">Semua Tahun</option>${db.tahun_pelajaran.map(t => `<option value="${t.nama}" ${filters.tahun === t.nama ? 'selected' : ''}>${t.nama}</option>`).join('')}</select></div>
+                    <div class="min-w-[120px]"><label class="text-[10px] font-black uppercase text-purple-900">Filter Smt</label><select onchange="handleFilterChange('${dbKey}', 'semester', this.value)" class="w-full px-4 py-2.5 clay-input text-purple-950 font-bold"><option value="">Semua</option><option value="Semester 1" ${filters.semester === "Semester 1" ? 'selected' : ''}>1</option><option value="Semester 2" ${filters.semester === "Semester 2" ? 'selected' : ''}>2</option></select></div>
+                    <div class="min-w-[150px]"><label class="text-[10px] font-black uppercase text-purple-900">Filter Bentuk</label><input type="text" value="${filters.bentuk || ''}" oninput="handleFilterChange('${dbKey}', 'bentuk', this.value)" class="w-full px-4 py-2.5 clay-input text-purple-950 font-bold" placeholder="Cari Bentuk..."></div>
                 `;
             }
 
-            let dynamicButtons = `<button onclick="toggleForm('formAkademik')" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-lg font-bold transition flex items-center space-x-1.5 shadow-sm"><i data-lucide="plus" class="w-4 h-4"></i><span>+ Entry Manual</span></button>`;
+            let dynamicButtons = `<button onclick="toggleForm('formAkademik')" class="clay-btn-purple px-4 py-2.5 rounded-xl font-black transition flex items-center space-x-1.5 text-xs"><i data-lucide="plus" class="w-4 h-4"></i><span>+ Entry Manual</span></button>`;
             if (dbKey === 'absensi') {
-                dynamicButtons += `<button onclick="openQRScanner()" class="bg-indigo-700 hover:bg-indigo-800 text-white px-4 py-2 rounded-lg font-bold transition flex items-center space-x-1.5 shadow-sm"><i data-lucide="qr-code" class="w-4 h-4"></i><span>Buka Scanner QR</span></button>`;
+                dynamicButtons += `<button onclick="openQRScanner()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl font-black transition flex items-center space-x-1.5 shadow-md text-xs border-b-2 border-indigo-900"><i data-lucide="qr-code" class="w-4 h-4"></i><span>Buka Scanner QR</span></button>`;
             }
 
             body.innerHTML = `
                 <div class="space-y-6">
-                    <div class="bg-white p-6 rounded-xl shadow-sm border flex flex-wrap gap-4 items-end relative z-10">
+                    <div class="clay-card p-6 flex flex-wrap gap-4 items-end relative z-10">
                         ${filtersHtml}
                         <div class="flex space-x-2">
                             ${dynamicButtons}
-                            <button onclick="cetakData('${dbKey}')" class="bg-slate-700 hover:bg-slate-800 text-white px-4 py-2 rounded-lg font-bold transition">Cetak</button>
+                            <button onclick="cetakData('${dbKey}')" class="bg-purple-900 hover:bg-purple-950 text-white px-4 py-2.5 rounded-xl font-black transition text-xs shadow-md border-b-2 border-purple-950">Cetak</button>
                         </div>
                     </div>
-                    <div id="formAkademik" class="${editingIndex !== null ? '' : 'hidden'} bg-white p-8 rounded-xl border"><form id="academicForm" class="grid grid-cols-1 md:grid-cols-3 gap-6" autocomplete="off">${getAcademicFields(dbKey)}<div class="md:col-span-3 flex justify-end"><button type="submit" class="bg-blue-700 text-white px-10 py-2 rounded-lg font-bold">Simpan</button></div></form></div>
-                    <div class="bg-white rounded-xl shadow overflow-x-auto border border-black">
+                    <div id="formAkademik" class="${editingIndex !== null ? '' : 'hidden'} clay-card p-8"><form id="academicForm" class="grid grid-cols-1 md:grid-cols-3 gap-6" autocomplete="off">${getAcademicFields(dbKey)}<div class="md:col-span-3 flex justify-end"><button type="submit" class="clay-btn-purple text-white px-10 py-3 rounded-xl font-black text-xs uppercase">Simpan</button></div></form></div>
+                    <div class="bg-white rounded-2xl shadow-md overflow-x-auto border border-purple-900">
                         <table class="w-full text-left text-xs custom-table">
-                            <thead class="bg-blue-800 text-white">
-                                <tr class="border-black"><th class="px-6 py-4 border-black">No</th>${getAcademicTableHead(dbKey)}<th class="px-6 py-4 border-black">Aksi</th></tr>
+                            <thead>
+                                <tr><th class="px-6 py-4">No</th>${getAcademicTableHead(dbKey)}<th class="px-6 py-4">Aksi</th></tr>
                             </thead>
                             <tbody id="dataTableBody">
-                                <!-- Diisi secara cepat dan langsung oleh updateAcademicTable -->
                             </tbody>
                         </table>
-                        <div class="p-4 flex justify-between items-center bg-slate-50 border-t border-black">
-                            <span id="paginationInfo" class="text-xs text-slate-500 font-semibold">Menampilkan 0 data filter</span>
+                        <div class="p-4 flex justify-between items-center bg-purple-50/50 border-t border-purple-900">
+                            <span id="paginationInfo" class="text-xs text-purple-900 font-bold">Menampilkan 0 data filter</span>
                             <div id="paginationControls" class="flex space-x-2">
-                                <!-- Diisi secara cepat oleh updateAcademicTable -->
                             </div>
                         </div>
                     </div>
                     <div id="rekapContainer"></div>
                 </div>`;
             
-            // Panggil langsung untuk mengisi tabel tanpa merusak elemen filter
             updateAcademicTable(dbKey);
 
             document.getElementById('academicForm').onsubmit = (e) => {
@@ -1368,32 +1495,32 @@
 
         function getAcademicFields(key) {
             const sOpt = `<option value="">-- Pilih Siswa --</option>` + db.siswa.map(s => `<option value="${s.nama}">${s.nama}</option>`).join('');
-            const basic = `<div><label class="text-[10px] font-bold">Nama Siswa</label><select name="nama_siswa" onchange="autoFillStudent(this)" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none" required>${sOpt}</select></div><div><label class="text-[10px] font-bold">NISN</label><input type="text" name="nisn" readonly class="w-full p-2.5 border rounded bg-slate-100"></div><div><label class="text-[10px] font-bold">Kelas</label><input type="text" name="kelas" readonly class="w-full p-2.5 border rounded bg-slate-100"></div>`;
-            const mapel = `<div><label class="text-[10px] font-bold">Mapel</label><select name="mapel" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none">${db.mapel.map(m => `<option>${m.nama}</option>`)}</select></div>`;
-            const tahun = `<div><label class="text-[10px] font-bold">Tahun</label><select name="tahun" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none">${db.tahun_pelajaran.map(t => `<option>${t.nama}</option>`)}</select></div>`;
-            const semester = `<div><label class="text-[10px] font-bold">Semester</label><select name="semester" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"><option>Semester 1</option><option>Semester 2</option></select></div>`;
-            if(key === 'nilai') return basic + mapel + tahun + semester + `<div><label class="text-[10px] font-bold">Kategori</label><select name="kategori" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none">${db.kategori_soal.map(k => `<option>${k.nama}</option>`)}</select></div><div><label class="text-[10px] font-bold">Nilai</label><input type="number" name="nilai" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div>`;
-            if(key === 'penilaian') return basic + mapel + tahun + semester + `<div class="md:col-span-3 grid grid-cols-3 gap-2">${db.kategori_soal.map(k => `<div><label class="text-[10px]">${k.nama}</label><input type="number" name="${k.nama}" autocomplete="off" class="w-full p-2 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div>`).join('')}</div>`;
-            if(key === 'absensi') return basic + `<div><label class="text-[10px] font-bold">Tanggal</label><input type="date" name="tanggal" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div><div><label class="text-[10px] font-bold">Status</label><select name="status" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"><option>Hadir</option><option>Izin</option><option>Sakit</option><option>Tanpa Keterangan</option></select></div><div><label class="text-[10px] font-bold">Ket</label><input type="text" name="keterangan" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div>`;
-            if(key === 'jurnal') return mapel + tahun + `<div><label class="text-[10px] font-bold">Tanggal</label><input type="date" name="tanggal" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div><div class="md:col-span-3"><label class="text-[10px] font-bold">Materi</label><input type="text" name="materi" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div><div class="md:col-span-3"><label class="text-[10px] font-bold">Kegiatan</label><textarea name="kegiatan" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></textarea></div><div class="md:col-span-3 grid grid-cols-2 gap-4"><div><label class="text-[10px] font-bold">URL Foto 1</label><input type="text" name="doc1" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div><div><label class="text-[10px] font-bold">URL Foto 2</label><input type="text" name="doc2" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div></div>`;
-            if(key === 'kisi_kisi') return mapel + tahun + semester + `<div><label class="text-[10px] font-bold">Bentuk</label><input type="text" name="bentuk" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div><div><label class="text-[10px] font-bold">Bobot</label><input type="number" name="bobot" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></div><div class="md:col-span-3"><label class="text-[10px] font-bold">TP</label><textarea name="tujuan" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></textarea></div><div class="md:col-span-3"><label class="text-[10px] font-bold">Indikator</label><textarea name="indikator" autocomplete="off" class="w-full p-2.5 border border-slate-300 rounded bg-white focus:ring-2 focus:ring-blue-600 focus:outline-none"></textarea></div>`;
+            const basic = `<div><label class="text-[10px] font-black text-purple-900">Nama Siswa</label><select name="nama_siswa" onchange="autoFillStudent(this)" class="w-full p-3 clay-input text-purple-950 font-bold" required>${sOpt}</select></div><div><label class="text-[10px] font-black text-purple-900">NISN</label><input type="text" name="nisn" readonly class="w-full p-3 clay-input bg-purple-100/50 text-purple-900 font-bold"></div><div><label class="text-[10px] font-black text-purple-900">Kelas</label><input type="text" name="kelas" readonly class="w-full p-3 clay-input bg-purple-100/50 text-purple-900 font-bold"></div>`;
+            const mapel = `<div><label class="text-[10px] font-black text-purple-900">Mapel</label><select name="mapel" class="w-full p-3 clay-input text-purple-950 font-bold">${db.mapel.map(m => `<option>${m.nama}</option>`)}</select></div>`;
+            const tahun = `<div><label class="text-[10px] font-black text-purple-900">Tahun</label><select name="tahun" class="w-full p-3 clay-input text-purple-950 font-bold">${db.tahun_pelajaran.map(t => `<option>${t.nama}</option>`)}</select></div>`;
+            const semester = `<div><label class="text-[10px] font-black text-purple-900">Semester</label><select name="semester" class="w-full p-3 clay-input text-purple-950 font-bold"><option>Semester 1</option><option>Semester 2</option></select></div>`;
+            if(key === 'nilai') return basic + mapel + tahun + semester + `<div><label class="text-[10px] font-black text-purple-900">Kategori</label><select name="kategori" class="w-full p-3 clay-input text-purple-950 font-bold">${db.kategori_soal.map(k => `<option>${k.nama}</option>`)}</select></div><div><label class="text-[10px] font-black text-purple-900">Nilai</label><input type="number" name="nilai" autocomplete="off" class="w-full p-3 clay-input text-purple-950 font-bold"></div>`;
+            if(key === 'penilaian') return basic + mapel + tahun + semester + `<div class="md:col-span-3 grid grid-cols-3 gap-2">${db.kategori_soal.map(k => `<div><label class="text-[10px] font-black text-purple-900">${k.nama}</label><input type="number" name="${k.nama}" autocomplete="off" class="w-full p-2.5 clay-input text-purple-950 font-bold"></div>`).join('')}</div>`;
+            if(key === 'absensi') return basic + `<div><label class="text-[10px] font-black text-purple-900">Tanggal</label><input type="date" name="tanggal" class="w-full p-3 clay-input text-purple-950 font-bold"></div><div><label class="text-[10px] font-black text-purple-900">Status</label><select name="status" class="w-full p-3 clay-input text-purple-950 font-bold"><option>Hadir</option><option>Izin</option><option>Sakit</option><option>Tanpa Keterangan</option></select></div><div><label class="text-[10px] font-black text-purple-900">Ket</label><input type="text" name="keterangan" autocomplete="off" class="w-full p-3 clay-input text-purple-950 font-bold"></div>`;
+            if(key === 'jurnal') return mapel + tahun + `<div><label class="text-[10px] font-black text-purple-900">Tanggal</label><input type="date" name="tanggal" class="w-full p-3 clay-input text-purple-950 font-bold"></div><div class="md:col-span-3"><label class="text-[10px] font-black text-purple-900">Materi</label><input type="text" name="materi" autocomplete="off" class="w-full p-3 clay-input text-purple-950 font-bold"></div><div class="md:col-span-3"><label class="text-[10px] font-black text-purple-900">Kegiatan</label><textarea name="kegiatan" autocomplete="off" class="w-full p-3 clay-input text-purple-950 font-bold"></textarea></div><div class="md:col-span-3 grid grid-cols-2 gap-4"><div><label class="text-[10px] font-black text-purple-900">URL Foto 1</label><input type="text" name="doc1" autocomplete="off" class="w-full p-3 clay-input text-purple-950 font-bold"></div><div><label class="text-[10px] font-black text-purple-900">URL Foto 2</label><input type="text" name="doc2" autocomplete="off" class="w-full p-3 clay-input text-purple-950 font-bold"></div></div>`;
+            if(key === 'kisi_kisi') return mapel + tahun + semester + `<div><label class="text-[10px] font-black text-purple-900">Bentuk</label><input type="text" name="bentuk" autocomplete="off" class="w-full p-3 clay-input text-purple-950 font-bold"></div><div><label class="text-[10px] font-black text-purple-900">Bobot</label><input type="number" name="bobot" autocomplete="off" class="w-full p-3 clay-input text-purple-950 font-bold"></div><div class="md:col-span-3"><label class="text-[10px] font-black text-purple-900">TP</label><textarea name="tujuan" autocomplete="off" class="w-full p-3 clay-input text-purple-950 font-bold"></textarea></div><div class="md:col-span-3"><label class="text-[10px] font-black text-purple-900">Indikator</label><textarea name="indikator" autocomplete="off" class="w-full p-3 clay-input text-purple-950 font-bold"></textarea></div>`;
         }
 
         function getAcademicTableHead(key) {
-            if(key === 'penilaian') return '<th class="border-black">Siswa</th><th class="border-black">NISN</th><th class="border-black">Kelas</th><th class="border-black">Mapel</th><th class="border-black">Tahun</th><th class="border-black">Smt</th>' + db.kategori_soal.map(k => `<th class="border-black">${k.nama}</th>`).join('') + '<th class="border-black">Rata</th>';
-            if(key === 'nilai') return '<th class="border-black">Siswa</th><th class="border-black">NISN</th><th class="border-black">Kelas</th><th class="border-black">Mapel</th><th class="border-black">Tahun</th><th class="border-black">Smt</th><th class="border-black">Kategori</th><th class="border-black">Nilai</th>';
-            if(key === 'absensi') return '<th class="border-black">Siswa</th><th class="border-black">NISN</th><th class="border-black">Kelas</th><th class="border-black">Tanggal</th><th class="border-black">Status</th><th class="border-black">Ket</th>';
-            if(key === 'jurnal') return '<th class="border-black">Mapel</th><th class="border-black">Tahun</th><th class="border-black">Tanggal</th><th class="border-black">Materi</th><th class="border-black">Kegiatan</th>';
-            if(key === 'kisi_kisi') return '<th class="border-black">Mapel</th><th class="border-black">Tahun</th><th class="border-black">Smt</th><th class="border-black">Bentuk</th><th class="border-black">TP</th>';
+            if(key === 'penilaian') return '<th>Siswa</th><th>NISN</th><th>Kelas</th><th>Mapel</th><th>Tahun</th><th>Smt</th>' + db.kategori_soal.map(k => `<th>${k.nama}</th>`).join('') + '<th>Rata</th>';
+            if(key === 'nilai') return '<th>Siswa</th><th>NISN</th><th>Kelas</th><th>Mapel</th><th>Tahun</th><th>Smt</th><th>Kategori</th><th>Nilai</th>';
+            if(key === 'absensi') return '<th>Siswa</th><th>NISN</th><th>Kelas</th><th>Tanggal</th><th>Status</th><th>Ket</th>';
+            if(key === 'jurnal') return '<th>Mapel</th><th>Tahun</th><th>Tanggal</th><th>Materi</th><th>Kegiatan</th>';
+            if(key === 'kisi_kisi') return '<th>Mapel</th><th>Tahun</th><th>Smt</th><th>Bentuk</th><th>TP</th>';
             return '';
         }
 
         function getAcademicTableRow(key, item) {
-            if(key === 'penilaian') return `<td class="border-black">${item.nama_siswa}</td><td class="border-black">${item.nisn}</td><td class="border-black">${item.kelas}</td><td class="border-black">${item.mapel}</td><td class="border-black">${item.tahun}</td><td class="border-black">${item.semester}</td>` + db.kategori_soal.map(k => `<td class="border-black">${item[k.nama] || 0}</td>`).join('') + `<td class="font-bold border-black">${item.rata_rata}</td>`;
-            if(key === 'nilai') return `<td class="border-black">${item.nama_siswa}</td><td class="border-black">${item.nisn}</td><td class="border-black">${item.kelas}</td><td class="border-black">${item.mapel}</td><td class="border-black">${item.tahun}</td><td class="border-black">${item.semester}</td><td class="border-black">${item.kategori}</td><td class="font-bold border-black">${item.nilai}</td>`;
-            if(key === 'absensi') return `<td class="border-black">${item.nama_siswa}</td><td class="border-black">${item.nisn}</td><td class="border-black">${item.kelas}</td><td class="border-black">${formatTanggalIndo(item.tanggal)}</td><td class="border-black">${item.status}</td><td class="border-black">${item.keterangan || '-'}</td>`;
-            if(key === 'jurnal') return `<td class="border-black">${item.mapel}</td><td class="border-black">${item.tahun}</td><td class="border-black">${formatTanggalIndo(item.tanggal)}</td><td class="whitespace-normal break-words max-w-[200px] border-black">${item.materi}</td><td class="whitespace-normal break-words max-w-[200px] border-black">${item.kegiatan || '-'}</td>`;
-            if(key === 'kisi_kisi') return `<td class="border-black">${item.mapel}</td><td class="border-black">${item.tahun}</td><td class="border-black">${item.semester}</td><td class="border-black">${item.bentuk}</td><td class="border-black">${item.tujuan}</td>`;
+            if(key === 'penilaian') return `<td class="font-bold">${item.nama_siswa}</td><td>${item.nisn}</td><td>${item.kelas}</td><td>${item.mapel}</td><td>${item.tahun}</td><td>${item.semester}</td>` + db.kategori_soal.map(k => `<td>${item[k.nama] || 0}</td>`).join('') + `<td class="font-black text-purple-900">${item.rata_rata}</td>`;
+            if(key === 'nilai') return `<td class="font-bold">${item.nama_siswa}</td><td>${item.nisn}</td><td>${item.kelas}</td><td>${item.mapel}</td><td>${item.tahun}</td><td>${item.semester}</td><td>${item.kategori}</td><td class="font-black text-purple-900">${item.nilai}</td>`;
+            if(key === 'absensi') return `<td class="font-bold">${item.nama_siswa}</td><td>${item.nisn}</td><td>${item.kelas}</td><td>${formatTanggalIndo(item.tanggal)}</td><td>${item.status}</td><td>${item.keterangan || '-'}</td>`;
+            if(key === 'jurnal') return `<td class="font-bold">${item.mapel}</td><td>${item.tahun}</td><td>${formatTanggalIndo(item.tanggal)}</td><td class="whitespace-normal break-words max-w-[200px]">${item.materi}</td><td class="whitespace-normal break-words max-w-[200px]">${item.kegiatan || '-'}</td>`;
+            if(key === 'kisi_kisi') return `<td class="font-bold">${item.mapel}</td><td>${item.tahun}</td><td>${item.semester}</td><td>${item.bentuk}</td><td>${item.tujuan}</td>`;
             return '';
         }
 
@@ -1409,11 +1536,11 @@
             const btnFront = document.getElementById('btnCamFront');
             if (btnBack && btnFront) {
                 if (currentFacingMode === 'environment') {
-                    btnBack.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition border border-blue-600 bg-blue-700 text-white flex items-center space-x-1.5 shadow-sm";
-                    btnFront.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition border border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center space-x-1.5";
+                    btnBack.className = "px-3.5 py-2 rounded-xl text-xs font-extrabold transition border border-purple-300 bg-purple-600 text-white flex items-center space-x-1.5 shadow-md";
+                    btnFront.className = "px-3.5 py-2 rounded-xl text-xs font-extrabold transition border border-purple-200 bg-purple-100 text-purple-700 hover:bg-purple-200 flex items-center space-x-1.5 shadow-sm";
                 } else {
-                    btnBack.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition border border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200 flex items-center space-x-1.5";
-                    btnFront.className = "px-3 py-1.5 rounded-lg text-xs font-bold transition border border-blue-600 bg-blue-700 text-white flex items-center space-x-1.5 shadow-sm";
+                    btnBack.className = "px-3.5 py-2 rounded-xl text-xs font-extrabold transition border border-purple-200 bg-purple-100 text-purple-700 hover:bg-purple-200 flex items-center space-x-1.5 shadow-sm";
+                    btnFront.className = "px-3.5 py-2 rounded-xl text-xs font-extrabold transition border border-purple-300 bg-purple-600 text-white flex items-center space-x-1.5 shadow-md";
                 }
             }
         }
@@ -1440,7 +1567,6 @@
             updateCameraButtons();
             refreshIcons();
             
-            // Buka kunci modul audio global (Stand-alone PWA Edge Tablet Huawei)
             initGlobalAudio();
 
             setTimeout(() => {
@@ -1455,7 +1581,6 @@
             
             html5QrcodeScanner = new Html5Qrcode("qr-reader");
             
-            // Menentukan Ukuran Kotak Bidik Scanner Secara Dinamis (85% dari ukuran layar)
             const qrBoxCalc = (viewfinderWidth, viewfinderHeight) => {
                 const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
                 const size = Math.floor(minEdge * 0.85);
@@ -1470,7 +1595,6 @@
                     handleQRScanned(decodedText);
                 },
                 (errorMessage) => {
-                    // Polling sunyi kamera
                 }
             ).catch(err => {
                 console.error("Camera fail:", err);
@@ -1500,7 +1624,6 @@
             const now = Date.now();
             const scannedValue = text.trim();
             
-            // COOLDOWN SCANNER 3 DETIK
             if (scannedValue === lastScannedValue && (now - lastScannedTime) < 3000) {
                 return;
             }
@@ -1544,7 +1667,6 @@
                 saveData(true); 
                 renderMenu(); 
                 
-                // Panggil suara ucapan "Terima kasih" saja (Suara Wanita)
                 speakTerimaKasih();
                 
                 showToast(`Absensi "${student.nama}" BERHASIL (HADIR)!`, "success");
@@ -1581,56 +1703,44 @@
             const logoKiri = kop.logo_kiri || 'https://iili.io/ChkXJyb.png';
 
             return `
-            <div class="card" style="width: 9.2cm; height: 13.5cm; border: 3px solid #1e3a8a; border-radius: 14px; box-sizing: border-box; overflow: hidden; display: flex; flex-direction: column; background: #ffffff; position: relative; font-family: 'Inter', sans-serif; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin: auto;">
-                <!-- Header Biru Premium dengan Indikator Lobang Kokarde -->
-                <div style="background: linear-gradient(135deg, #1e3a8a, #0f172a); color: white; display: flex; align-items: center; justify-content: center; padding: 18px 12px 6px 12px; gap: 8px; border-bottom: 3px solid #172554; height: 2.4cm; box-sizing: border-box; position: relative; z-index: 10;">
-                    <!-- Tanda Lobang Kartu (Hole Punch Slot Kokarde) -->
-                    <div style="position: absolute; top: 5px; left: 50%; transform: translateX(-50%); width: 16px; height: 5px; background: #ffffff; border: 1px solid #60a5fa; border-radius: 4px; opacity: 0.9;" title="Tanda Lobang Kartu"></div>
+            <div class="card" style="width: 9.2cm; height: 13.5cm; border: 3px solid #6d28d9; border-radius: 14px; box-sizing: border-box; overflow: hidden; display: flex; flex-direction: column; background: #ffffff; position: relative; font-family: 'Inter', sans-serif; box-shadow: 0 4px 12px rgba(109, 40, 217, 0.2); margin: auto;">
+                <div style="background: linear-gradient(135deg, #7c3aed, #6d28d9); color: white; display: flex; align-items: center; justify-content: center; padding: 18px 12px 6px 12px; gap: 8px; border-bottom: 3px solid #5b21b6; height: 2.4cm; box-sizing: border-box; position: relative; z-index: 10;">
+                    <div style="position: absolute; top: 5px; left: 50%; transform: translateX(-50%); width: 16px; height: 5px; background: #ffffff; border: 1px solid #a78bfa; border-radius: 4px; opacity: 0.9;" title="Tanda Lobang Kartu"></div>
 
                     <img src="${logoKiri}" style="height: 1.4cm; width: 1.4cm; object-fit: contain; border-radius: 4px;" onerror="this.src='https://iili.io/ChkXJyb.png'">
                     <div style="text-align: left; flex: 1; display: flex; flex-direction: column; justify-content: center;">
                         <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${sekolahName}</div>
-                        <div style="font-size: 8px; font-weight: 700; color: #60a5fa; text-transform: uppercase; margin-top: 2px; letter-spacing: 0.4px;">KARTU ABSENSI ELEKTRONIK</div>
+                        <div style="font-size: 8px; font-weight: 700; color: #ddd6fe; text-transform: uppercase; margin-top: 2px; letter-spacing: 0.4px;">KARTU ABSENSI ELEKTRONIK</div>
                     </div>
                 </div>
 
-                <!-- Content Area -->
-                <div style="display: flex; flex-direction: column; padding: 12px; flex: 1; justify-content: space-between; box-sizing: border-box; background: radial-gradient(circle at top right, #f8fafc, #ffffff); position: relative;">
+                <div style="display: flex; flex-direction: column; padding: 12px; flex: 1; justify-content: space-between; box-sizing: border-box; background: radial-gradient(circle at top right, #f5f3ff, #ffffff); position: relative;">
                     
-                    <!-- Watermark Logo (Opasitas 0.15) -->
                     <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; opacity: 0.15; pointer-events: none; z-index: 1;">
                         <img src="https://iili.io/ChkXJyb.png" style="width: 6.5cm; height: 6.5cm; object-fit: contain;">
                     </div>
 
-                    <!-- Elemen konten -->
                     <div style="position: relative; z-index: 5; display: flex; flex-direction: column; height: 100%; justify-content: space-between; width: 100%;">
-                        <!-- Photo & QR Code Row -->
                         <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; margin-top: 4px;">
-                            <!-- Foto Siswa -->
                             <div style="position: relative; display: flex; justify-content: center;">
-                                <img src="${student.foto || ''}" style="width: 3.0cm; height: 3.8cm; object-fit: cover; border: 2.5px solid #1e3a8a; border-radius: 8px; background-color: #f1f5f9;" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(student.nama)}&background=1e3a8a&color=fff'">
+                                <img src="${student.foto || ''}" style="width: 3.0cm; height: 3.8cm; object-fit: cover; border: 2.5px solid #6d28d9; border-radius: 8px; background-color: #f1f5f9;" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(student.nama)}&background=7c3aed&color=fff'">
                             </div>
-                            <!-- QR Code -->
                             <div style="display: flex; justify-content: center;">
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(student.nisn || student.nama)}" style="width: 3.4cm; height: 3.4cm; border: 2.5px solid #1e3a8a; padding: 5px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(student.nisn || student.nama)}" style="width: 3.4cm; height: 3.4cm; border: 2.5px solid #6d28d9; padding: 5px; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
                             </div>
                         </div>
 
-                        <!-- Info Siswa -->
                         <div style="text-align: center; width: 100%; border-bottom: 1px dashed #cbd5e1; padding-bottom: 6px; margin-top: 6px;">
-                            <div style="font-size: 13px; font-weight: 800; color: #1e3a8a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase;">${student.nama}</div>
+                            <div style="font-size: 13px; font-weight: 800; color: #6d28d9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase;">${student.nama}</div>
                             <div style="font-size: 10px; color: #475569; font-weight: 700; margin-top: 2px;">NISN: ${student.nisn || '-'} &bull; KELAS: ${student.kelas || '-'}</div>
                         </div>
 
-                        <!-- Footer TTD & Wali Kelas -->
                         <div style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%; font-size: 9px; height: 1.8cm;">
-                            <!-- Wali Kelas -->
                             <div style="text-align: left; width: 55%; display: flex; flex-direction: column; justify-content: flex-end; height: 100%;">
                                 <span style="font-size: 7px; font-weight: 700; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 2px;">Wali Kelas:</span>
                                 <strong style="font-size: 9px; color: #0f172a; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${wkObj.nama}</strong>
                                 <span style="font-size: 8px; color: #475569; display: block;">NIP. ${wkObj.nip || '-'}</span>
                             </div>
-                            <!-- TTD Area -->
                             <div style="width: 40%; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; position: relative;">
                                 ${wkTtd ? `<img src="${wkTtd}" style="max-height: 1.2cm; max-width: 90%; object-fit: contain; position: absolute; bottom: 10px; z-index: 10;" crossorigin="anonymous">` : '<div style="height: 1.0cm;"></div>'}
                                 <div style="font-size: 7px; font-weight: 700; color: #94a3b8; border-top: 1px solid #cbd5e1; width: 100%; text-align: center; padding-top: 2px; z-index: 5;">TANDA TANGAN</div>
@@ -1763,10 +1873,11 @@
         function generatePrintHTML(key) {
             const kop = db.kop || {}, ttd = db.ttd || {}, sekolah = db.sekolah || {};
             const content = getFilteredData(key);
+            const watermarkUrl = "https://iili.io/By8FQ7s.png";
             
             const renderImg = (src, s) => src ? `<img src="${src}" style="${s}" crossorigin="anonymous">` : '<div>-</div>';
-            const thStyle = 'border:1px solid black; padding: 6px; background-color: #1e3a8a !important; color: #ffffff !important; font-weight: bold; text-align: center; vertical-align: middle; font-size: 9px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;';
-            const tdStyle = 'border:1px solid black; padding: 6px; vertical-align: top; font-size: 9px; word-wrap: break-word; white-space: normal;';
+            const thStyle = 'border:1px solid black; padding: 6px; background-color: #6d28d9 !important; color: #ffffff !important; font-weight: bold; text-align: center; vertical-align: middle; font-size: 9px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;';
+            const tdStyle = 'border:1px solid black; padding: 6px; vertical-align: top; font-size: 9px; word-wrap: break-wrap; white-space: normal;';
             let tableHeaderHtml = ''; let tableRowsHtml = '';
             
             if (key === 'nilai') {
@@ -1797,18 +1908,40 @@
     <title>LAPORAN ${key.toUpperCase().replace('_', ' ')}</title>
     <style>
         @page { size: auto; margin: 10mm; }
-        body { margin: 0; padding: 15px; font-family: sans-serif; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
-        table { width: 100%; border-collapse: collapse; table-layout: fixed; border: 1px solid black; }
-        th { border: 1px solid black; padding: 6px; background-color: #1e3a8a !important; color: #ffffff !important; font-weight: bold; text-align: center; vertical-align: middle; font-size: 9px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-        td { border: 1px solid black; padding: 6px; vertical-align: top; font-size: 9px; word-wrap: break-word; white-space: normal; }
+        body { 
+            margin: 0; 
+            padding: 15px; 
+            font-family: sans-serif; 
+            -webkit-print-color-adjust: exact !important; 
+            print-color-adjust: exact !important; 
+            color-adjust: exact !important; 
+            position: relative;
+        }
+        .watermark-bg {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            max-width: 75vw;
+            height: auto;
+            opacity: 0.11;
+            z-index: -10;
+            pointer-events: none;
+        }
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; border: 1px solid black; background: transparent; }
+        th { border: 1px solid black; padding: 6px; background-color: #6d28d9 !important; color: #ffffff !important; font-weight: bold; text-align: center; vertical-align: middle; font-size: 9px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        td { border: 1px solid black; padding: 6px; vertical-align: top; font-size: 9px; word-wrap: break-word; white-space: normal; background: transparent; }
         @media print {
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
-            th { background-color: #1e3a8a !important; color: #ffffff !important; }
+            th { background-color: #6d28d9 !important; color: #ffffff !important; }
+            .watermark-bg { opacity: 0.11 !important; }
         }
     </style>
 </head>
 <body>
-    <div style="padding: 10px; font-family: sans-serif;">
+    <img src="${watermarkUrl}" class="watermark-bg" alt="Watermark Logo">
+    <div style="padding: 10px; font-family: sans-serif; position: relative; z-index: 1;">
         <div style="display: flex; align-items: center; border-bottom: 3px solid black; padding-bottom: 10px; margin-bottom: 20px; text-align: center;">
             ${renderImg(kop.logo_kiri, "width: 75px;")}
             <div style="flex: 1;"><h2 style="margin: 0; font-size: 14px; text-transform: uppercase;">${kop.pemda || '-'}</h2><h2 style="margin: 0; font-size: 14px; text-transform: uppercase;">${kop.dinas || '-'}</h2><h1 style="margin: 0; font-size: 18px; text-transform: uppercase; font-weight: bold;">${kop.sekolah || '-'}</h1><p style="margin: 0; font-size: 11px;">KECAMATAN ${kop.kecamatan || '-'}</p><p style="margin: 0; font-size: 10px;">${kop.alamat || '-'}</p><p style="margin: 2px 0 0 0; font-size: 10px;"><span style="color: blue;">Email: ${kop.email || '-'}</span> | <span style="color: blue;">Website: ${kop.website || '-'}</span></p></div>
@@ -1827,7 +1960,6 @@
 
         function cetakData(key) { const h = generatePrintHTML(key); const w = window.open('', '_blank'); w.document.write(h); w.document.close(); setTimeout(() => w.print(), 800); }
 
-        // RESIZE LISTENER PINTAR (TIDAK MERESET FORM SAAT VIRTUAL KEYBOARD TABLET TERBUKA)
         window.addEventListener('resize', () => {
             const currentIsMobile = checkMobileViewport();
             if (currentIsMobile !== lastIsMobile) {
