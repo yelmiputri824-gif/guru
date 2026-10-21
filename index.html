@@ -196,7 +196,7 @@
         </div>
         <p id="progressPercentageText" class="text-2xl font-black font-mono text-purple-200">0%</p>
         
-        <p class="text-xs opacity-70 mt-4 italic text-center text-purple-200">Tunggu Sebentar<br>Jangan Tutup Aplikasi Anda!</p>
+        <p class="text-xs opacity-70 mt-4 italic text-center text-purple-200">Tunggu Sebentar<br>Mohon jangan tutup aplikasi anda</p>
     </div>
 
     <!-- Area Tersembunyi untuk Render PDF -->
@@ -361,25 +361,24 @@
         </div>
     </div>
 
-    <!-- TAMPILAN LOGIN SPLIT 2 LAYAR PERSIS REFERENSI (KIRI FORM DENGAN KARAKTER 3D MENGINTIP, KANAN BANNER UNGU & FOTO/KUTIPAN) -->
+    <!-- TAMPILAN LOGIN SPLIT 2 LAYAR -->
     <div id="loginScreen" class="fixed inset-0 z-[100] flex flex-col md:flex-row bg-[#f1f3f9] overflow-y-auto">
         
-        <!-- SEKSI KIRI: FORM LOGIN DENGAN KARAKTER 3D MENGINTIP DI ATAS KARTU 3D WHITE CLAY -->
+        <!-- SEKSI KIRI: FORM LOGIN DENGAN KARAKTER 3D MENGINTIP -->
         <div class="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12 lg:p-16 min-h-screen relative pt-24 md:pt-28">
             <div class="w-full max-w-md clay-card p-8 md:p-10 relative bg-white rounded-[2.2rem] shadow-[0_22px_45px_rgba(139,92,246,0.18)] border border-purple-100/80 mt-12 md:mt-16">
                 
-                <!-- KARAKTER 3D MENGINTIP DI ATAS KARTU LOGIN (POSISI TINGGI SUPAYA TIDAK MENUTUPI TULISAN SELAMAT DATANG) -->
+                <!-- KARAKTER 3D MENGINTIP -->
                 <div class="absolute -top-20 md:-top-24 left-1/2 -translate-x-1/2 w-36 md:w-44 pointer-events-none z-20 drop-shadow-[0_10px_15px_rgba(124,58,237,0.2)]">
                     <img src="https://iili.io/njZtuVI.png" alt="Karakter 3D Mengintip" class="w-full h-auto object-contain mx-auto mix-blend-multiply" onerror="this.src='https://iili.io/njZtuVI.png'">
                 </div>
 
-                <!-- Header Card dengan Logo Badge di Kanan Top (TULISAN SELAMAT DATANG DIBERIKAN MARGIN TOP AGAR KELIHATAN DENGAN JELAS DAN TERBACA) -->
+                <!-- Header Card dengan Logo Badge -->
                 <div class="flex justify-between items-start mb-6 pt-10 md:pt-12">
                     <div>
                         <h2 class="text-2xl md:text-3xl font-black text-purple-950 tracking-tight leading-tight">Selamat Datang</h2>
                         <p class="text-purple-600 text-xs mt-1.5 font-extrabold">Silakan login ke sistem administrasi guru</p>
                     </div>
-                    <!-- Badge Logo Tut Wuri / Sekolah di Pojok Kanan Atas Card -->
                     <div class="w-12 h-12 bg-purple-50 rounded-2xl p-1 shadow-md border border-purple-200 flex items-center justify-center shrink-0">
                         <img src="https://iili.io/ChkXJyb.png" alt="Logo" class="w-9 h-9 object-contain" onerror="this.src='https://iili.io/C8T11s4.png'">
                     </div>
@@ -414,16 +413,13 @@
 
         <!-- SEKSI KANAN: BANNER UNGU DENGAN FOTO PORTRAIT & KUTIPAN NELSON MANDELA -->
         <div class="hidden md:flex w-1/2 bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-700 p-12 lg:p-16 flex-col items-center justify-center text-center relative overflow-hidden min-h-screen">
-            <!-- Background Soft Overlay Effect -->
             <div class="absolute inset-0 bg-white/5 backdrop-blur-[2px]"></div>
 
             <div class="relative z-10 max-w-md flex flex-col items-center">
-                <!-- Frame Foto Portrait Guru -->
                 <div class="w-56 h-64 rounded-3xl p-1 bg-white/30 shadow-[0_20px_35px_rgba(0,0,0,0.25)] backdrop-blur-md mb-8 border-2 border-white/60 overflow-hidden transform hover:scale-102 transition duration-300">
                     <img src="https://iili.io/ChijUtp.png" alt="Yelmi Putri, S.Pd" class="w-full h-full object-cover rounded-[1.25rem]" onerror="this.src='https://ui-avatars.com/api/?name=Yelmi+Putri&background=8b5cf6&color=fff'">
                 </div>
 
-                <!-- Kutipan Inspiratif -->
                 <blockquote class="text-white font-extrabold text-lg lg:text-xl leading-relaxed tracking-wide drop-shadow-sm">
                     "Pendidikan adalah senjata paling ampuh untuk mengubah dunia."
                 </blockquote>
@@ -435,16 +431,15 @@
 
     <!-- MAIN APP INTERFACE WITH 3D PASTEL SIDEBAR -->
     <div id="appInterface" class="hidden min-h-screen flex">
-        <!-- Sidebar Desktop (Soft Lavender Clay Theme) -->
+        <!-- Sidebar Desktop -->
         <aside id="sidebarDesktop" class="hidden md:flex w-64 sidebar-clay text-white flex-col fixed h-full overflow-y-auto hide-scrollbar z-50 py-4">
-            <!-- Profile Avatar Badge Header -->
             <div class="px-6 py-4 text-center border-b border-white/15 mb-2">
                 <div class="relative w-16 h-16 mx-auto mb-2">
                     <img src="https://iili.io/ChijUtp.png" alt="Yelmi Putri" class="w-16 h-16 rounded-full object-cover border-2 border-white shadow-xl" onerror="this.src='https://ui-avatars.com/api/?name=Yelmi+Putri&background=8b5cf6&color=fff'">
                     <span class="absolute bottom-0 right-0 w-4 h-4 bg-emerald-400 border-2 border-white rounded-full shadow-md"></span>
                 </div>
                 <h1 class="text-lg font-black tracking-tight text-white">Yelmi Putri, S.Pd</h1>
-                <p class="text-xs text-purple-200 font-extrabold mt-0.5">Guru Kelas 6 &bull; Profesional</p>
+                <p class="text-xs text-purple-200 font-extrabold mt-0.5">Guru Kelas 6 &bull; Guru Profesional</p>
             </div>
             
             <nav class="flex-1 py-2 space-y-1">
@@ -489,7 +484,7 @@
                 <a href="#" onclick="switchMenu('kisi_kisi', event)" class="sidebar-item flex items-center px-5 py-3 space-x-3 transition">
                     <i data-lucide="layout" class="w-5 h-5"></i><span>Kisi-Kisi Soal</span>
                 </a>
-                <a href="https://paa806419-pixel.github.io/Kelola_Soal/" target="_blank" class="sidebar-item flex items-center px-5 py-3 space-x-3 transition">
+                <a href="https://www-ceritaqu.my.canva.site/banksoal" target="_blank" class="sidebar-item flex items-center px-5 py-3 space-x-3 transition">
                     <i data-lucide="plus-circle" class="w-5 h-5 text-amber-300"></i><span class="text-amber-200 font-extrabold">Buat Soal</span>
                 </a>
 
@@ -516,7 +511,6 @@
         </aside>
 
         <main id="mainContainer" class="flex-1 ml-0 md:ml-64 p-4 md:p-8 pb-24 md:pb-8">
-            <!-- Header Utama (3D Soft Pastel Clay Header) -->
             <header class="flex justify-between items-center mb-6 clay-card p-4 md:p-6 sticky top-0 z-40 border border-purple-100">
                 <div class="flex items-center space-x-4">
                     <div>
@@ -525,7 +519,6 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-2 md:space-x-4">
-                    <!-- Tombol Keluar Cepat untuk Mobile -->
                     <button onclick="showLogoutModal()" class="block md:hidden p-2 bg-red-50 text-red-600 rounded-xl border border-red-200 hover:bg-red-100 transition shadow-sm">
                         <i data-lucide="log-out" class="w-5 h-5"></i>
                     </button>
@@ -537,12 +530,10 @@
                         <p class="font-black text-purple-950">Yelmi Putri, S.Pd</p>
                         <p class="text-xs text-purple-600 font-bold">Guru Kelas 6</p>
                     </div>
-                    <!-- Foto Administrator Terpilih -->
                     <img src="https://iili.io/ChijUtp.png" alt="Yelmi Putri" class="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover border-2 border-purple-400 shadow-md" onerror="this.src='https://ui-avatars.com/api/?name=Yelmi+Putri&background=8b5cf6&color=fff'">
                 </div>
             </header>
 
-            <!-- Wadah utama pemuatan menu -->
             <div id="contentBody"></div>
         </main>
 
@@ -563,12 +554,10 @@
     </div>
 
     <script>
-        // --- GLOBAL CONFIG ---
         const credentials = { user: "Yelmi Putri", pass: "12345" };
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySVJf_BLC8Ni93AeA1cQZUW8XzaD5UV7kjfS6joCcbESN2U69qdrOSViSZ8SY8x1Z6og/exec";
         const ITEMS_PER_PAGE = 8;
 
-        // --- GLOBAL STATE ---
         let db = JSON.parse(localStorage.getItem('admin_guru_db')) || {
             sekolah: {}, wali_kelas: [], mapel: [], tahun_pelajaran: [], kategori_soal: [],
             siswa: [], nilai: [], penilaian: [], absensi: [], jurnal: [], kisi_kisi: [],
@@ -585,12 +574,8 @@
         let currentFacingMode = 'environment';
         let globalAudioCtx = null;
 
-        // --- UTILITY: DETEKSI VIEWPORT HP ---
-        function checkMobileViewport() {
-            return window.innerWidth < 768;
-        }
+        function checkMobileViewport() { return window.innerWidth < 768; }
 
-        // --- UTILITY: LOCK DATE STRING ---
         function forceLocalDate(dateValue) {
             if (!dateValue) return "";
             if (typeof dateValue === 'string') {
@@ -606,7 +591,6 @@
             return dateValue;
         }
 
-        // --- NOTIFICATION HELPERS ---
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
@@ -620,7 +604,6 @@
             }, 3000);
         }
 
-        // --- CUSTOM CONFIRM MODAL CONTROLLER ---
         function showCustomConfirm(title, message, callback) {
             document.getElementById('confirmTitle').innerText = title;
             document.getElementById('confirmMessage').innerText = message;
@@ -631,20 +614,15 @@
 
         function closeConfirmModal(result) {
             document.getElementById('confirmModal').style.display = 'none';
-            if (result && confirmCallback) {
-                confirmCallback();
-            }
+            if (result && confirmCallback) confirmCallback();
             confirmCallback = null;
         }
 
-        // --- INITIALIZE & UNLOCK UNIVERSAL AUDIO (PWA STANDALONE EDGE HUAWEI FIX) ---
         function initGlobalAudio() {
             try {
                 if (!globalAudioCtx) {
                     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-                    if (AudioContextClass) {
-                        globalAudioCtx = new AudioContextClass();
-                    }
+                    if (AudioContextClass) globalAudioCtx = new AudioContextClass();
                 }
                 if (globalAudioCtx && globalAudioCtx.state === 'suspended') {
                     globalAudioCtx.resume();
@@ -675,7 +653,6 @@
             try {
                 initGlobalAudio();
                 if (!globalAudioCtx) return;
-
                 const ctx = globalAudioCtx;
                 const oscillator = ctx.createOscillator();
                 const gainNode = ctx.createGain();
@@ -686,97 +663,59 @@
                 gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
                 oscillator.start();
                 oscillator.stop(ctx.currentTime + 0.15); 
-            } catch (e) {
-                console.warn("Audio context error:", e);
-            }
+            } catch (e) { console.warn("Audio context error:", e); }
         }
 
         function playHuaweiVoiceFallback() {
             try {
                 initGlobalAudio();
                 if (!globalAudioCtx) return;
-
                 const ctx = globalAudioCtx;
                 const now = ctx.currentTime;
-                
                 const notes = [523.25, 659.25, 783.99, 1046.50];
                 notes.forEach((freq, idx) => {
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(freq, now + (idx * 0.12));
-                    
                     gain.gain.setValueAtTime(0, now + (idx * 0.12));
                     gain.gain.linearRampToValueAtTime(0.3, now + (idx * 0.12) + 0.03);
                     gain.gain.exponentialRampToValueAtTime(0.001, now + (idx * 0.12) + 0.35);
-                    
                     osc.connect(gain);
                     gain.connect(ctx.destination);
                     osc.start(now + (idx * 0.12));
                     osc.stop(now + (idx * 0.12) + 0.35);
                 });
-            } catch (e) {
-                console.warn("Audio Context fallback error:", e);
-            }
+            } catch (e) { console.warn("Fallback audio error:", e); }
         }
 
         function speakTerimaKasih() {
             try {
                 initGlobalAudio();
-                let spokenWithSpeech = false;
-                
                 if ('speechSynthesis' in window) {
                     window.speechSynthesis.resume();
                     window.speechSynthesis.cancel();
                     
-                    const teks = "Terima kasih";
-                    const utterance = new SpeechSynthesisUtterance(teks);
+                    const utterance = new SpeechSynthesisUtterance("Terima kasih");
                     utterance.lang = 'id-ID';
                     utterance.rate = 0.95;  
                     utterance.pitch = 1.45; 
-
-                    utterance.onerror = () => {
-                        playHuaweiVoiceFallback();
-                    };
+                    utterance.onerror = () => playHuaweiVoiceFallback();
                     
                     const voices = window.speechSynthesis.getVoices();
-                    
                     if (voices && voices.length > 0) {
-                        const idVoices = voices.filter(voice => voice.lang.includes('id') || voice.lang.includes('ID') || voice.lang.startsWith('id'));
-                        const maleKeywords = ['male', 'aris', 'pria', 'david', 'guy', 'boy', 'man'];
-                        const nonMaleIndoVoices = idVoices.filter(v => 
-                            !maleKeywords.some(m => v.name.toLowerCase().includes(m))
-                        );
-                        const femaleKeywords = ['female', 'gadis', 'damayanti', 'sari', 'wanita', 'perempuan', 'zira', 'yuni', 'wita', 'susan', 'lisa', 'google', 'id-id-x-dfz', 'id-id-x-fid', 'id-id-x-iie'];
-                        
-                        let selectedVoice = idVoices.find(voice => {
-                            const name = voice.name.toLowerCase();
-                            return femaleKeywords.some(f => name.includes(f));
-                        });
-                        
-                        if (!selectedVoice && nonMaleIndoVoices.length > 0) selectedVoice = nonMaleIndoVoices[0];
+                        const idVoices = voices.filter(v => v.lang.includes('id') || v.lang.includes('ID'));
+                        const femaleKeywords = ['female', 'gadis', 'damayanti', 'sari', 'wanita', 'perempuan', 'zira', 'yuni', 'wita', 'google'];
+                        let selectedVoice = idVoices.find(v => femaleKeywords.some(f => v.name.toLowerCase().includes(f)));
                         if (!selectedVoice && idVoices.length > 0) selectedVoice = idVoices[0];
-                        
-                        if (selectedVoice) {
-                            utterance.voice = selectedVoice;
-                        }
-                        
+                        if (selectedVoice) utterance.voice = selectedVoice;
                         window.speechSynthesis.speak(utterance);
-                        spokenWithSpeech = true;
                     }
                 }
-                
                 playHuaweiVoiceFallback();
             } catch (e) {
-                console.error("Gagal memutar audio ucapan:", e);
                 playHuaweiVoiceFallback();
             }
-        }
-
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.onvoiceschanged = () => {
-                window.speechSynthesis.getVoices();
-            };
         }
 
         async function fetchFromSheets() {
@@ -797,9 +736,7 @@
                     document.getElementById('syncStatus').innerHTML = '<div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div><span>AUTO-SYNC AKTIF</span>';
                 }
             } catch (err) {
-                console.warn("Sinkronisasi gagal, masuk mode offline:", err);
                 document.getElementById('syncStatus').innerHTML = '<div class="w-2 h-2 bg-red-500 rounded-full"></div><span>MODE OFFLINE</span>';
-                throw err;
             }
         }
 
@@ -817,12 +754,7 @@
             let isFetched = false;
             
             const interval = setInterval(() => {
-                if (!isFetched) {
-                    if (progress < 85) progress += (Math.random() * 2);
-                } else {
-                    progress += 5;
-                }
-                
+                if (!isFetched) { if (progress < 85) progress += (Math.random() * 2); } else { progress += 5; }
                 if (progress >= 100) progress = 100;
                 
                 const displayProgress = Math.floor(progress);
@@ -836,7 +768,6 @@
                         overlay.style.display = 'none';
                         loginScreen.classList.add('hidden');
                         appInterface.classList.remove('hidden');
-                        
                         adaptLayoutToViewport();
                         renderMenu();
                         refreshIcons();
@@ -895,7 +826,7 @@
         function closeLogoutModal() { document.getElementById('logoutModal').style.display = 'none'; }
         function confirmLogout() { location.reload(); }
         function refreshIcons() { if (typeof lucide !== 'undefined') lucide.createIcons(); }
-        
+
         function adaptLayoutToViewport() {
             const sidebar = document.getElementById('sidebarDesktop');
             const main = document.getElementById('mainContainer');
@@ -903,11 +834,6 @@
                 currentMenu = 'beranda';
                 if (sidebar) sidebar.classList.add('hidden');
                 if (main) main.classList.remove('md:ml-64');
-                const navBeranda = document.getElementById('navMobileBeranda');
-                if (navBeranda) {
-                    navBeranda.classList.add('text-white');
-                    navBeranda.classList.remove('text-purple-200');
-                }
             } else {
                 if (sidebar) sidebar.classList.remove('hidden');
                 if (sidebar) sidebar.classList.add('md:flex');
@@ -936,14 +862,10 @@
             refreshIcons();
         }
 
-        function closeResetModal() {
-            document.getElementById('selectiveResetModal').style.display = 'none';
-        }
+        function closeResetModal() { document.getElementById('selectiveResetModal').style.display = 'none'; }
 
         function toggleSelectAllReset(master) {
-            document.querySelectorAll('.reset-item-chk').forEach(chk => {
-                chk.checked = master.checked;
-            });
+            document.querySelectorAll('.reset-item-chk').forEach(chk => chk.checked = master.checked);
         }
 
         function executeSelectiveReset() {
@@ -959,11 +881,8 @@
                 () => {
                     checkedBoxes.forEach(chk => {
                         const key = chk.value;
-                        if (key === 'sekolah' || key === 'kop' || key === 'ttd') {
-                            db[key] = {};
-                        } else {
-                            db[key] = [];
-                        }
+                        if (key === 'sekolah' || key === 'kop' || key === 'ttd') db[key] = {};
+                        else db[key] = [];
                     });
                     saveData(true);
                     renderMenu();
@@ -1103,7 +1022,6 @@
                             </div>
                         </div>`;
                     } else {
-                        // BERANDA DESKTOP CLAY PASTEL STYLE
                         body.innerHTML = `
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                             <div class="clay-card p-6 border-l-8 border-amber-400">
@@ -1126,7 +1044,7 @@
                         <div class="clay-card p-8">
                             <div class="flex items-center space-x-3 mb-6">
                                 <div class="p-2.5 bg-purple-100 text-purple-700 rounded-2xl shadow-sm border border-purple-200"><i data-lucide="user" class="w-6 h-6"></i></div>
-                                <h3 class="text-xl font-black text-purple-950">Profil Profesional</h3>
+                                <h3 class="text-xl font-black text-purple-950">Profil Guru Profesional</h3>
                             </div>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-left text-sm">
@@ -1134,7 +1052,7 @@
                                         <tr><td class="py-4 font-bold text-purple-500 w-1/3">Nama Lengkap</td><td class="py-4 text-purple-950 font-black">Yelmi Putri, S.Pd</td></tr>
                                         <tr><td class="py-4 font-bold text-purple-500">NIP</td><td class="py-4 text-purple-900 font-bold">199408312022212002</td></tr>
                                         <tr><td class="py-4 font-bold text-purple-500">Status Kepegawaian</td><td class="py-4"><span class="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs font-black uppercase shadow-sm">PPPK</span></td></tr>
-                                        <tr><td class="py-4 font-bold text-purple-500">Jabatan</td><td class="py-4 text-purple-900 font-bold">Guru Kelas 6</td></tr>
+                                        <tr><td class="py-4 font-bold text-purple-500">Jabatan</td><td class="py-4 text-purple-900 font-bold">Guru Kelas 6 &bull; Guru Profesional</td></tr>
                                         <tr><td class="py-4 font-bold text-purple-500">Unit Kerja</td><td class="py-4 text-purple-900 font-bold">UPT SDN 22 Tanah Keras</td></tr>
                                         <tr><td class="py-4 font-bold text-purple-500">Link s.id</td><td class="py-4 font-black text-purple-700"><a href="https://s.id/yelmiputri" target="_blank" class="flex items-center space-x-2 hover:text-purple-900 transition"><span>https://s.id/yelmiputri</span><i data-lucide="external-link" class="w-4 h-4"></i></a></td></tr>
                                     </tbody>
@@ -1431,13 +1349,6 @@
                     <div class="min-w-[150px]"><label class="text-[10px] font-black uppercase text-purple-900">Ke Tanggal</label><input type="date" value="${filters.dateEnd || ''}" onchange="handleFilterChange('${dbKey}', 'dateEnd', this.value)" class="w-full px-4 py-2.5 clay-input text-purple-950 font-bold"></div>
                 `;
             }
-            if (dbKey === 'kisi_kisi') {
-                filtersHtml += `
-                    <div class="min-w-[150px]"><label class="text-[10px] font-black uppercase text-purple-900">Filter Tahun</label><select onchange="handleFilterChange('${dbKey}', 'tahun', this.value)" class="w-full px-4 py-2.5 clay-input text-purple-950 font-bold"><option value="">Semua Tahun</option>${db.tahun_pelajaran.map(t => `<option value="${t.nama}" ${filters.tahun === t.nama ? 'selected' : ''}>${t.nama}</option>`).join('')}</select></div>
-                    <div class="min-w-[120px]"><label class="text-[10px] font-black uppercase text-purple-900">Filter Smt</label><select onchange="handleFilterChange('${dbKey}', 'semester', this.value)" class="w-full px-4 py-2.5 clay-input text-purple-950 font-bold"><option value="">Semua</option><option value="Semester 1" ${filters.semester === "Semester 1" ? 'selected' : ''}>1</option><option value="Semester 2" ${filters.semester === "Semester 2" ? 'selected' : ''}>2</option></select></div>
-                    <div class="min-w-[150px]"><label class="text-[10px] font-black uppercase text-purple-900">Filter Bentuk</label><input type="text" value="${filters.bentuk || ''}" oninput="handleFilterChange('${dbKey}', 'bentuk', this.value)" class="w-full px-4 py-2.5 clay-input text-purple-950 font-bold" placeholder="Cari Bentuk..."></div>
-                `;
-            }
 
             let dynamicButtons = `<button onclick="toggleForm('formAkademik')" class="clay-btn-purple px-4 py-2.5 rounded-xl font-black transition flex items-center space-x-1.5 text-xs"><i data-lucide="plus" class="w-4 h-4"></i><span>+ Entry Manual</span></button>`;
             if (dbKey === 'absensi') {
@@ -1554,9 +1465,7 @@
                 try {
                     await html5QrcodeScanner.stop();
                     await html5QrcodeScanner.clear();
-                } catch (e) {
-                    console.warn("Beralih kamera:", e);
-                }
+                } catch (e) { console.warn("Beralih kamera:", e); }
                 html5QrcodeScanner = null;
             }
             startQRScanner();
@@ -1566,12 +1475,8 @@
             document.getElementById('qrScannerModal').style.display = 'flex';
             updateCameraButtons();
             refreshIcons();
-            
             initGlobalAudio();
-
-            setTimeout(() => {
-                startQRScanner();
-            }, 300);
+            setTimeout(() => { startQRScanner(); }, 300);
         }
 
         function startQRScanner() {
@@ -1594,26 +1499,18 @@
                 (decodedText, decodedResult) => {
                     handleQRScanned(decodedText);
                 },
-                (errorMessage) => {
-                }
+                (errorMessage) => {}
             ).catch(err => {
-                console.error("Camera fail:", err);
-                const modeText = currentFacingMode === 'user' ? 'Depan' : 'Belakang';
-                showToast(`Gagal mengakses Kamera ${modeText}. Mohon periksa izin kamera!`, "error");
+                showToast("Gagal mengaktifkan Kamera! Periksa izin browser.", "error");
             });
         }
 
         function closeQRScanner() {
             document.getElementById('qrScannerModal').style.display = 'none';
             if (html5QrcodeScanner) {
-                html5QrcodeScanner.stop().then(() => {
-                    return html5QrcodeScanner.clear();
-                }).then(() => {
-                    html5QrcodeScanner = null;
-                }).catch(err => {
-                    console.warn(err);
-                    html5QrcodeScanner = null;
-                });
+                html5QrcodeScanner.stop().then(() => html5QrcodeScanner.clear())
+                .then(() => { html5QrcodeScanner = null; })
+                .catch(err => { html5QrcodeScanner = null; });
             }
         }
 
@@ -1624,6 +1521,7 @@
             const now = Date.now();
             const scannedValue = text.trim();
             
+            // Penghenti ganda pindaian berulang dalam jeda 3 detik
             if (scannedValue === lastScannedValue && (now - lastScannedTime) < 3000) {
                 return;
             }
@@ -1633,6 +1531,7 @@
             
             playBeep();
             
+            // Pencocokan NISN / Nama Siswa secara fleksibel
             const student = db.siswa.find(s => 
                 (s.nisn && s.nisn.trim() === scannedValue) || 
                 (s.nama && s.nama.trim().toLowerCase() === scannedValue.toLowerCase())
@@ -1645,6 +1544,7 @@
                 const d = String(today.getDate()).padStart(2, '0');
                 const todayStr = `${y}-${m}-${d}`;
                 
+                // Pengecekan status ketersediaan di database lokal
                 const isAlreadyPresent = db.absensi.some(a => 
                     a.nama_siswa === student.nama && forceLocalDate(a.tanggal) === todayStr
                 );
@@ -1663,15 +1563,24 @@
                     keterangan: "Hadir via QR Code"
                 };
                 
+                // 1. Tulis langsung ke array memori lokal
                 db.absensi.push(automaticRecord);
-                saveData(true); 
+                
+                // 2. Kunci fisik ke LocalStorage secara eksplisit & sinkronis (Garansi Android persistence)
+                localStorage.setItem('admin_guru_db', JSON.stringify(db));
+                
+                // 3. Picu pengiriman latar belakang ke Google Sheets Awan
+                if (GOOGLE_SCRIPT_URL) syncToSheets();
+                
+                // 4. Perbarui Tampilan Riil Seketika
                 renderMenu(); 
                 
+                // 5. Bunyikan Ucapan Notifikasi Suara
                 speakTerimaKasih();
                 
                 showToast(`Absensi "${student.nama}" BERHASIL (HADIR)!`, "success");
             } else {
-                showToast(`QR Code "${scannedValue}" tidak terdaftar!`, "error");
+                showToast(`QR Code "${scannedValue}" tidak terdaftar dalam database!`, "error");
             }
         }
 
@@ -1716,7 +1625,7 @@
 
                 <div style="display: flex; flex-direction: column; padding: 12px; flex: 1; justify-content: space-between; box-sizing: border-box; background: radial-gradient(circle at top right, #f5f3ff, #ffffff); position: relative;">
                     
-                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; opacity: 0.15; pointer-events: none; z-index: 1;">
+                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: justify-center; opacity: 0.15; pointer-events: none; z-index: 1;">
                         <img src="https://iili.io/ChkXJyb.png" style="width: 6.5cm; height: 6.5cm; object-fit: contain;">
                     </div>
 
@@ -1753,10 +1662,7 @@
         }
 
         function printQR() {
-            if (!activeViewerStudent) {
-                showToast("Data siswa tidak terpilih!", "error");
-                return;
-            }
+            if (!activeViewerStudent) return;
             const printWindow = window.open('', '_blank');
             printWindow.document.write(`
                 <!DOCTYPE html>
@@ -1766,23 +1672,9 @@
                     <title>Cetak Kartu Absensi - ${activeViewerStudent.nama}</title>
                     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
                     <style>
-                        body {
-                            margin: 0;
-                            padding: 2cm;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            min-height: 100vh;
-                            background: #f1f5f9;
-                            font-family: 'Inter', sans-serif;
-                            -webkit-print-color-adjust: exact;
-                            print-color-adjust: exact;
-                        }
+                        body { margin: 0; padding: 2cm; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f1f5f9; font-family: 'Inter', sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                         @page { size: A4 portrait; margin: 0; }
-                        @media print {
-                            body { background: #ffffff; padding: 0; min-height: auto; }
-                            .card-wrapper { position: absolute; top: 4cm; left: 50%; transform: translateX(-50%); }
-                        }
+                        @media print { body { background: #ffffff; padding: 0; min-height: auto; } .card-wrapper { position: absolute; top: 4cm; left: 50%; transform: translateX(-50%); } }
                     </style>
                 </head>
                 <body>
@@ -1855,9 +1747,7 @@
             const item = db[key][idx]; 
             const f = document.getElementById('academicForm') || document.getElementById('mainForm'); 
             if (f) {
-                Object.keys(item).forEach(k => { 
-                    if(f[k]) f[k].value = item[k]; 
-                }); 
+                Object.keys(item).forEach(k => { if(f[k]) f[k].value = item[k]; }); 
                 toggleForm(document.getElementById('formMaster') ? 'formMaster' : 'formAkademik'); 
                 f.scrollIntoView({ behavior: 'smooth' });
             }
