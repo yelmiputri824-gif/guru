@@ -558,7 +558,8 @@
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySVJf_BLC8Ni93AeA1cQZUW8XzaD5UV7kjfS6joCcbESN2U69qdrOSViSZ8SY8x1Z6og/exec";
         const ITEMS_PER_PAGE = 8;
 
-        let db = JSON.parse(localStorage.getItem('admin_guru_db')) || {
+        // Inisialisasi DB di memori RAM murni (Tanpa LocalStorage)
+        let db = {
             sekolah: {}, wali_kelas: [], mapel: [], tahun_pelajaran: [], kategori_soal: [],
             siswa: [], nilai: [], penilaian: [], absensi: [], jurnal: [], kisi_kisi: [],
             kop: {}, ttd: {}
@@ -730,53 +731,15 @@
                 if(cloudData && typeof cloudData === 'object' && Object.keys(cloudData).length > 0) {
                     if (cloudData.absensi) cloudData.absensi.forEach(a => a.tanggal = forceLocalDate(a.tanggal));
                     if (cloudData.jurnal) cloudData.jurnal.forEach(j => j.tanggal = forceLocalDate(j.tanggal));
+                    
+                    // Isi data dari Google Sheets murni ke memori
                     db = cloudData;
-                    localStorage.setItem('admin_guru_db', JSON.stringify(db));
                     renderMenu();
-                    document.getElementById('syncStatus').innerHTML = '<div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div><span>AUTO-SYNC AKTIF</span>';
+                    document.getElementById('syncStatus').innerHTML = '<div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div><span>100% GOOGLE SHEETS</span>';
                 }
             } catch (err) {
-                document.getElementById('syncStatus').innerHTML = '<div class="w-2 h-2 bg-red-500 rounded-full"></div><span>MODE OFFLINE</span>';
+                document.getElementById('syncStatus').innerHTML = '<div class="w-2 h-2 bg-red-500 rounded-full"></div><span>GAGAL KONEKSI SHEETS</span>';
             }
-        }
-
-        function handleLoginWithSync() {
-            const overlay = document.getElementById('loadingOverlay');
-            const loginScreen = document.getElementById('loginScreen');
-            const appInterface = document.getElementById('appInterface');
-            const barInner = document.getElementById('progressBarInner');
-            const progressText = document.getElementById('progressPercentageText');
-            
-            overlay.style.display = 'flex';
-            document.getElementById('loadingText').innerText = "SEDANG LOGIN...";
-            
-            let progress = 0;
-            let isFetched = false;
-            
-            const interval = setInterval(() => {
-                if (!isFetched) { if (progress < 85) progress += (Math.random() * 2); } else { progress += 5; }
-                if (progress >= 100) progress = 100;
-                
-                const displayProgress = Math.floor(progress);
-                if (barInner) barInner.style.width = displayProgress + '%';
-                if (progressText) progressText.innerText = displayProgress + '%';
-                
-                if (progress >= 100 && isFetched) {
-                    clearInterval(interval);
-                    document.getElementById('loadingText').innerText = "SINKRONISASI BERHASIL!";
-                    setTimeout(() => {
-                        overlay.style.display = 'none';
-                        loginScreen.classList.add('hidden');
-                        appInterface.classList.remove('hidden');
-                        adaptLayoutToViewport();
-                        renderMenu();
-                        refreshIcons();
-                        showToast("SELAMAT DATANG, " + credentials.user.toUpperCase());
-                    }, 500);
-                }
-            }, 60);
-            
-            fetchFromSheets().then(() => { isFetched = true; }).catch(() => { isFetched = true; });
         }
 
         async function syncToSheets() {
@@ -789,19 +752,19 @@
                     body: JSON.stringify(dataToSync),
                     mode: 'no-cors' 
                 });
-            } catch (err) { console.error(err); }
+            } catch (err) { console.error("Error Sync Sheets:", err); }
         }
 
-        function saveData(isSilent = false) {
-            localStorage.setItem('admin_guru_db', JSON.stringify(db));
-            if(GOOGLE_SCRIPT_URL) syncToSheets();
-            if (!isSilent) showToast("DATA BERHASIL DISIMPAN!");
+        async function saveData(isSilent = false) {
+            // Langsung simpan ke Google Sheets (Tanpa LocalStorage)
+            if(GOOGLE_SCRIPT_URL) await syncToSheets();
+            if (!isSilent) showToast("DATA BERHASIL TERSIMPAN!");
         }
 
         async function manualSync() {
             const overlay = document.getElementById('loadingOverlay');
             overlay.style.display = 'flex';
-            document.getElementById('loadingText').innerText = "SINKRONISASI DATA...";
+            document.getElementById('loadingText').innerText = "SINKRONISASI";
             try {
                 await fetchFromSheets();
                 showToast("SINKRONISASI BERHASIL!");
@@ -809,6 +772,24 @@
                 showToast("SINKRONISASI GAGAL!", "error");
             }
             overlay.style.display = 'none';
+        }
+
+        async function handleLoginWithSync() {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = 'flex';
+            document.getElementById('loadingText').innerText = "SEDANG LOGIN";
+            
+            try {
+                await fetchFromSheets();
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('appInterface').classList.remove('hidden');
+                renderMenu();
+                showToast("SELAMAT DATANG, YELMI PUTRI, S.Pd!");
+            } catch (err) {
+                showToast("Gagal memuat data dari Sheets!", "error");
+            } finally {
+                overlay.style.display = 'none';
+            }
         }
 
         document.getElementById('loginForm').onsubmit = (e) => {
@@ -1517,7 +1498,7 @@
         let lastScannedValue = "";
         let lastScannedTime = 0;
 
-        function handleQRScanned(text) {
+        async function handleQRScanned(text) {
             const now = Date.now();
             const scannedValue = text.trim();
             
@@ -1531,7 +1512,7 @@
             
             playBeep();
             
-            // Pencocokan NISN / Nama Siswa secara fleksibel
+            // Pencocokan NISN / Nama Siswa
             const student = db.siswa.find(s => 
                 (s.nisn && s.nisn.trim() === scannedValue) || 
                 (s.nama && s.nama.trim().toLowerCase() === scannedValue.toLowerCase())
@@ -1544,7 +1525,7 @@
                 const d = String(today.getDate()).padStart(2, '0');
                 const todayStr = `${y}-${m}-${d}`;
                 
-                // Pengecekan status ketersediaan di database lokal
+                // Pengecekan status di database memori
                 const isAlreadyPresent = db.absensi.some(a => 
                     a.nama_siswa === student.nama && forceLocalDate(a.tanggal) === todayStr
                 );
@@ -1563,22 +1544,21 @@
                     keterangan: "Hadir via QR Code"
                 };
                 
-                // 1. Tulis langsung ke array memori lokal
+                // 1. Tulis langsung ke database memori
                 db.absensi.push(automaticRecord);
                 
-                // 2. Kunci fisik ke LocalStorage secara eksplisit & sinkronis (Garansi Android persistence)
-                localStorage.setItem('admin_guru_db', JSON.stringify(db));
+                // 2. Kirim dan Kunci Langsung ke Google Sheets Awan (Tanpa LocalStorage)
+                if (GOOGLE_SCRIPT_URL) {
+                    await syncToSheets();
+                }
                 
-                // 3. Picu pengiriman latar belakang ke Google Sheets Awan
-                if (GOOGLE_SCRIPT_URL) syncToSheets();
-                
-                // 4. Perbarui Tampilan Riil Seketika
+                // 3. Perbarui Tampilan Riil Seketika
                 renderMenu(); 
                 
-                // 5. Bunyikan Ucapan Notifikasi Suara
+                // 4. Bunyikan Ucapan Notifikasi Suara
                 speakTerimaKasih();
                 
-                showToast(`Absensi "${student.nama}" BERHASIL (HADIR)!`, "success");
+                showToast(`Absensi "${student.nama}" BERHASIL (LANGSUNG SHEETS)!`, "success");
             } else {
                 showToast(`QR Code "${scannedValue}" tidak terdaftar dalam database!`, "error");
             }
