@@ -281,7 +281,7 @@
         </div>
         <p id="progressPercentageText" class="text-2xl font-black font-mono text-purple-200">0%</p>
         
-        <p class="text-xs opacity-70 mt-4 italic text-center text-purple-200">Tunggu Sebentar<br>Mohon jangan tutup Aplikasi anda</p>
+        <p class="text-xs opacity-70 mt-4 italic text-center text-purple-200">Tunggu Sebentar<br>Mohon jangan tutup aplikasi anda</p>
     </div>
 
     <!-- Area Tersembunyi PDF -->
@@ -1657,7 +1657,6 @@
                 html5QrcodeScanner = null;
             }
             
-            // Hentikan paksa semua video stream aktif di halaman agar resource kamera Android tidak terkunci
             try {
                 const streams = document.querySelectorAll('video');
                 streams.forEach(v => {
@@ -1696,7 +1695,6 @@
             };
 
             try {
-                // Strategi 1: Cek Perangkat Kamera Fisik HP Android
                 const devices = await Html5Qrcode.getCameras();
                 if (devices && devices.length > 0) {
                     let targetCam = null;
@@ -1718,18 +1716,15 @@
                     }
                 }
 
-                // Strategi 2: Opsi facingMode Bawaan
                 await html5QrcodeScanner.start({ facingMode: currentFacingMode }, config, onScanSuccess, () => {});
             } catch (err1) {
                 console.warn("Strategi 1 & 2 gagal, mencoba fallback facingMode lunak...", err1);
                 try {
-                    // Strategi 3: Fallback Opsi Facing Mode Sederhana
                     const modeObj = currentFacingMode === 'user' ? "user" : "environment";
                     await html5QrcodeScanner.start({ facingMode: modeObj }, config, onScanSuccess, () => {});
                 } catch (err2) {
                     console.warn("Strategi 3 gagal, mencoba fallback kamera generik Android...", err2);
                     try {
-                        // Strategi 4: Kamera Generik Apapun yang Tersedia
                         await html5QrcodeScanner.start({ video: true }, config, onScanSuccess, () => {});
                     } catch (err3) {
                         console.error("Gagal mengaktifkan semua opsi kamera:", err3);
@@ -1799,7 +1794,8 @@
                 renderMenu(); 
                 speakTerimaKasih();
                 
-                showToast(`Absensi "${student.nama}" BERHASIL!`, "success");
+                // Tampilkan Notifikasi Tulisan Warna Ungu "Siswa Hadir"
+                showToast(`Absensi "${student.nama}" BERHASIL (HADIR)!`, "success");
             } else {
                 showToast(`QR Code "${scannedValue}" tidak terdaftar dalam database!`, "error");
             }
