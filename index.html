@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <title>YELMI PUTRI, S.Pd</title>
+    <title>YELMI PUTRI</title>
     
     <!-- PWA & Mobile Capabilities -->
     <meta name="mobile-web-app-capable" content="yes">
@@ -281,7 +281,7 @@
         </div>
         <p id="progressPercentageText" class="text-2xl font-black font-mono text-purple-200">0%</p>
         
-        <p class="text-xs opacity-70 mt-4 italic text-center text-purple-200">Tunggu Sebentar<br>Mohon Jangan Tutup Aplikasi Anda!</p>
+        <p class="text-xs opacity-70 mt-4 italic text-center text-purple-200">Tunggu Sebentar<br>Mohon jangan tutup aplikasi anda!</p>
     </div>
 
     <!-- Area Tersembunyi PDF -->
@@ -915,7 +915,7 @@
         async function handleLoginWithSync() {
             const overlay = document.getElementById('loadingOverlay');
             overlay.style.display = 'flex';
-            document.getElementById('loadingText').innerText = "SEDANG LOGIN";
+            document.getElementById('loadingText').innerText = "SEDANG LOGIN...";
             document.getElementById('progressPercentageText').innerText = "0%";
             document.getElementById('progressBarInner').style.width = "0%";
             
@@ -930,7 +930,7 @@
                 showToast("SELAMAT DATANG, YELMI PUTRI, S.Pd!");
             } catch (err) {
                 showToast("Gagal memuat data dari Sheets!", "error");
-            } font-bold;
+            }
             setTimeout(() => { overlay.style.display = 'none'; }, 300);
         }
 
