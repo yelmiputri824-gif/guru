@@ -684,6 +684,8 @@
         let lastIsMobile = checkMobileViewport();
         let currentFacingMode = 'environment';
         let globalAudioCtx = null;
+        let lastScannedValue = "";
+        let lastScannedTime = 0;
 
         function checkMobileViewport() { return window.innerWidth < 768; }
 
@@ -738,13 +740,6 @@
                 if (globalAudioCtx && globalAudioCtx.state === 'suspended') {
                     globalAudioCtx.resume();
                 }
-                if (globalAudioCtx) {
-                    const buffer = globalAudioCtx.createBuffer(1, 1, 22050);
-                    const source = globalAudioCtx.createBufferSource();
-                    source.buffer = buffer;
-                    source.connect(globalAudioCtx.destination);
-                    source.start(0);
-                }
             } catch (e) {
                 console.warn("Global Audio Init error:", e);
             }
@@ -752,10 +747,6 @@
             try {
                 if ('speechSynthesis' in window) {
                     window.speechSynthesis.resume();
-                    const dummy = new SpeechSynthesisUtterance(' ');
-                    dummy.volume = 0.01;
-                    window.speechSynthesis.speak(dummy);
-                    window.speechSynthesis.getVoices();
                 }
             } catch (e) {}
         }
@@ -820,10 +811,12 @@
                         let selectedVoice = idVoices.find(v => femaleKeywords.some(f => v.name.toLowerCase().includes(f)));
                         if (!selectedVoice && idVoices.length > 0) selectedVoice = idVoices[0];
                         if (selectedVoice) utterance.voice = selectedVoice;
-                        window.speechSynthesis.speak(utterance);
                     }
+                    window.speechSynthesis.speak(utterance);
+                    playHuaweiVoiceFallback();
+                } else {
+                    playHuaweiVoiceFallback();
                 }
-                playHuaweiVoiceFallback();
             } catch (e) {
                 playHuaweiVoiceFallback();
             }
@@ -1665,6 +1658,8 @@
                     }
                 });
             } catch (err) {}
+            
+            await new Promise(resolve => setTimeout(resolve, 300));
         }
 
         function openQRScanner() {
@@ -1739,13 +1734,11 @@
             await stopCurrentScanner();
         }
 
-        let lastScannedValue = "";
-        let lastScannedTime = 0;
-
         async function handleQRScanned(text) {
             const now = Date.now();
             const scannedValue = text.trim();
             
+            // Anti-Spam / Throttle 3 Detik untuk QR Code yang sama persis
             if (scannedValue === lastScannedValue && (now - lastScannedTime) < 3000) {
                 return;
             }
@@ -1753,8 +1746,7 @@
             lastScannedValue = scannedValue;
             lastScannedTime = now;
             
-            playBeep();
-            
+            // Cari data siswa di database
             const student = db.siswa.find(s => 
                 (s.nisn && s.nisn.trim() === scannedValue) || 
                 (s.nama && s.nama.trim().toLowerCase() === scannedValue.toLowerCase())
@@ -1767,15 +1759,19 @@
                 const d = String(today.getDate()).padStart(2, '0');
                 const todayStr = `${y}-${m}-${d}`;
                 
+                // Cek apakah siswa sudah terabsen hari ini
                 const isAlreadyPresent = db.absensi.some(a => 
                     a.nama_siswa === student.nama && forceLocalDate(a.tanggal) === todayStr
                 );
                 
                 if (isAlreadyPresent) {
-                    showToast(`Siswa "${student.nama}" sudah absen hari ini!`, "error");
+                    // JIKA SUDAH ABSEN: Berikan peringatan suara/toast bahwa sudah terabsen
+                    playBeep();
+                    showToast(`Siswa "${student.nama}" SUDAH ABSEN hari ini!`, "error");
                     return;
                 }
                 
+                // JIKA BELUM ABSEN: Proses Absensi Baru
                 const automaticRecord = {
                     nama_siswa: student.nama,
                     nisn: student.nisn || "",
@@ -1787,16 +1783,18 @@
                 
                 db.absensi.push(automaticRecord);
                 
+                // Pemicu Suara & Notifikasi DIJALANKAN BERSAMAAN secara Tepat
+                playBeep();
+                speakTerimaKasih();
+                showToast(`Absensi "${student.nama}" BERHASIL (HADIR)!`, "success");
+                
+                renderMenu(); 
+
                 if (GOOGLE_SCRIPT_URL) {
                     await syncToSheets();
                 }
-                
-                renderMenu(); 
-                speakTerimaKasih();
-                
-                // Tampilkan Notifikasi Tulisan Warna Ungu "Siswa Hadir"
-                showToast(`Absensi "${student.nama}" BERHASIL (HADIR)!`, "success");
             } else {
+                playBeep();
                 showToast(`QR Code "${scannedValue}" tidak terdaftar dalam database!`, "error");
             }
         }
