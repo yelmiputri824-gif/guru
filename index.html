@@ -281,7 +281,7 @@
         </div>
         <p id="progressPercentageText" class="text-2xl font-black font-mono text-purple-200">0%</p>
         
-        <p class="text-xs opacity-70 mt-4 italic text-center text-purple-200">Tunggu Sebentar<br>Mohon jangan tutup aplikasi anda</p>
+        <p class="text-xs opacity-70 mt-4 italic text-center text-purple-200">Tunggu Sebentar<br>Mohon jangan tutup Aplikasi anda</p>
     </div>
 
     <!-- Area Tersembunyi PDF -->
@@ -1640,14 +1640,32 @@
             currentFacingMode = mode;
             updateCameraButtons();
             
+            await stopCurrentScanner();
+            startQRScanner();
+        }
+
+        async function stopCurrentScanner() {
             if (html5QrcodeScanner) {
                 try {
-                    await html5QrcodeScanner.stop();
+                    if (html5QrcodeScanner.isScanning) {
+                        await html5QrcodeScanner.stop();
+                    }
                     await html5QrcodeScanner.clear();
-                } catch (e) { console.warn("Beralih kamera:", e); }
+                } catch (e) {
+                    console.warn("Pembersihan scanner kamera:", e);
+                }
                 html5QrcodeScanner = null;
             }
-            startQRScanner();
+            
+            // Hentikan paksa semua video stream aktif di halaman agar resource kamera Android tidak terkunci
+            try {
+                const streams = document.querySelectorAll('video');
+                streams.forEach(v => {
+                    if (v.srcObject && v.srcObject.getTracks) {
+                        v.srcObject.getTracks().forEach(track => track.stop());
+                    }
+                });
+            } catch (err) {}
         }
 
         function openQRScanner() {
@@ -1655,42 +1673,75 @@
             updateCameraButtons();
             refreshIcons();
             initGlobalAudio();
-            setTimeout(() => { startQRScanner(); }, 300);
+            setTimeout(() => { startQRScanner(); }, 350);
         }
 
-        function startQRScanner() {
-            if (html5QrcodeScanner) {
-                html5QrcodeScanner.clear().catch(err => console.warn(err));
-            }
+        async function startQRScanner() {
+            await stopCurrentScanner();
+            
+            const qrReaderDiv = document.getElementById("qr-reader");
+            if (qrReaderDiv) qrReaderDiv.innerHTML = "";
             
             html5QrcodeScanner = new Html5Qrcode("qr-reader");
             
             const qrBoxCalc = (viewfinderWidth, viewfinderHeight) => {
                 const minEdge = Math.min(viewfinderWidth, viewfinderHeight);
-                const size = Math.floor(minEdge * 0.85);
+                const size = Math.floor(minEdge * 0.82);
                 return { width: size, height: size };
             };
             const config = { fps: 20, qrbox: qrBoxCalc, aspectRatio: 1.0 };
             
-            html5QrcodeScanner.start(
-                { facingMode: currentFacingMode },
-                config,
-                (decodedText, decodedResult) => {
-                    handleQRScanned(decodedText);
-                },
-                (errorMessage) => {}
-            ).catch(err => {
-                showToast("Gagal mengaktifkan Kamera! Periksa izin browser.", "error");
-            });
+            const onScanSuccess = (decodedText) => {
+                handleQRScanned(decodedText);
+            };
+
+            try {
+                // Strategi 1: Cek Perangkat Kamera Fisik HP Android
+                const devices = await Html5Qrcode.getCameras();
+                if (devices && devices.length > 0) {
+                    let targetCam = null;
+                    if (currentFacingMode === 'user') {
+                        targetCam = devices.find(d => {
+                            const lbl = (d.label || '').toLowerCase();
+                            return lbl.includes('front') || lbl.includes('user') || lbl.includes('selfie') || lbl.includes('depan');
+                        });
+                    } else {
+                        targetCam = devices.find(d => {
+                            const lbl = (d.label || '').toLowerCase();
+                            return lbl.includes('back') || lbl.includes('rear') || lbl.includes('environment') || lbl.includes('belakang');
+                        });
+                    }
+
+                    if (targetCam) {
+                        await html5QrcodeScanner.start(targetCam.id, config, onScanSuccess, () => {});
+                        return;
+                    }
+                }
+
+                // Strategi 2: Opsi facingMode Bawaan
+                await html5QrcodeScanner.start({ facingMode: currentFacingMode }, config, onScanSuccess, () => {});
+            } catch (err1) {
+                console.warn("Strategi 1 & 2 gagal, mencoba fallback facingMode lunak...", err1);
+                try {
+                    // Strategi 3: Fallback Opsi Facing Mode Sederhana
+                    const modeObj = currentFacingMode === 'user' ? "user" : "environment";
+                    await html5QrcodeScanner.start({ facingMode: modeObj }, config, onScanSuccess, () => {});
+                } catch (err2) {
+                    console.warn("Strategi 3 gagal, mencoba fallback kamera generik Android...", err2);
+                    try {
+                        // Strategi 4: Kamera Generik Apapun yang Tersedia
+                        await html5QrcodeScanner.start({ video: true }, config, onScanSuccess, () => {});
+                    } catch (err3) {
+                        console.error("Gagal mengaktifkan semua opsi kamera:", err3);
+                        showToast("Kamera tidak dapat diakses! Pastikan aplikasi lain tidak menggunakan kamera.", "error");
+                    }
+                }
+            }
         }
 
-        function closeQRScanner() {
+        async function closeQRScanner() {
             document.getElementById('qrScannerModal').style.display = 'none';
-            if (html5QrcodeScanner) {
-                html5QrcodeScanner.stop().then(() => html5QrcodeScanner.clear())
-                .then(() => { html5QrcodeScanner = null; })
-                .catch(err => { html5QrcodeScanner = null; });
-            }
+            await stopCurrentScanner();
         }
 
         let lastScannedValue = "";
