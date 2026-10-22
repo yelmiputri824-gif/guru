@@ -281,7 +281,7 @@
         </div>
         <p id="progressPercentageText" class="text-2xl font-black font-mono text-purple-200">0%</p>
         
-        <p class="text-xs opacity-70 mt-4 italic text-center text-purple-200">Tunggu Sebentar<br>Mohon jangan tutup aplikasi anda</p>
+        <p class="text-xs opacity-70 mt-4 italic text-center text-purple-200">Tunggu Sebentar<br>Mohon Jangan Tutup Aplikasi Anda!</p>
     </div>
 
     <!-- Area Tersembunyi PDF -->
@@ -930,9 +930,8 @@
                 showToast("SELAMAT DATANG, YELMI PUTRI, S.Pd!");
             } catch (err) {
                 showToast("Gagal memuat data dari Sheets!", "error");
-            } finally {
-                setTimeout(() => { overlay.style.display = 'none'; }, 300);
-            }
+            } font-bold;
+            setTimeout(() => { overlay.style.display = 'none'; }, 300);
         }
 
         document.getElementById('loginForm').onsubmit = (e) => {
