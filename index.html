@@ -263,6 +263,198 @@
 
         #qr-reader { border: none !important; width: 100% !important; height: 100% !important; }
         #qr-reader video { object-fit: cover !important; width: 100% !important; height: 100% !important; border-radius: 1.25rem; }
+
+        /* =========================================================
+           iOS SPRING PHYSICS & SMOOTH FLUID ANIMATION SYSTEM
+           ========================================================= */
+        :root {
+            --ios-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --ios-fluid: cubic-bezier(0.22, 1, 0.36, 1);
+            --ios-tap: cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* 1. iOS Smooth Page & Content View Transition */
+        @keyframes iosPageEnter {
+            0% {
+                opacity: 0;
+                transform: translateY(18px) scale(0.985);
+                filter: blur(4px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        .ios-page-enter {
+            animation: iosPageEnter 0.48s var(--ios-fluid) forwards;
+            will-change: transform, opacity, filter;
+        }
+
+        /* 2. iOS Staggered Card Spring Reveal */
+        @keyframes iosCardPop {
+            0% {
+                opacity: 0;
+                transform: translateY(24px) scale(0.95);
+            }
+            70% {
+                opacity: 1;
+                transform: translateY(-2px) scale(1.006);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .ios-stagger-item {
+            opacity: 0;
+            animation: iosCardPop 0.52s var(--ios-fluid) forwards;
+            will-change: transform, opacity;
+        }
+        .ios-stagger-1 { animation-delay: 0.04s; }
+        .ios-stagger-2 { animation-delay: 0.09s; }
+        .ios-stagger-3 { animation-delay: 0.14s; }
+        .ios-stagger-4 { animation-delay: 0.19s; }
+        .ios-stagger-5 { animation-delay: 0.24s; }
+
+        /* 3. iOS Tactile Press & Spring Hover on Cards & Buttons */
+        .clay-card {
+            transition: transform 0.38s var(--ios-spring), box-shadow 0.38s var(--ios-fluid), border-color 0.3s ease;
+            will-change: transform;
+        }
+        .clay-card:hover {
+            transform: translateY(-3px);
+        }
+
+        button, .clay-btn-purple, .sidebar-item, .ios-dock-btn {
+            transition: transform 0.28s var(--ios-spring), background-color 0.25s ease, box-shadow 0.28s var(--ios-fluid), opacity 0.2s ease;
+            will-change: transform;
+        }
+
+        button:active, .clay-btn-purple:active {
+            transform: scale(0.94) translateY(2px) !important;
+        }
+
+        .ios-dock-btn:active {
+            transform: scale(0.86) !important;
+        }
+
+        /* 4. iOS Modal Backdrop Fade & Spring Sheet Scale */
+        @keyframes iosBackdropFade {
+            from { opacity: 0; backdrop-filter: blur(0px); }
+            to { opacity: 1; backdrop-filter: blur(8px); }
+        }
+
+        @keyframes iosModalSpring {
+            0% {
+                opacity: 0;
+                transform: scale(0.86) translateY(22px);
+            }
+            65% {
+                opacity: 1;
+                transform: scale(1.02) translateY(-2px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-overlay.ios-modal-open {
+            animation: iosBackdropFade 0.28s var(--ios-fluid) forwards;
+        }
+
+        .modal-overlay.ios-modal-open > div {
+            animation: iosModalSpring 0.42s var(--ios-spring) forwards;
+        }
+
+        /* 5. Dynamic Island Spring Toast Notification */
+        @keyframes iosDynamicIslandIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-45px) scaleX(0.65) scaleY(0.75);
+            }
+            65% {
+                opacity: 1;
+                transform: translateY(4px) scaleX(1.03) scaleY(1.02);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scaleX(1) scaleY(1);
+            }
+        }
+
+        @keyframes iosDynamicIslandOut {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-35px) scale(0.75);
+            }
+        }
+
+        .toast {
+            animation: iosDynamicIslandIn 0.46s var(--ios-spring) forwards !important;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            letter-spacing: 0.02em;
+        }
+
+        .toast.ios-toast-exit {
+            animation: iosDynamicIslandOut 0.32s var(--ios-fluid) forwards !important;
+        }
+
+        /* 6. iOS Floating Dock Breathing & Active Pulse */
+        @keyframes iosDockSlideUp {
+            0% { opacity: 0; transform: translateY(60px) scale(0.9); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .ios-floating-dock {
+            animation: iosDockSlideUp 0.6s var(--ios-spring) forwards;
+        }
+
+        /* 7. Smooth Table Row Hover & Form Expand */
+        .custom-table tbody tr {
+            transition: background-color 0.2s var(--ios-fluid), transform 0.25s var(--ios-spring);
+        }
+        .custom-table tbody tr:hover {
+            background-color: rgba(139, 92, 246, 0.06);
+        }
+
+        @keyframes iosFormReveal {
+            0% { opacity: 0; transform: translateY(-12px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .ios-form-reveal {
+            animation: iosFormReveal 0.38s var(--ios-fluid) forwards;
+        }
+
+        /* 8. Subtle 3D Character Float (iOS Ambient Motion) */
+        @keyframes iosGentleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+        .ios-float-ambient {
+            animation: iosGentleFloat 3.6s ease-in-out infinite;
+        }
+
+        /* 9. Network Status Pill & Banner Animation (Online / Jaringan Buruk / Offline) */
+        @keyframes netBannerSlide {
+            0% { opacity: 0; transform: translate(-50%, -40px) scale(0.9); }
+            70% { opacity: 1; transform: translate(-50%, 4px) scale(1.02); }
+            100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+        }
+        .net-alert-banner {
+            animation: netBannerSlide 0.45s var(--ios-spring) forwards;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
     </style>
 </head>
 <body class="bg-[#eef0f8]">
@@ -270,18 +462,55 @@
     <!-- Toast Container -->
     <div id="toastContainer"></div>
 
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="loading-overlay">
-        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-purple-300 mb-6 shadow-2xl"></div>
-        <p id="loadingText" class="font-extrabold tracking-widest uppercase text-sm mb-4 text-center text-purple-100">Sedang Memproses...</p>
-        
-        <!-- Animasi Progress Bar dan Persentase 0% - 100% -->
-        <div id="progressBarWrapper" class="w-72 bg-white/20 rounded-full h-3 overflow-hidden mb-2 border border-white/30 shadow-inner">
-            <div id="progressBarInner" class="bg-gradient-to-r from-purple-400 to-indigo-300 h-full transition-all duration-300" style="width: 0%"></div>
+    <!-- Floating Network Warning Banner (Offline / Jaringan Buruk) -->
+    <div id="networkBanner" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-[10001] w-[92%] max-w-md pointer-events-auto">
+        <div id="networkBannerInner" class="net-alert-banner flex items-center justify-between px-4 py-3 rounded-2xl shadow-2xl border text-white">
+            <div class="flex items-center space-x-3">
+                <div id="networkBannerIcon" class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
+                    <i data-lucide="wifi-off" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h4 id="networkBannerTitle" class="text-xs font-black uppercase tracking-wider">Aplikasi Offline</h4>
+                    <p id="networkBannerDesc" class="text-[11px] font-semibold opacity-95 leading-snug">Aplikasi Offline, Silakan Periksa Jaringan Anda.</p>
+                </div>
+            </div>
+            <button onclick="checkNetworkQuality(true)" class="ml-2 px-2.5 py-1.5 bg-white/20 hover:bg-white/30 rounded-xl text-[10px] font-black uppercase tracking-wider shrink-0 transition">
+                Cek
+            </button>
         </div>
-        <p id="progressPercentageText" class="text-2xl font-black font-mono text-purple-200">0%</p>
-        
-        <p class="text-xs opacity-70 mt-4 italic text-center text-purple-200">Tunggu Sebentar<br>Mohon jangan tutup aplikasi anda!</p>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay p-4">
+        <div class="clay-card max-w-sm w-full p-8 pt-14 text-center relative bg-white rounded-[2.2rem] shadow-[0_24px_50px_rgba(76,29,149,0.45)] border-2 border-purple-200 mt-14">
+            <!-- Foto Karakter Anime di Atas Kotak -->
+            <div class="w-28 md:w-32 mx-auto -mt-28 mb-4 pointer-events-none drop-shadow-[0_10px_18px_rgba(124,58,237,0.3)] ios-float-ambient">
+                <img src="https://iili.io/njZtuVI.png" alt="Karakter Anime" class="w-full h-auto object-contain mx-auto mix-blend-multiply" onerror="this.src='https://iili.io/njZtuVI.png'">
+            </div>
+
+            <!-- Spinner Kecil & Judul Utama -->
+            <div class="inline-flex items-center justify-center space-x-2 bg-purple-100 text-purple-800 px-3.5 py-1.5 rounded-full text-[11px] font-black uppercase tracking-wider mb-3 border border-purple-200 shadow-inner">
+                <span class="w-3.5 h-3.5 border-2 border-purple-600 border-t-transparent rounded-full animate-spin"></span>
+                <span>Memproses Sistem</span>
+            </div>
+
+            <h3 id="loadingText" class="font-black tracking-tight text-xl text-purple-950 mb-4">Sedang Memuat Data</h3>
+            
+            <!-- Kotak Progress Bar dan Persentase 0% - 100% -->
+            <div class="bg-purple-50/90 p-4 rounded-2xl border border-purple-100 shadow-inner mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-purple-600">Progres Data</span>
+                    <span id="progressPercentageText" class="text-xl font-black font-mono text-purple-900">0%</span>
+                </div>
+                <div id="progressBarWrapper" class="w-full bg-purple-200/80 rounded-full h-3 overflow-hidden border border-purple-300/60 shadow-inner">
+                    <div id="progressBarInner" class="bg-gradient-to-r from-purple-600 via-indigo-500 to-emerald-500 h-full transition-all duration-300 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <!-- Teks Keterangan Bawah -->
+            <p class="text-sm font-black text-purple-900 tracking-wide">Sedang Login</p>
+            <p class="text-xs font-bold text-slate-500 mt-0.5">Jangan Tutup Aplikasi Anda</p>
+        </div>
     </div>
 
     <!-- Area Tersembunyi PDF -->
@@ -289,9 +518,10 @@
 
     <!-- Modal Konfirmasi -->
     <div id="confirmModal" class="modal-overlay">
-        <div class="clay-card p-8 max-w-sm w-full text-center m-4 border border-purple-100">
-            <div class="w-20 h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner border border-amber-200">
-                <i data-lucide="alert-triangle" class="w-10 h-10"></i>
+        <div class="clay-card p-8 max-w-sm w-full text-center m-4 border border-purple-100 relative pt-12">
+            <!-- Foto Karakter Anime di Atas Kotak Konfirmasi -->
+            <div class="w-32 mx-auto -mt-20 mb-3 drop-shadow-[0_10px_15px_rgba(124,58,237,0.2)] pointer-events-none ios-float-ambient">
+                <img src="https://iili.io/njZtuVI.png" alt="Karakter Anime" class="w-full h-auto object-contain mx-auto mix-blend-multiply" onerror="this.src='https://iili.io/njZtuVI.png'">
             </div>
             <h3 id="confirmTitle" class="text-xl font-black text-purple-950 mb-2">Konfirmasi Tindakan</h3>
             <p id="confirmMessage" class="text-slate-500 text-sm mb-8 font-medium">Apakah Anda yakin ingin melanjutkan tindakan ini?</p>
@@ -304,9 +534,10 @@
 
     <!-- Selective Reset Data Modal -->
     <div id="selectiveResetModal" class="modal-overlay">
-        <div class="clay-card p-6 max-w-md w-full m-4 overflow-y-auto max-h-[90vh] border border-purple-100">
-            <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
-                <i data-lucide="trash-2" class="w-8 h-8"></i>
+        <div class="clay-card p-6 max-w-md w-full m-4 overflow-visible max-h-[90vh] border border-purple-100 relative pt-12 mt-12">
+            <!-- Foto Karakter Anime di Atas Kotak Reset Data -->
+            <div class="w-28 md:w-32 mx-auto -mt-24 mb-2 drop-shadow-[0_10px_15px_rgba(124,58,237,0.2)] pointer-events-none ios-float-ambient">
+                <img src="https://iili.io/njZtuVI.png" alt="Karakter Anime" class="w-full h-auto object-contain mx-auto mix-blend-multiply" onerror="this.src='https://iili.io/njZtuVI.png'">
             </div>
             <h3 class="text-xl font-black text-purple-950 mb-1 text-center">Reset Data Terpilih</h3>
             <p class="text-xs text-slate-500 mb-4 text-center font-medium">Silakan centang data yang ingin dihapus secara permanen dari sistem harian.</p>
@@ -448,16 +679,16 @@
 
     <!-- FORM LOGIN SPLIT 2 LAYAR (3D CHARACTER OVERLAY) -->
     <div id="loginScreen" class="fixed inset-0 z-[100] flex flex-col md:flex-row bg-[#f1f3f9] overflow-y-auto">
-        <div class="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12 lg:p-16 min-h-screen relative pt-24 md:pt-28">
-            <div class="w-full max-w-md clay-card p-8 md:p-10 relative bg-white rounded-[2.2rem] shadow-[0_22px_45px_rgba(139,92,246,0.18)] border border-purple-100/80 mt-12 md:mt-16">
-                <div class="absolute -top-20 md:-top-24 left-1/2 -translate-x-1/2 w-36 md:w-44 pointer-events-none z-20 drop-shadow-[0_10px_15px_rgba(124,58,237,0.2)]">
+        <div class="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12 lg:p-16 min-h-screen relative pt-28 md:pt-32">
+            <div class="w-full max-w-md clay-card p-8 md:p-10 relative bg-white rounded-[2.2rem] shadow-[0_22px_45px_rgba(139,92,246,0.18)] border border-purple-100/80 mt-16 md:mt-20">
+                <div class="absolute -top-24 md:-top-28 left-1/2 -translate-x-1/2 w-32 md:w-40 pointer-events-none z-20 drop-shadow-[0_10px_15px_rgba(124,58,237,0.2)]">
                     <img src="https://iili.io/njZtuVI.png" alt="Karakter 3D Mengintip" class="w-full h-auto object-contain mx-auto mix-blend-multiply" onerror="this.src='https://iili.io/njZtuVI.png'">
                 </div>
 
-                <div class="flex justify-between items-start mb-6 pt-10 md:pt-12">
+                <div class="flex justify-between items-start mb-6 pt-14 md:pt-16">
                     <div>
-                        <h2 class="text-2xl md:text-3xl font-black text-purple-950 tracking-tight leading-tight"></h2>
-                        <p class="text-purple-600 text-xs mt-1.5 font-extrabold"></p>
+                        <h2 class="text-2xl md:text-3xl font-black text-purple-950 tracking-tight leading-tight">Selamat Datang</h2>
+                        <p class="text-purple-600 text-xs mt-1.5 font-extrabold">Silakan login ke sistem administrasi guru</p>
                     </div>
                     <div class="w-12 h-12 bg-purple-50 rounded-2xl p-1 shadow-md border border-purple-200 flex items-center justify-center shrink-0">
                         <img src="https://iili.io/ChkXJyb.png" alt="Logo" class="w-9 h-9 object-contain" onerror="this.src='https://iili.io/C8T11s4.png'">
@@ -596,9 +827,14 @@
                     <button onclick="showLogoutModal()" class="block md:hidden p-2 bg-red-50 text-red-600 rounded-xl border border-red-200 hover:bg-red-100 transition shadow-sm">
                         <i data-lucide="log-out" class="w-5 h-5"></i>
                     </button>
+                    <!-- Indikator Status Jaringan Real-Time (Online / Jaringan Buruk / Offline) -->
+                    <div id="networkStatusPill" onclick="checkNetworkQuality(true)" title="Klik untuk cek status jaringan" class="cursor-pointer flex items-center space-x-1.5 bg-emerald-100 border border-emerald-300 px-3 py-1.5 rounded-full text-emerald-800 text-[10px] font-black shadow-inner transition-all duration-300">
+                        <span id="networkStatusDot" class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                        <span id="networkStatusText">ONLINE</span>
+                    </div>
                     <div id="syncStatus" class="hidden sm:flex items-center space-x-2 bg-emerald-100 border border-emerald-300 px-3.5 py-1.5 rounded-full text-emerald-800 text-[10px] font-black shadow-inner">
                         <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                        <span>TERHUBUNG SHEETS</span>
+                        <span>TERHUBUNG</span>
                     </div>
                     <div class="text-right hidden sm:block">
                         <p class="font-black text-purple-950">Yelmi Putri, S.Pd</p>
@@ -686,8 +922,130 @@
         let globalAudioCtx = null;
         let lastScannedValue = "";
         let lastScannedTime = 0;
+        let currentNetworkState = 'online'; // 'online' | 'slow' | 'offline'
 
         function checkMobileViewport() { return window.innerWidth < 768; }
+
+        // =========================================================
+        // SISTEM DETEKSI JARINGAN REAL-TIME (ONLINE / BURUK / OFFLINE)
+        // =========================================================
+        function updateNetworkUI(state, latencyMs = 0, forceNotify = false) {
+            const pill = document.getElementById('networkStatusPill');
+            const dot = document.getElementById('networkStatusDot');
+            const text = document.getElementById('networkStatusText');
+            const banner = document.getElementById('networkBanner');
+            const bannerInner = document.getElementById('networkBannerInner');
+            const bannerTitle = document.getElementById('networkBannerTitle');
+            const bannerDesc = document.getElementById('networkBannerDesc');
+            const bannerIcon = document.getElementById('networkBannerIcon');
+
+            const prevState = currentNetworkState;
+            currentNetworkState = state;
+
+            if (state === 'offline') {
+                if (pill) {
+                    pill.className = "cursor-pointer flex items-center space-x-1.5 bg-red-100 border border-red-300 px-3 py-1.5 rounded-full text-red-800 text-[10px] font-black shadow-inner transition-all duration-300";
+                    dot.className = "w-2.5 h-2.5 bg-red-600 rounded-full animate-ping";
+                    text.innerText = "OFFLINE";
+                }
+                if (banner && bannerInner) {
+                    banner.classList.remove('hidden');
+                    bannerInner.className = "net-alert-banner flex items-center justify-between px-4 py-3 rounded-2xl shadow-2xl border border-red-300/60 bg-gradient-to-r from-red-600 to-rose-700 text-white";
+                    bannerTitle.innerText = "APLIKASI OFFLINE";
+                    bannerDesc.innerText = "Aplikasi Offline, Silakan Periksa Jaringan Anda.";
+                    bannerIcon.innerHTML = `<i data-lucide="wifi-off" class="w-5 h-5"></i>`;
+                    refreshIcons();
+                }
+                if (prevState !== 'offline' || forceNotify) {
+                    showToast("Aplikasi Offline! Silakan Periksa Jaringan Anda.", "error");
+                }
+            } else if (state === 'slow') {
+                if (pill) {
+                    pill.className = "cursor-pointer flex items-center space-x-1.5 bg-amber-100 border border-amber-300 px-3 py-1.5 rounded-full text-amber-900 text-[10px] font-black shadow-inner transition-all duration-300";
+                    dot.className = "w-2.5 h-2.5 bg-amber-500 rounded-full animate-bounce";
+                    text.innerText = `JARINGAN BURUK${latencyMs ? ` (${latencyMs}ms)` : ''}`;
+                }
+                if (banner && bannerInner) {
+                    banner.classList.remove('hidden');
+                    bannerInner.className = "net-alert-banner flex items-center justify-between px-4 py-3 rounded-2xl shadow-2xl border border-amber-300/60 bg-gradient-to-r from-amber-500 to-orange-600 text-white";
+                    bannerTitle.innerText = "PERINGATAN JARINGAN BURUK";
+                    bannerDesc.innerText = `Koneksi internet lambat / tidak stabil${latencyMs ? ` (${latencyMs} ms)` : ''}. Mohon tunggu saat menyimpan data.`;
+                    bannerIcon.innerHTML = `<i data-lucide="alert-triangle" class="w-5 h-5"></i>`;
+                    refreshIcons();
+                }
+                if (prevState !== 'slow' || forceNotify) {
+                    showToast("Peringatan: Jaringan Buruk / Lambat terdeteksi!", "error");
+                }
+            } else {
+                // ONLINE NORMAL
+                if (pill) {
+                    pill.className = "cursor-pointer flex items-center space-x-1.5 bg-emerald-100 border border-emerald-300 px-3 py-1.5 rounded-full text-emerald-800 text-[10px] font-black shadow-inner transition-all duration-300";
+                    dot.className = "w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse";
+                    text.innerText = "ONLINE";
+                }
+                if (banner) {
+                    banner.classList.add('hidden');
+                }
+                if (prevState !== 'online' || forceNotify) {
+                    showToast("Aplikasi Sudah Online & Koneksi Stabil!", "success");
+                }
+            }
+        }
+
+        async function checkNetworkQuality(forceNotify = false) {
+            if (!navigator.onLine) {
+                updateNetworkUI('offline', 0, forceNotify);
+                return;
+            }
+
+            // Cek Network Information API (jika didukung browser Android/Chrome)
+            const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            const isWeakEffectiveType = conn && (conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g');
+
+            // Uji ping ringan ke endpoint eksternal/Google untuk memastikan internet benar-benar jalan & mengukur kecepatan
+            const startTime = performance.now();
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+            try {
+                await fetch(`https://www.gstatic.com/generate_204?t=${Date.now()}`, {
+                    mode: 'no-cors',
+                    cache: 'no-store',
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                const latency = Math.round(performance.now() - startTime);
+
+                // Jika latensi > 2200ms atau jaringan 2G/slow-2g -> Peringatan Jaringan Buruk
+                if (latency > 2200 || isWeakEffectiveType) {
+                    updateNetworkUI('slow', latency, forceNotify);
+                } else {
+                    updateNetworkUI('online', latency, forceNotify);
+                }
+            } catch (err) {
+                clearTimeout(timeoutId);
+                // Jika navigator.onLine true tapi fetch gagal/timeout -> Jaringan Buruk atau Offline
+                if (!navigator.onLine) {
+                    updateNetworkUI('offline', 0, forceNotify);
+                } else {
+                    updateNetworkUI('slow', 5000, forceNotify);
+                }
+            }
+        }
+
+        window.addEventListener('online', () => {
+            checkNetworkQuality(true);
+        });
+
+        window.addEventListener('offline', () => {
+            updateNetworkUI('offline', 0, true);
+        });
+
+        // Jalankan pengecekan koneksi saat aplikasi dimuat & setiap 15 detik
+        window.addEventListener('load', () => {
+            checkNetworkQuality(false);
+            setInterval(() => checkNetworkQuality(false), 15000);
+        });
 
         function forceLocalDate(dateValue) {
             if (!dateValue) return "";
@@ -707,26 +1065,42 @@
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
-            toast.className = `toast ${type === 'success' ? 'bg-purple-600' : 'bg-red-600'}`;
-            toast.innerText = message;
+            toast.className = `toast ${type === 'success' ? 'bg-purple-600/95' : 'bg-red-600/95'} flex items-center space-x-2.5`;
+            const dotColor = type === 'success' ? 'bg-emerald-300' : 'bg-amber-300';
+            toast.innerHTML = `<span class="w-2.5 h-2.5 rounded-full ${dotColor} animate-pulse shrink-0"></span><span>${message}</span>`;
             container.appendChild(toast);
             setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(-20px)';
-                setTimeout(() => toast.remove(), 500);
-            }, 3000);
+                toast.classList.add('ios-toast-exit');
+                setTimeout(() => toast.remove(), 340);
+            }, 2800);
+        }
+
+        function openIosModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            modal.style.display = 'flex';
+            modal.classList.remove('ios-modal-open');
+            void modal.offsetWidth;
+            modal.classList.add('ios-modal-open');
+        }
+
+        function closeIosModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            modal.classList.remove('ios-modal-open');
+            modal.style.display = 'none';
         }
 
         function showCustomConfirm(title, message, callback) {
             document.getElementById('confirmTitle').innerText = title;
             document.getElementById('confirmMessage').innerText = message;
-            document.getElementById('confirmModal').style.display = 'flex';
+            openIosModal('confirmModal');
             confirmCallback = callback;
             refreshIcons();
         }
 
         function closeConfirmModal(result) {
-            document.getElementById('confirmModal').style.display = 'none';
+            closeIosModal('confirmModal');
             if (result && confirmCallback) confirmCallback();
             confirmCallback = null;
         }
@@ -870,42 +1244,58 @@
                     db = cloudData;
                     await animateProgressBar(100, 400);
                     renderMenu();
-                    document.getElementById('syncStatus').innerHTML = '<div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div><span>100% GOOGLE SHEETS</span>';
+                    document.getElementById('syncStatus').innerHTML = '<div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div><span>TERHUBUNG</span>';
                 }
             } catch (err) {
                 await animateProgressBar(100, 300);
-                document.getElementById('syncStatus').innerHTML = '<div class="w-2 h-2 bg-red-500 rounded-full"></div><span>GAGAL KONEKSI SHEETS</span>';
+                document.getElementById('syncStatus').innerHTML = '<div class="w-2 h-2 bg-red-500 rounded-full"></div><span>GAGAL TERHUBUNG</span>';
             }
         }
 
         async function syncToSheets() {
             if(!GOOGLE_SCRIPT_URL) return;
+            const syncBadge = document.getElementById('syncStatus');
+            if (syncBadge) {
+                syncBadge.innerHTML = '<div class="w-2 h-2 bg-amber-500 rounded-full animate-ping"></div><span>MENYIMPAN...</span>';
+            }
             try {
                 const dataToSync = JSON.parse(JSON.stringify(db));
                 await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {'Content-Type': 'text/plain;charset=utf-8'},
                     body: JSON.stringify(dataToSync),
                     mode: 'no-cors' 
                 });
-            } catch (err) { console.error("Error Sync Sheets:", err); }
+                if (syncBadge) {
+                    syncBadge.innerHTML = '<div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div><span>TERHUBUNG</span>';
+                }
+            } catch (err) { 
+                console.error("Error Sync Sheets:", err);
+                if (syncBadge) {
+                    syncBadge.innerHTML = '<div class="w-2 h-2 bg-red-500 rounded-full"></div><span>GAGAL SINKRON</span>';
+                }
+            }
         }
 
-        async function saveData(isSilent = false) {
-            if(GOOGLE_SCRIPT_URL) await syncToSheets();
-            if (!isSilent) showToast("DATA BERHASIL TERSIMPAN DI GOOGLE SHEETS!");
+        function saveData(isSilent = false) {
+            if (!isSilent) {
+                showToast("DATA BERHASIL DISIMPAN", "success");
+            }
+            if (GOOGLE_SCRIPT_URL) {
+                syncToSheets();
+            }
         }
 
         async function manualSync() {
             const overlay = document.getElementById('loadingOverlay');
             overlay.style.display = 'flex';
-            document.getElementById('loadingText').innerText = "SINKRONISASI";
+            document.getElementById('loadingText').innerText = "Sedang Memuat Data";
             document.getElementById('progressPercentageText').innerText = "0%";
             document.getElementById('progressBarInner').style.width = "0%";
 
             try {
                 await fetchFromSheets();
-                showToast("SINKRONISASI BERHASIL!");
+                showToast("SINGKRONISAI BERHASIL!");
             } catch (err) {
                 showToast("SINKRONISASI GAGAL!", "error");
             }
@@ -915,7 +1305,7 @@
         async function handleLoginWithSync() {
             const overlay = document.getElementById('loadingOverlay');
             overlay.style.display = 'flex';
-            document.getElementById('loadingText').innerText = "SEDANG LOGIN...";
+            document.getElementById('loadingText').innerText = "Sedang Memuat Data";
             document.getElementById('progressPercentageText').innerText = "0%";
             document.getElementById('progressBarInner').style.width = "0%";
             
@@ -945,8 +1335,8 @@
             }
         };
 
-        function showLogoutModal() { document.getElementById('logoutModal').style.display = 'flex'; refreshIcons(); }
-        function closeLogoutModal() { document.getElementById('logoutModal').style.display = 'none'; }
+        function showLogoutModal() { openIosModal('logoutModal'); refreshIcons(); }
+        function closeLogoutModal() { closeIosModal('logoutModal'); }
         function confirmLogout() { location.reload(); }
         function refreshIcons() { if (typeof lucide !== 'undefined') lucide.createIcons(); }
 
@@ -992,13 +1382,13 @@
         }
 
         function resetData() {
-            document.getElementById('selectiveResetModal').style.display = 'flex';
+            openIosModal('selectiveResetModal');
             document.getElementById('selectAllReset').checked = false;
             document.querySelectorAll('.reset-item-chk').forEach(chk => chk.checked = false);
             refreshIcons();
         }
 
-        function closeResetModal() { document.getElementById('selectiveResetModal').style.display = 'none'; }
+        function closeResetModal() { closeIosModal('selectiveResetModal'); }
 
         function toggleSelectAllReset(master) {
             document.querySelectorAll('.reset-item-chk').forEach(chk => chk.checked = master.checked);
@@ -1068,6 +1458,11 @@
 
             adaptLayoutToViewport();
 
+            // Terapkan animasi transisi halaman iOS setiap berpindah menu
+            body.classList.remove('ios-page-enter');
+            void body.offsetWidth;
+            body.classList.add('ios-page-enter');
+
             switch(currentMenu) {
                 case 'beranda':
                     title.innerText = "Beranda";
@@ -1088,7 +1483,7 @@
 
                         body.innerHTML = `
                         <div class="space-y-6">
-                            <div class="clay-card-purple p-6 text-white relative overflow-hidden">
+                            <div class="clay-card-purple p-6 text-white relative overflow-hidden ios-stagger-item ios-stagger-1">
                                 <div class="flex items-center justify-between mb-4">
                                     <div class="p-2.5 bg-white/20 rounded-xl border border-white/30 shadow-inner z-10">
                                         <i data-lucide="clipboard-check" class="w-6 h-6 text-white"></i>
@@ -1100,12 +1495,12 @@
                                 <p class="text-[11px] text-purple-200 mt-2 font-bold relative z-10">${formatTanggalIndo(todayStr)}</p>
 
                                 <!-- Karakter 3D Anime Muslimah di Pojok Kanan Card -->
-                                <div class="absolute -right-2 -bottom-4 w-28 h-32 pointer-events-none opacity-90">
+                                <div class="absolute -right-2 -bottom-4 w-28 h-32 pointer-events-none opacity-90 ios-float-ambient">
                                     <img src="https://iili.io/njZtuVI.png" alt="Anime Character" class="w-full h-full object-contain filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.25)]" onerror="this.src='https://iili.io/njZtuVI.png'">
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-4 gap-3">
+                            <div class="grid grid-cols-4 gap-3 ios-stagger-item ios-stagger-2">
                                 <div class="clay-card p-3.5 text-center">
                                     <p class="text-[9px] font-black text-purple-500 uppercase">Hadir</p>
                                     <h4 class="text-xl font-black text-emerald-600 mt-1">${totalHadir}</h4>
@@ -1124,7 +1519,7 @@
                                 </div>
                             </div>
 
-                            <div class="bg-amber-500/10 border border-amber-300/60 p-4 rounded-2xl flex items-start space-x-3 shadow-sm">
+                            <div class="bg-amber-500/10 border border-amber-300/60 p-4 rounded-2xl flex items-start space-x-3 shadow-sm ios-stagger-item ios-stagger-3">
                                 <div class="p-2 bg-amber-100 text-amber-800 rounded-xl border border-amber-200">
                                     <i data-lucide="info" class="w-4 h-4"></i>
                                 </div>
@@ -1134,7 +1529,7 @@
                                 </div>
                             </div>
 
-                            <div class="clay-card p-5">
+                            <div class="clay-card p-5 ios-stagger-item ios-stagger-4">
                                 <div class="flex items-center justify-between mb-4 pb-3 border-b border-purple-100">
                                     <h3 class="text-sm font-black text-purple-950">Siswa Absen Hari Ini</h3>
                                     <span class="text-xs text-purple-600 font-mono font-black">${todayAbsensi.length} Data</span>
@@ -1167,52 +1562,52 @@
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                             
                             <!-- Card 1: Siswa -->
-                            <div class="clay-card p-6 border-l-8 border-amber-400 relative overflow-hidden flex justify-between items-center group hover:scale-[1.02] transition duration-300">
+                            <div class="clay-card p-6 border-l-8 border-amber-400 relative overflow-hidden flex justify-between items-center group ios-stagger-item ios-stagger-1">
                                 <div class="z-10">
                                     <p class="text-purple-500 text-xs font-black uppercase tracking-wider">Siswa</p>
                                     <h3 class="text-4xl font-black text-purple-950 mt-1">${db.siswa.length}</h3>
                                 </div>
-                                <div class="w-20 h-24 shrink-0 -mr-2 -mb-4 z-10 pointer-events-none transform group-hover:scale-110 transition duration-300">
+                                <div class="w-20 h-24 shrink-0 -mr-2 -mb-4 z-10 pointer-events-none transform group-hover:scale-110 transition duration-300 ios-float-ambient">
                                     <img src="https://iili.io/njZtuVI.png" alt="Siswa" class="w-full h-full object-contain mix-blend-multiply filter drop-shadow-[0_6px_10px_rgba(124,58,237,0.18)]" onerror="this.src='https://iili.io/njZtuVI.png'">
                                 </div>
                             </div>
 
                             <!-- Card 2: Mapel -->
-                            <div class="clay-card p-6 border-l-8 border-emerald-400 relative overflow-hidden flex justify-between items-center group hover:scale-[1.02] transition duration-300">
+                            <div class="clay-card p-6 border-l-8 border-emerald-400 relative overflow-hidden flex justify-between items-center group ios-stagger-item ios-stagger-2">
                                 <div class="z-10">
                                     <p class="text-purple-500 text-xs font-black uppercase tracking-wider">Mapel</p>
                                     <h3 class="text-4xl font-black text-purple-950 mt-1">${db.mapel.length}</h3>
                                 </div>
-                                <div class="w-20 h-24 shrink-0 -mr-2 -mb-4 z-10 pointer-events-none transform group-hover:scale-110 transition duration-300">
+                                <div class="w-20 h-24 shrink-0 -mr-2 -mb-4 z-10 pointer-events-none transform group-hover:scale-110 transition duration-300 ios-float-ambient" style="animation-delay: 0.4s;">
                                     <img src="https://iili.io/njZtuVI.png" alt="Mapel" class="w-full h-full object-contain mix-blend-multiply filter drop-shadow-[0_6px_10px_rgba(16,185,129,0.18)]" onerror="this.src='https://iili.io/njZtuVI.png'">
                                 </div>
                             </div>
 
                             <!-- Card 3: Nilai -->
-                            <div class="clay-card p-6 border-l-8 border-purple-500 relative overflow-hidden flex justify-between items-center group hover:scale-[1.02] transition duration-300">
+                            <div class="clay-card p-6 border-l-8 border-purple-500 relative overflow-hidden flex justify-between items-center group ios-stagger-item ios-stagger-3">
                                 <div class="z-10">
                                     <p class="text-purple-500 text-xs font-black uppercase tracking-wider">Nilai</p>
                                     <h3 class="text-4xl font-black text-purple-950 mt-1">${db.nilai.length}</h3>
                                 </div>
-                                <div class="w-20 h-24 shrink-0 -mr-2 -mb-4 z-10 pointer-events-none transform group-hover:scale-110 transition duration-300">
+                                <div class="w-20 h-24 shrink-0 -mr-2 -mb-4 z-10 pointer-events-none transform group-hover:scale-110 transition duration-300 ios-float-ambient" style="animation-delay: 0.8s;">
                                     <img src="https://iili.io/njZtuVI.png" alt="Nilai" class="w-full h-full object-contain mix-blend-multiply filter drop-shadow-[0_6px_10px_rgba(139,92,246,0.18)]" onerror="this.src='https://iili.io/njZtuVI.png'">
                                 </div>
                             </div>
 
                             <!-- Card 4: Presensi -->
-                            <div class="clay-card p-6 border-l-8 border-rose-400 relative overflow-hidden flex justify-between items-center group hover:scale-[1.02] transition duration-300">
+                            <div class="clay-card p-6 border-l-8 border-rose-400 relative overflow-hidden flex justify-between items-center group ios-stagger-item ios-stagger-4">
                                 <div class="z-10">
                                     <p class="text-purple-500 text-xs font-black uppercase tracking-wider">Presensi</p>
                                     <h3 class="text-4xl font-black text-purple-950 mt-1">${db.absensi.length}</h3>
                                 </div>
-                                <div class="w-20 h-24 shrink-0 -mr-2 -mb-4 z-10 pointer-events-none transform group-hover:scale-110 transition duration-300">
+                                <div class="w-20 h-24 shrink-0 -mr-2 -mb-4 z-10 pointer-events-none transform group-hover:scale-110 transition duration-300 ios-float-ambient" style="animation-delay: 1.2s;">
                                     <img src="https://iili.io/njZtuVI.png" alt="Presensi" class="w-full h-full object-contain mix-blend-multiply filter drop-shadow-[0_6px_10px_rgba(244,63,94,0.18)]" onerror="this.src='https://iili.io/njZtuVI.png'">
                                 </div>
                             </div>
 
                         </div>
 
-                        <div class="clay-card p-8">
+                        <div class="clay-card p-8 ios-stagger-item ios-stagger-5">
                             <div class="flex items-center space-x-3 mb-6">
                                 <div class="p-2.5 bg-purple-100 text-purple-700 rounded-2xl shadow-sm border border-purple-200"><i data-lucide="user" class="w-6 h-6"></i></div>
                                 <h3 class="text-xl font-black text-purple-950">Profil Guru Profesional</h3>
@@ -1662,7 +2057,7 @@
         }
 
         function openQRScanner() {
-            document.getElementById('qrScannerModal').style.display = 'flex';
+            openIosModal('qrScannerModal');
             updateCameraButtons();
             refreshIcons();
             initGlobalAudio();
@@ -1729,7 +2124,7 @@
         }
 
         async function closeQRScanner() {
-            document.getElementById('qrScannerModal').style.display = 'none';
+            closeIosModal('qrScannerModal');
             await stopCurrentScanner();
         }
 
@@ -1809,12 +2204,12 @@
             const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${qrData}`;
             document.getElementById('qrViewerImage').src = qrUrl;
             
-            document.getElementById('qrViewerModal').style.display = 'flex';
+            openIosModal('qrViewerModal');
             refreshIcons();
         }
 
         function closeQRViewer() {
-            document.getElementById('qrViewerModal').style.display = 'none';
+            closeIosModal('qrViewerModal');
             activeViewerStudent = null;
         }
 
@@ -1968,7 +2363,12 @@
 
         function toggleForm(id) { 
             const el = document.getElementById(id);
-            if (el) el.classList.remove('hidden'); 
+            if (el) {
+                el.classList.remove('hidden');
+                el.classList.remove('ios-form-reveal');
+                void el.offsetWidth;
+                el.classList.add('ios-form-reveal');
+            }
         }
 
         function cancelEditing() { editingIndex = null; renderMenu(); }
